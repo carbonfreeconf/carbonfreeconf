@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} Pricing of virtual conferences {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="Check out how much it costs to make a virtual workshop with us. The truth is that you can even make profits for your research institute and we tell you how." />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/pricing/" />
+  {% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<div class="intro-pricing">
+  {% blocktrans %}
+  <div class="content">
+    <div class="pretitle">Pricing</div>
+    <h1>Budget the cost of a virtual conference that's right <span>for you</span>.</h1>
+    
+  </div>
+  <div>
+    <h2 style="margin: 20px;">3 options for you</h2>
+  <ul style="list-style-type: circle;margin: 40px;">
+    <p><li>Our platform is open source and you can deploy our services for free on your own servers.</li></p>
+    <p><li>You can also use our platform for free if you choose to only use our organizing tools (website creation, program maker, management of participants, abstract/registration handling, ...) and not run the video-conference with us.</li></p>
+    <p><li>If you run the video-conference with us, then our prices include a carbon offset (including streaming and electric consumption) for each organized conference to limit the impact of research activities on our Planet. Therefore, the pricing is mostly set by the number of people participating to the conference and the number of days it lasts. Note that the conferences with less than 50 participants lasting for less than 3 days are free (except for carbon offsetting fees, which you can do on your own and send us the certificate or offset directly on our website).</li></p>
+  </ul>
+  </div>
+  <p>How many days will your workshop last?</p>
+  <div class="days-selector">
+    <span class="tabs-link active" onclick="openTab(event, 'pricingOne')">1-3 days</span>
+    <span class="tabs-link" onclick="openTab(event, 'pricingTwo')">3-5 days</span>
+    <span class="tabs-link" onclick="openTab(event, 'pricingThree')">5+ days</span>
+  </div>
+  {% endblocktrans %}
+</div>
+
+<main>
+  
+  <section class="pricing">
+    <div class="tab" id="pricingOne">
+      <div>
+        {% blocktrans %}
+        <div class="size">For a small event</div>
+        <div class="number">10-50 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:0|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:0|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+      <div>
+        {% blocktrans %}
+        <div class="size">For a medium event</div>
+        <div class="number">50-100 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:1|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:1|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Conference recording</li>
+          <li>Recording on Youtube</li>
+          <li>Technical support</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+      <div>
+        {% blocktrans %}
+        <div class="size">For a large event</div>
+        <div class="number">300-500 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:2|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:2|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Conference recording</li>
+          <li>Recording on Youtube</li>
+          <li>Technical support</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+    </div>
+    <div class="tab" id="pricingTwo">
+      <div>
+        {% blocktrans %}
+        <div class="size">For a small event</div>
+        <div class="number">10-50 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:3|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:3|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Technical support</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+      <div>
+        {% blocktrans %}
+        <div class="size">For a medium event</div>
+        <div class="number">50-100 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:4|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:4|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Conference recording</li>
+          <li>Recording on Youtube</li>
+          <li>Technical support</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+      <div>
+        {% blocktrans %}
+        <div class="size">For a large event</div>
+        <div class="number">300-500 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:5|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:5|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Conference recording</li>
+          <li>Recording on Youtube</li>
+          <li>Technical support</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+    </div>
+    <div class="tab" id="pricingThree">
+      <div>
+        {% blocktrans %}
+        <div class="size">For a small event</div>
+        <div class="number">10-50 participants</div>
+        {% endblocktrans %}
+        <div class="price">{{ total|index:6|stringformat:".0f" }}€</div>
+        <div class="offset">{{ offseteuro|index:6|stringformat:".0f" }}€ {% trans 'to carbon offsetting' %}</div>
+        {% blocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Technical support</li>
+        </ul>
+        {% endblocktrans %}
+      </div>
+      {% blocktrans %}
+      <div>
+        <div class="size">For a medium event</div>
+        <div class="number">50-100 participants</div>
+        <div class="price">390€</div>
+        <div class="offset">110€ to carbon offsetting</div>
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Conference recording</li>
+          <li>Recording on Youtube</li>
+          <li>Technical support</li>
+        </ul>
+      </div>
+      <div>
+        <div class="size">For a large event</div>
+        <div class="number">300-500 participants</div>
+        <div class="price">1334€</div>
+        <div class="offset">468€ to carbon offsetting</div>
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">Let's get Started</a>
+        <ul>
+          <li>Conference website</li>
+          <li>Set-up your participant list and interact via email</li>
+          <li>Make your conference program</li>
+          <li>Proceedings for each participant</li>
+          <li>Carbon offsetting</li>
+          <li>Conference recording</li>
+          <li>Recording on Youtube</li>
+          <li>Technical support</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  
+  
+
+  <section class="pricing-faq">
+    <h2>Frequently Asked Questions</h2>
+    <h3>Can I organize a conference for 5000 persons with different rooms running simultaneously?</h3>
+    <p>This is possible. When you create a conference, first create a master conference, which will host the master website of the conference and the plenary sessions. Then you get a code that can be given to researchers that want to organize the different sessions within this conference. They can go and create their meeting on <a href="/{{LANGUAGE_CODE}}/">CarbonFreeConf</a> and then just say it is a daughter conference and give the master conference code to get it linked.</p>
+    <h3>Do I have access to all the tools with the free version?</h3>
+    <p>Yes you do. The free version is for meetings with less than 50 participants for one day. The only thing that you cannot have for free is a very reactive human to fix issues that may arise. To get this support, you have the option to pay some additional fees in the free version (you will see the option to tick when you go to the payment section).</p>
+    <!-- <h3>Can I cancel my workshop and get the money back to the participants?</h3>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pretium proin mi nisl non ut. Lacus pellentesque turpis ipsum sed habitant nunc. At convallis hac elit volutpat dignissim at ultricies. At orci nunc pretium nunc eget ac scelerisque volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pretium proin mi nisl non ut. Lacus pellentesque turpis ipsum sed habitant nunc. At convallis hac elit volutpat dignissim at ultricies. At orci nunc pretium nunc eget ac scelerisque volutpat.</p> -->
+  </section>
+  {% endblocktrans %}
+
+
+  <div class="pricing-contact">
+    <div>{% blocktrans %}Have more questions about our plans?{% endblocktrans %}</div>
+    <a href="/{{LANGUAGE_CODE}}/contactform">
+      <button class="btn">{% blocktrans %}Reach Out to Us{% endblocktrans %}</button>
+    </a>
+  </div>
+
+
+</main>
+
+{% endblock %}

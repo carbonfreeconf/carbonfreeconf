@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron mt-4">
+    {% if queryset %}
+        <h2>Results of your search in our blog</h2><hr>
+    {% for post in queryset %}
+        <strong><a href="{{ post.get_absolute_url }}" style="font-size: 22px;color: #FF9933"><i class="fas fa-cube"></i> {{ post.title }}</a></strong>
+        {% for cat in post.categories.all %}
+            {% if forloop.first %}
+                <span>&mdash;
+            {% endif %}
+            <a href="/blog-search/?q={{ cat }}">{{ cat }}</a>
+            {% if forloop.revcounter0 != 0 %}
+            -
+            {% endif %}
+
+        {% endfor %}
+
+        <br />
+    {% endfor %}
+    {% else %}
+        <h3>Nothing matches your query "{{ qs }}" in our blog</h3>
+        <p><a href="#" onclick="history.back();">Go back to the blog</a></p>
+    {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% for cat in post.categories.all %}
+                    <a href="/blog-search/?q={{ cat }}">{{ cat }}</a>
+                    {% endfor %}

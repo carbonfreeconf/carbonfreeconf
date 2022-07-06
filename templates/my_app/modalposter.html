@@ -1,0 +1,228 @@
+{% load static %}
+{% load i18n %}
+
+<style type="text/css">
+
+    video {
+      width: 100%;
+      max-height: 100%;
+    }
+
+    @media only screen  and (min-width : 1025px) {
+
+        #containerz {
+            position: relative;
+            padding-bottom: 56.28%; /*70.25%;/*was 56.28*/
+            padding-top: 35px;
+            height: 0;
+            overflow: hidden;
+        }
+
+        #containerz iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /*display: block;*/
+        }
+    }
+
+@media only  screen and (min-width : 320px) and (max-width : 480px) {
+.pdf {
+        position: relative;
+        padding-bottom: 56.25%;
+        text-align: center;
+        }
+
+.pdf iframe {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    display: block;
+    border: 0;
+}
+}
+
+.desktop-pdf {
+    display: none;
+}
+
+.mobile-pdf {
+    display: block;
+}
+
+@media only screen  and (min-width : 1025px) {
+
+  .mobile-pdf {
+      display: none;
+  }
+
+  .desktop-pdf {
+      display: block;
+  }
+}
+
+    .resp-iframe3 {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .resp-container3 {
+            position: relative;
+            height: 600px;
+            /*overflow: hidden;*/
+            /*padding-top: 56.25%;*/
+        }
+
+</style>
+
+<div id="extraLargeModal" class="modal fade" tabindex="-1" role="dialog" style="color: black">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><strong>{% trans 'Poster by'%} {{ instance.user.first_name }} {{ instance.user.last_name }}</strong><small> {% trans '(Viewed'%} {{ totalviews }} {% trans 'time'%}{{ totalviews|pluralize:"s" }})</small></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>{% trans 'Poster title:'%}</strong> {{ instance.title }}</p>
+
+                    {% if instance.mp4_url %}
+                        <div id="player-overlay" class="mb-4">
+                            <!--<p><strong>* Poster's video</strong></p>-->
+                          <video controls>
+                            <source src="{{ instance.mp4_url }}" type="video/mp4">
+                            {% trans "Sorry, your browser doesn't support embedded videos."%}
+
+                          </video>
+                        </div>
+
+                    {% endif %}
+
+                {% if instance.slides %}
+
+                 <div class="flex-containerz">
+                    <div id="containerz">
+
+                        <div class="outer-pdf" style="-webkit-overflow-scrolling: touch; overflow: auto;">
+                            <div class="pdf">
+                                <iframe class="desktop-pdf" scrolling="auto" src="{{ instance.slides.url }}" width="100%" height="90%" type='application/pdf' title="Poster">
+                                    <p style="font-size: 110%;"><em>{% trans "There is content being displayed here that your browser doesn't support."%}</em> <a href="{{ instance.slides.url }}" target="_blank"> {% trans 'Please click here to attempt to view the information in a separate browser window.'%} </a> {% trans 'Thanks for your patience!'%}</p>
+                                </iframe>
+                                <iframe class="mobile-pdf" scrolling="auto" src="https://drive.google.com/viewerng/viewer?embedded=true&url={{ instance.slides.url }}" width="100%" height="90%" type='application/pdf' title="Poster">
+                                    <p style="font-size: 110%;"><em>{% trans "There is content being displayed here that your browser doesn't support."%}</em> <a href="{{ instance.slides.url }}" target="_blank"> {% trans 'Please click here to attempt to view the information in a separate browser window.'%} </a> {% trans 'Thanks for your patience!'%}</p>
+                                </iframe>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endif %}
+                        <div style="text-align:center;">
+
+                    <div id="test4">{% trans 'Total number of upvotes:'%} {{instance.vote_score}}</div>
+                    <a class="navbar-brand d-inline-block align-center upvote" href="">
+                        <img src={% static "images/thumbs-up-icon.png" %} width="10%" class="d-inline-block align-center" alt="Thumbs up" data-toggle="tooltip" title="{% trans 'Upvote this poster? You can upvote each poster only once.'%}">
+                    </a>
+                    <div id="test3"></div>
+                        </div>
+                </div>
+                <div class="modal-body">
+                    {% include "my_app/posterchat.html" with invite_url=instance.poster_invite_chat_url resumetoken=resumetoken %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Done with the poster'%}</button>
+                    <!--<button type="button" class="btn btn-primary">OK</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+    $(document).on('click', '.navbar-brand.d-inline-block.align-center.upvote', function (event) {
+        event.preventDefault();
+        //alert($(this).closest("form").attr('id'));
+
+        voteup($(this));
+        return false;
+    });
+</script>
+
+<script>
+function voteup(thisObj) {
+console.log("voteup is working!");// sanity check
+//console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+    //alert('bef');
+$.ajax({
+    url : "/voteup/",//"{% url 'my_app:addpeople' %}", // the endpoint
+    type : "POST", // http method
+    //if(/Firefox[\/\s](\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 4)
+    //{
+    //async: datam.async,
+    //}
+    data : {    //title : $('#id_title').val(),
+
+                talkid : {{ instance.id }},//$('#peopleemailid').val(),
+
+                //loopnum : $('.divpeop').last().attr('id'),
+                //confnum : {{ confnum }},//$('#confnumid').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+
+        console.log(json); // log the returned json to the console
+        //var source = $("#result-template").html();
+        //alert(json.result+json.nbvote)
+        //$(document.body).append(html);
+
+        $("div[id='test3']").text('');
+        $("div[id='test4']").text('');
+
+        //if(json.result2==0){
+          //  e=1;
+            //exc='<i class="fas fa-exclamation-triangle ml-3"></i> <strong>This day should not exceed 8 hours!</strong>';
+        //}else{
+          //  e=0;
+        //}
+
+        $("#test3").append(json.result);
+        $("#test4").append("Total number of upvotes: " + json.nbvote);
+
+
+        //alert('success');
+        console.log("success"); // another sanity check
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+});
+};
+</script>
+
+ <!-- Start of Rocket.Chat Livechat Script -->
+    <!--<script type="text/javascript">
+    (function(w, d, s, u) {
+        w.RocketChat = function(c) { w.RocketChat._.push(c) }; w.RocketChat._ = []; w.RocketChat.url = u;
+        var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+        j.async = true; j.src = 'https://chat.carbonfreeconf.com/livechat/rocketchat-livechat.min.js?_=201903270000';
+        h.parentNode.insertBefore(j, h);
+    })(window, document, 'script', 'https://chat.carbonfreeconf.com/livechat');
+    </script>-->
+    <!-- End of Rocket.Chat Livechat Script -->
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

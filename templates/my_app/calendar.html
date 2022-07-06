@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} How to schedule my research workshop? {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="With CarbonFreeConf you can very easily schedule your virtual meeting with your peers in a few clicks" />
+{% endblock %}
+
+{% block content %}
+    <h2 style="text-align: center">Create conference</h2>
+    <div class="container">
+       <div class="clearfix">
+           <a class="btn btn-info left" href="{% url 'my_app:calendar' %}?{{ prev_month }}"> Previous Month </a>
+           <a class="btn btn-info right" href="{% url 'my_app:calendar' %}?{{ next_month }}"> Next Month </a>
+               <a class="btn btn-info right" href="{% url 'my_app:event_new' %}"> New Event </a>
+        </div>
+    </div>
+
+    {{ calendar }}
+
+{% endblock %}

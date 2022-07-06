@@ -1,0 +1,122 @@
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<style>
+    .modal .modal-dialog {
+   color: black;
+}
+
+</style>
+
+
+<div class="modal fade" id="myEdit3">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="fas fa-envelope"></i>
+				</div>
+                {% if username == 'program_committee_contact_A3@8l0' %}
+                    <h4 class="modal-title">{% trans 'Send an email to the program committee' %}</h4>
+                {% elif username == 'organizers_contact_A3@8l0op.' %}
+                    <h4 class="modal-title">{% trans 'Send an email to all the organizers' %}</h4>
+                {% else %}
+				    <h4 class="modal-title">{% trans 'Send an email to' %} {{ person.first_name }} {{ person.last_name }}</h4>
+                {% endif %}
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+
+
+			<div class="modal-body">
+
+				<h5><strong>{% trans 'Send an email about the conference:' %} {{ conftopass.title }}</strong>  </h5>
+            </div>
+                <div class="modal-body">
+
+                    {% if user.is_authenticated %}
+
+                <form enctype="multipart/form-data" method="POST" action="{% url 'my_app:contactperson' confnum username fromm %}">
+                {% csrf_token %}
+                <div class="row">
+                        {{ emailpeople.replyto.as_hidden }}
+
+                    <div class="col-12 mb-2">
+                        {{ emailpeople.subjectt|as_crispy_field }}
+                    </div>
+                    <div class="col-12 mb-2">
+                        {{ emailpeople.message|as_crispy_field }}
+                    </div>
+                    <div class="col-12 mb-2">
+                        {{ emailpeople.captcha|as_crispy_field }}
+                    </div>
+
+                </div>
+                    {% if username == 'program_committee_contact_A3@8l0' %}
+                    <button type="submit" class="btn btn-warning mt-2"> {% trans 'Send the email to the Program Committee' %}</button>
+                    
+                    <i data-toggle="tooltip" data-placement="right" title="{% trans 'This will send the email you have written to all the members of the program committee' %}" class="fas fa-info-circle ml-2 mt-5 pt-3"></i>
+                {% elif username == 'organizers_contact_A3@8l0op.' %}
+                    <button type="submit" class="btn btn-warning mt-2"> {% trans 'Send the email to the organizers' %}</button>
+                    <i data-toggle="tooltip" data-placement="right" title="{% trans 'This will send the email you have written to all the organizers' %}" class="fas fa-info-circle ml-2 mt-5 pt-3"></i>
+                {% else %}
+                    <button type="submit" class="btn btn-warning mt-2"> {% trans 'Send the email to' %} {{ person.first_name }} {{ person.last_name }}</button>
+                    <i data-toggle="tooltip" data-placement="right" title="{% trans 'This will send the email you have written to the person you selected' %}" class="fas fa-info-circle ml-2 mt-5 pt-3"></i>
+                {% endif %}
+
+                </form>
+                    {% else %}
+                    <h5 style="color: red">{% trans 'You need to log-in to be able to send emails to participants' %}</h5>
+                    {% endif %}
+
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Cancel' %}</button>
+
+                <input type="hidden" name="tittalk" value="b" />
+                <input type="hidden" name="confnum" value="j" />
+
+			</div>
+                <div class="modal-footer"></div>
+
+		</div>
+	</div>
+</div>
+
+<script>
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
+<script>
+    $(function() {
+    // Add refresh button after field (this can be done in the template as well)
+    $('img.captcha').after(
+            $('<a href="#void" class="captcha-refresh" style="color:dodgerblue"><small>  Refresh</small></a>')
+            );
+
+    // Click-handler for the refresh-link
+    $('.captcha-refresh').click(function(){
+        var $form = $(this).parents('form');
+        var url = location.protocol + "//" + window.location.hostname + ":"
+                  + location.port + "/captcha/refresh/";
+
+        // Make the AJAX-call
+        $.getJSON(url, {}, function(json) {
+            $form.find('input[name="captcha_0"]').val(json.key);
+            $form.find('img.captcha').attr('src', json.image_url);
+        });
+
+        return false;
+    });
+});
+    </script>
+
+
+
+
+

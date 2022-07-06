@@ -1,0 +1,28 @@
+{% extends 'qa/base.html' %}
+{% load django_markdown %}
+
+{% block content %}
+
+<style>
+    #qform p label,
+    #qform p input{
+        display: block;
+        /*clear: left;*/
+    }
+</style>
+
+  {% if message %}
+    <strong>Enter a valid Answer!</strong>
+  {% endif %}
+
+  <form method="post" id="qform" action="">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input class="btn pull-right btn-success" type="submit" value="Submit Comment" />
+  </form>
+
+</div>
+
+{% markdown_editor "#ans" %}
+{% markdown_media %}
+{% endblock content %}

@@ -1,0 +1,29 @@
+{% load index %}
+
+<div class="container">
+    {% if post_list %}
+        <div class="row">
+            <!-- Blog Entries Column -->
+
+            {% for post in post_list %}
+                <div class="col-md-4 mt-3 left">
+                <!--<div class="col-lg 3 col-md-3 col-sm-12 col-xs-12 mt-4 mb-4">-->
+                    <div class="card mb-4">
+                        <div class="card-body" style="font-weight: normal;">
+                            <h1 class="card-title">{{ post.title }}</h1>
+                            <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+                            <p class="card-text">{{post.content|safe}}</p>
+                            <a href="{% url 'my_app2:post_detail' post.slug  %}" class="btn btn-primary">Read More &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <p><a href="{% url 'my_app2:news' %}">See all the news</a></p>
+
+    {% else %}
+        <p style="font-weight: normal;">No news so far</p>
+    {% endif %}
+</div>
+
+

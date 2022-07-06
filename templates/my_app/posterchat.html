@@ -1,0 +1,49 @@
+{% load i18n %}
+
+<style>
+        .resp-iframe3 {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .resp-container3 {
+            position: relative;
+            height: 600px;
+            /*overflow: hidden;*/
+            /*padding-top: 56.25%;*/
+        }
+
+</style>
+
+<div class="container">
+    <!--add https://go.rocket.chat/invite?host=chat.carbonfreeconf.com&path=invite%2F9n3KNE-->
+    <div style="text-align:center;">
+        <h5>{% trans 'Ask a question down below'%}{% if not user.is_authenticated %}<small> {% trans '(You need to log-in to be able to ask a question)'%}</small>{% endif %}</h5>
+        <!--<button class='btn btn-primary mt-3 mb-3' onclick="displayIframe()">Ask a question?</button>-->
+    </div>
+
+    <div id="iframeDisplay"></div>
+
+    <script>
+        $( document ).ready(function() {
+
+            //function displayIframe() {
+                //document.getElementById("iframeDisplay").innerHTML = "<iframe src=\"my_app/posterchat.html\" height=\"200\" width=\"300\" ></iframe>";
+                document.getElementById("iframeDisplay").innerHTML = '<div class="resp-container3 mb-3">' +
+                    '<iframe class="resp-iframe3" id="myiFrame" frameBorder="0"' +
+                    'title="CarbonFreeChat"' +
+                    'src="{{ invite_url }}?resumeToken={{ resumetoken }}"' +
+                    //'src="https://chat.carbonfreeconf.com/home?resumeToken={{ resumetoken }}"' +
+                    'allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allow="microphone; camera;">' +
+                    '</iframe>' +
+                    '</div>';
+
+            //}
+        })
+    </script>
+
+</div>

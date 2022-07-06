@@ -1,0 +1,55 @@
+{% load crispy_forms_tags %}
+
+<div class="modal fade" id="myEdit55">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="align-items: center;">
+				<div class="icon-box mr-2">
+					<i class="fas fa-unlock-alt" style="color: black;"></i>
+				</div>
+				<h4 class="modal-title ml-2" style="color: black;">Forgot your password?</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+			</div>
+
+
+
+			<div class="modal-body">
+                {% if web %}
+                    <form enctype="multipart/form-data" id="forgotpassid" method="POST" action="{% url 'my_app:forgotpass' web %}">
+                {% else %}
+                    <form enctype="multipart/form-data" id="forgotpassid" method="POST" action="{% url 'my_app:forgotpass' %}">
+                {% endif %}
+                {% csrf_token %}
+				<!--<p><strong>Enter your login:</strong>  </p>
+
+                <label for="username" class="sr-only">Username</label>
+                <input name="username" class="form-control log" placeholder="Username" required="" autofocus="" type="text">-->
+
+				<p class="mt-4" style="color: black;"><strong>Enter the email you used to subscribe:</strong>  </p>
+
+                <label for="email" class="sr-only">Email</label>
+                <input name="email" class="form-control log" placeholder="Email" required="" autofocus="" type="text">
+
+                <!--<p class="mt-4"><strong>Enter your First name:</strong>  </p>
+
+                <label for="fname" class="sr-only">First name</label>
+                <input name="fname" class="form-control log" placeholder="First name" required="" autofocus="" type="text">
+
+                <p class="mt-4"><strong>Enter your Institute/Company:</strong>  </p>
+
+                <label for="ins" class="sr-only">Institute/Company</label>
+                <input name="ins" class="form-control log" placeholder="Institute/Company" required="" autofocus="" type="text">-->
+
+                <button type="submit" class="btn btn-danger mt-2"> Receive instructions to change my password </button>
+                </form>
+                <div id="test3"></div>
+            </div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+			</div>
+
+		</div>
+	</div>
+</div>

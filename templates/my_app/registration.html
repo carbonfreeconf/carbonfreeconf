@@ -1,0 +1,386 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %} Register to the virtual conference company CarbonFreeConf {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="Come register with us now and in no time you can prepare a topical research conference with people around the planet working in your field." />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/register/" />
+{% endblock %}
+
+{% block header_class %}no-header{% endblock %}
+{% block footer_class %}no-footer{% endblock %}
+
+{% block content %}
+    <style>
+    .help-block {
+        color: black;
+    }
+    .pass_error{
+        color:orange;
+        border-color: #ccc !important;
+    }
+    </style>
+
+<div class="register-wrapper">
+  
+  <div class="left">
+    <img class="dots" src="{% static "images/dots.svg" %}" alt="">
+    <a href="{% url 'my_app:home' %}">CarbonFreeConf.</a>
+    <p>Create your account now and start organizing your conference.</p>
+  </div>
+
+  <div class="right">
+    {% if registered %}
+    <div class="jumbotron mt-4">
+        {% blocktrans %}
+      <h2>Thank you for registering!</h2><br>
+      <h5>You have received an email with some information about CarbonFreeConf. <strong>Please note that you need to click on the activation link in this email within a week or it will become impossible to log-in.</strong></h5>
+      {% endblocktrans %}
+      <h5 class="mb-3">{% blocktrans %}You are now logged-in and can start <a href="/{{LANGUAGE_CODE}}/host-conference"> developing your own conference </a> or access to other tools such as seeing <a href="/{{LANGUAGE_CODE}}/archive">archived conference videos</a>, <a href="/{{LANGUAGE_CODE}}/join-conference">join an on-going conference</a>, see <a href="/{{LANGUAGE_CODE}}/archiveproc">archived proceedings</a>, ...{% endblocktrans %}</h5>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-1 mb-5">
+        <div class="container2">
+          <a href="/{{LANGUAGE_CODE}}/host-conference"><img src="{% static 'images/create_conf_with_title-1.svg' %}" class="image" alt="Create a conference">
+          <div class="middle">
+              <div class="text">Start organizing your webinar</div>
+          </div></a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+
+    <h1>Create your account</h1>
+    <p class="signin">Already have an account? <a href="/{{LANGUAGE_CODE}}/user_login">Sign in</a></p>
+
+    <form enctype="multipart/form-data" method="POST" novalidate>
+
+      {% csrf_token %}
+
+      <span class="{% if user_form.first_name.errors %}pass_error{% endif %}">
+        {{ user_form.first_name|as_crispy_field }}
+      </span>
+
+      <span class="{% if user_form.last_name.errors %}pass_error{% endif %}">
+        {{ user_form.last_name|as_crispy_field }}
+      </span>
+
+      <span class="{% if user_form.username.errors %}pass_error{% endif %}">
+        {{ user_form.username|as_crispy_field }}
+      </span>
+      <div id="testuname"></div>
+      
+      {% comment %}{% for error in user_form.username.errors %}
+        <strong style="color:crimson">{{ error }}</strong>
+      {% endfor %}{% endcomment %}
+      
+
+      <span class="{% if user_form.email.errors %}pass_error{% endif %}">
+        {{ user_form.email|as_crispy_field }}
+      </span>
+      
+      <div id="testuemail"></div>
+      {% if dispemail %}
+        <p style="color:crimson;margin-bottom:1rem">We do not accept that kind of emails.</p>
+      {% endif %}
+
+      <span class="{% if profile_form.instcountry.errors %}pass_error{% endif %}">
+        {{ profile_form.instcountry|as_crispy_field }}
+      </span>
+
+      <span class="{% if profile_form.institute.errors %}pass_error{% endif %}">
+        {{ profile_form.institute|as_crispy_field }}
+      </span>
+
+      <span class="{% if user_form.password.errors %}pass_error{% endif %}">
+        {{ user_form.password|as_crispy_field }}
+      </span>
+      
+      <div id="testupass"></div>
+
+
+      <!-- {{ profile_form.job|as_crispy_field }}
+
+      <span class="{% if profile_form.institute.errors %}pass_error{% endif %}">
+      {{ profile_form.institute|as_crispy_field }}
+      </span>
+
+      <span class="{% if profile_form.instcountry.errors %}pass_error{% endif %}">
+      {{ profile_form.instcountry|as_crispy_field }}
+      </span>
+
+      {{ profile_form.orcid|as_crispy_field }}<div class="orcid"></div>
+
+      <span class="btn btn-primary btn-file mt-3">
+        <i class="fa fa-image"></i> Add a profile picture {{ profile_form.profile_pic|as_crispy_field }}
+      </span>
+      <label id="file-name"></label>
+
+      <script>
+          $("#id_profile_pic").change(function(){
+              $("#file-name").text(this.files[0].name);
+          });
+      </script> -->
+
+      <p>{{ profile_form.captcha|as_crispy_field }}</p>
+
+
+
+
+        <label for="rgpd" class="checkbox">
+          <input type="checkbox" id="rgpd" name="rgpd" required>
+          <!--<svg viewBox="0 0 21 21"><path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path></svg>-->
+          <small>{% blocktrans %}By registering with CarbonFreeConf, you agree to our <a href="/{{LANGUAGE_CODE}}/terms" target="_blank">terms of use</a> and <a href="/{{LANGUAGE_CODE}}/privacy" target="_blank">privacy policy</a>.{% endblocktrans %}</small>
+        </label>
+
+        <input type="hidden" name="comingfrom" value={{ comingfrom }} />
+        <input type="hidden" name="linkfrom" value = "{{ linkfrom }}" />
+        <input type="hidden" name="realsub" value="brah" />
+        <button type="submit" id="regnow" class="btn">{% blocktrans %}Create Account{% endblocktrans %}</button>
+
+    </form>
+
+    {% endif %}
+
+    <p id="terms"><a href="/{{LANGUAGE_CODE}}/terms">{% trans 'Terms and conditions' %}</a> | <a href="/{{LANGUAGE_CODE}}/privacy">{% trans 'Privacy policy' %}</a></p>
+
+  </div>
+
+</div>
+
+
+    <script>
+    $(function() {
+    // Add refresh button after field (this can be done in the template as well)
+    $('img.captcha').after(
+            $('<a href="#void" class="captcha-refresh"><small>  Refresh</small></a>')
+            );
+
+    // Click-handler for the refresh-link
+    $('.captcha-refresh').click(function(){
+        var $form = $(this).parents('form');
+        var url = location.protocol + "//" + window.location.hostname + ":"
+                  + location.port + "/captcha/refresh/";
+
+        // Make the AJAX-call
+        $.getJSON(url, {}, function(json) {
+            $form.find('input[name="captcha_0"]').val(json.key);
+            $form.find('img.captcha').attr('src', json.image_url);
+        });
+
+        return false;
+    });
+});
+    </script>
+    <script>
+        function hasNonStandard(inputElem) {
+            //alert(inputElem);
+            //return /[^\w]/.test(inputElem.value);
+            return /(^\d{4}-\d{4}-\d{4}-\d{4}|\d{3}[X]$)/.test(inputElem);
+
+        }
+    </script>
+    <script>
+        $("#id_orcid").keyup(function() {
+            var regExp = $("#id_orcid").val();
+            //alert(regExp+hasNonStandard(regExp));
+            if(regExp != ''){
+            if (hasNonStandard(regExp) == true) {
+                //alert('It should start with a # so let us add one.');
+                $(".orcid").html('<small style="color:green;">The Orcid number has the right format<small>');
+                $("#regnow").prop("disabled",false);
+            }else{
+                $(".orcid").html('<small style="color:red;">The Orcid number should be of the form 1111-1111-1111-1111</small>');
+                $("#regnow").prop("disabled",true);
+            }
+            }else{
+                $(".orcid").text('');
+                $("#regnow").prop("disabled",false);
+            }
+        }
+    )
+    </script>
+<script>
+    $(document).on('input', '[id="id_username"]', function (event) {
+        event.preventDefault();
+        //alert('onfoc');
+        checkusernameb($(this));
+        return false;
+    });
+</script>
+<script>
+    function checkusernameb(thisObj) {
+        console.log("username is working!");// sanity check
+        //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+        $.ajax({
+            url : "/checkusername/",//", // the endpoint
+            type : "POST", // http method
+            data : {    uname : $('#id_username').val(),
+                        //loopnum : $('.divpeop').last().attr('id'),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //$('#results').text('');
+                $("div[id='testuname']").text('');
+                //$('#regconf').prop('disabled', false);
+                //$('#id_firstname').val(''); // remove the value from the input
+                //$('#id_lastname').val('');
+                //$('#id_email').val('');
+                console.log(json); // log the returned json to the console
+                //var source = $("#result-template").html();
+                //alert(json.title)
+                //$(document.body).append(html);
+
+                if (json.already == 1) {
+                    //alert('yes');
+                    $("#testuname").append("<p style='color: red;'>The username: '" + json.uname + "' is already used, please select another one.</p>");
+                    //$('#regconf').prop('disabled', true);
+
+                }
+                if (json.alphanum == 1) {
+                    //alert('yes');
+                    $("#testuname").append("<p style='color: red;'>Wrong username: Only alphanumeric characters are allowed (letters, digits, hyphens and underscores, no accents).</p>");
+                    //$('#regconf').prop('disabled', true);
+
+                }
+                if (json.toolong == 1) {
+                    //alert('yes');
+                    $("#testuname").append("<p style='color: red;'>Your username is too long. It should be less than 150 characters.</p>");
+                    //$('#regconf').prop('disabled', true);
+
+                }
+                //alert('success');
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+</script>
+
+<script>
+    $(document).on('input', '[id="id_password"]', function (event) {
+        event.preventDefault();
+        //alert('onfoc');
+        checkpasswordb($(this));
+        return false;
+    });
+</script>
+
+<script>
+    function checkpasswordb(thisObj) {
+        //console.log("pass is working!");// sanity check
+        //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+        $.ajax({
+            url : "/checkpassword/",//", // the endpoint
+            type : "POST", // http method
+            data : {    upass : $('#id_password').val(),
+                        //loopnum : $('.divpeop').last().attr('id'),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //$('#results').text('');
+                $("div[id='testupass']").text('');
+                //$('#regconf').prop('disabled', false);
+                //$('#id_firstname').val(''); // remove the value from the input
+                //$('#id_lastname').val('');
+                //$('#id_email').val('');
+                //console.log(json); // log the returned json to the console
+                //var source = $("#result-template").html();
+                //alert(json.title)
+                //$(document.body).append(html);
+
+                if (json.pass == 1) {
+                    //alert('yes');
+                    $("#testupass").append("<p style='color: red;'>"+json.passerr+"</p>");
+                    //$('#regconf').prop('disabled', true);
+
+                }
+
+                //alert('success');
+                //console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+</script>
+
+<script>
+    $(document).on('input', '[id="id_email"]', function (event) {
+        event.preventDefault();
+        //alert('onfoc');
+        checkemailb($(this));
+        return false;
+    });
+</script>
+
+<script>
+    function checkemailb(thisObj) {
+        //console.log("pass is working!");// sanity check
+        //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+        $.ajax({
+            url : "/checkemail/",//", // the endpoint
+            type : "POST", // http method
+            data : {    uemail : $('#id_email').val(),
+                        //loopnum : $('.divpeop').last().attr('id'),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //$('#results').text('');
+                $("div[id='testuemail']").text('');
+                //$('#regconf').prop('disabled', false);
+                //$('#id_firstname').val(''); // remove the value from the input
+                //$('#id_lastname').val('');
+                //$('#id_email').val('');
+                //console.log(json); // log the returned json to the console
+                //var source = $("#result-template").html();
+                //alert(json.title)
+                //$(document.body).append(html);
+
+                if (json.email == 1) {
+                    //alert('yes');
+                    $("#testuemail").append("<p style='color: red;'>"+json.emailerr+"</p>");
+                    //$('#regconf').prop('disabled', true);
+
+                }
+
+                if (json.emailalready == 1) {
+                    //alert('yes');
+                    $("#testuemail").append("<p style='color: red;'>Email already in use.</p>");
+                    //$('#regconf').prop('disabled', true);
+
+                }
+
+                //alert('success');
+                //console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+</script>
+
+{% endblock %}

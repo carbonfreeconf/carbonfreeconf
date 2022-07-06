@@ -1,0 +1,42 @@
+   {% load static %}
+
+
+<link href="{% static 'css/stylesimon.css' %}" rel="stylesheet" type="text/css" />
+  <main class="game">
+  <header>
+    <h5 class="heading js-heading">Simon Game</h5>
+  </header>
+
+  <section class="tile-container js-container unclickable">
+    <div class="tile tile-red" data-tile="red"></div>
+    <div class="tile tile-green" data-tile="green"></div>
+    <div class="tile tile-blue" data-tile="blue"></div>
+    <div class="tile tile-yellow" data-tile="yellow"></div>
+  </section>
+
+  <footer class="info-section">
+    <button class="start-button js-start">Start</button>
+    <span class="info js-info hidden"></span>
+  </footer>
+</main>
+
+<div class="hidden">
+  <audio
+    src="{% static 'sounds/simonSound1.mp3' %}"
+    data-sound="red"
+  ></audio>
+  <audio
+    src="{% static 'sounds/simonSound2.mp3' %}"
+    data-sound="green"
+  ></audio>
+  <audio
+    src="{% static 'sounds/simonSound3.mp3' %}"
+    data-sound="blue"
+  ></audio>
+  <audio
+    src="{% static 'sounds/simonSound4.mp3' %}"
+    data-sound="yellow"
+  ></audio>
+</div>
+
+<script src="{% static 'js/simon.js' %}"></script>

@@ -1,0 +1,148 @@
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<style>
+    /*.modal-dialog {
+      height: 90%; /* = 90% of the .modal-backdrop block = %90 of the screen */
+    /*}
+    .modal-content {
+      height: 100%; /* = 100% of the .modal-dialog block */
+    /*}*/
+
+</style>
+
+<script>
+    var $unique = $(".uniqueid");
+
+    function myNewFunction(sel) {
+        //alert(sel.options[sel.selectedIndex].value);
+        $unique.val(sel.options[sel.selectedIndex].value);
+    }
+
+    var $unique2 = $(".uniqueid2");
+
+    function myNewFunction2(sel) {
+        //alert(sel.options[sel.selectedIndex].value);
+        $unique2.val(sel.options[sel.selectedIndex].value);
+    }
+
+    var $unique3 = $(".uniqueid3");
+
+    function myNewFunction3(sel) {
+        //alert(sel.options[sel.selectedIndex].value);
+        $unique3.val(sel.options[sel.selectedIndex].value);
+    }
+
+    //var test=$("#role-select :selected").val();
+    //alert(test);
+    //var $unique = $(".uniqueid");
+    //$unique.val(test);
+</script>
+<div class="modal fade" id="myEdit3">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="fas fa-envelope"></i>
+				</div>
+				<h4 class="modal-title">{% trans 'Send an email to' %} {{ person.firstname }} {{ person.lastname }} ({{ person.email }})</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+
+
+			<div class="modal-body">
+
+				<p><strong>{% trans 'Send an email about the conference:' %} {{ conftopass.title }}</strong>  </p>
+            </div>
+                <div class="modal-body">
+
+                <form enctype="multipart/form-data" method="POST" action="{% url 'my_app:email' confnum email %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6">
+                        {{ emailpeople.replyto|as_crispy_field }}
+                    </div>
+                    <div class="col-6">
+                    <div class="tags_select0"><small><a href="#">{% trans 'Click here if no reply is needed' %}</a></small></div>
+                    </div>
+                    <div class="col-12">
+                        {{ emailpeople.subjectt|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ emailpeople.message|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                    <div class="tags_select"><small><a href="#">{% trans 'Copy link to your conference website into your message up here' %}</a></small></div>
+                    </div>
+                    <div class="col-12">
+                    <div class="tags_select2"><small><a href="#">{% trans 'Copy link to join the conference into your message up here' %}</a></small></div>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-warning mt-2"> {% trans 'Send the email to' %} {{ person.firstname }} {{ person.lastname }}</button>
+                </form>
+                <i data-toggle="tooltip" data-placement="bottom" title="{% trans 'This will send the email you have written to all persons you indicated.' %}" class="fas fa-info-circle ml-2 mt-2"></i>
+
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Cancel' %}</button>
+
+                <input type="hidden" name="tittalk" value="b" />
+                <input type="hidden" name="confnum" value="j" />
+
+			</div>
+                <div class="modal-footer"></div>
+
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    var confnum={{ confnum }}
+    $(function() {
+        $('.tags_select0 a').click(function() {
+            var value = "noreply@carbonfreeconf.com";
+            var input = $('#id_replyto');
+            input.val(input.val()+' '+ value);
+            return false;
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var confnum={{ confnum }}
+    $(function() {
+        $('.tags_select a').click(function() {
+            var value = "https://www.carbonfreeconf.com/website/"+confnum+"/home";
+            var input = $('#id_message');
+            input.val(input.val()+' '+ value);
+            return false;
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var confnum={{ confnum }}
+    $(function() {
+        $('.tags_select2 a').click(function() {
+            {% ifequal conftopass.priv "Public" %}
+                var value = "https://www.carbonfreeconf.com/join-conference/"+confnum+"/{{ conftopass.privpass }}";
+            {% else %}
+            var value = "https://www.carbonfreeconf.com/join-conference/"+confnum;
+            {% endifequal %}            var input = $('#id_message');
+            input.val(input.val() +' '+ value);
+            return false;
+        });
+    });
+</script>
+
+
+<script>
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

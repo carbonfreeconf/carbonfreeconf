@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %} Some tricks to organize a virtual conference {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Tips, tricks, advice to organize research conferences" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container mb-3">
+    <div class="jumbotron mt-4">
+        <h1 class="display-4">Tips, tricks, advice for creating a virtual conference</h1>
+        <p class="lead"> We just list a few useful tips and advice that you may find helpful when using our services and organizing a virtual conference.</p>
+        <hr class="my-4">
+        <div style="text-align: center">
+            <a class="btn btn-primary btn-lg" href="{% url 'my_app:tutorial' %}" role="button">Also check our tutorial</a>
+            <a class="btn btn-primary btn-lg" href="{% url 'my_app:createconf' %}" role="button">Create a conference</a>
+        </div>
+    </div>
+
+    <ul class="list-group">
+        <li class="list-group-item"><strong>5-minute series of tips when creating a conference with CarbonFreeConf</strong></li>
+        <li class="list-group-item list-group-item-secondary"><p><h3 style="display:inline;">1)</h3> You have permanent access to <mark>test rooms</mark>
+            to <strong>organize your conference-related meetings</strong>. You can come and meet with your co-organizers in this test room and start getting familiar
+            with the multiple possibilities opened to you when you actually manage the conference on the big day. You can also meet with the program committee (decision panel)
+            members in these test rooms to, e.g., pick the right list of attendees, decide on who you give a talk to, ... <strong>Other participants (that are not superusers or part of the organizers/decision panel) are not allowed in test rooms
+            and everything that is said can thus be kept secret.</strong></p></li>
+        <li class="list-group-item list-group-item-primary"><p><h3 style="display:inline;">2)</h3> If you organize a conference with more than 20 participants, that may
+            be handy to fill in your <mark>participant list</mark> in an <strong>Excel file</strong> which can then be inputted in your administration panel rather than adding participants one by one.</p> </li>
+        <li class="list-group-item list-group-item-success"><p><h3 style="display:inline;">3)</h3> You can send <mark>emails</mark> to your participants and/or organization committee from the admin panel.
+            <strong>There are many options to select the right people you want to send emails to</strong> (e.g. unregistered participants, members of the decision panel, persons with invited talks or posters, ...).
+            Note that you can select several of these lists together and persons happening to be in multiple lists will only receive one email.
+            <strong>You can also add a link to your conference website into your email and/or
+            a link to the conference room</strong> for the big day by clicking on 'Copy link to...' below the message box when writing the email. You can also send individual emails by clicking on the <span class="fa fa-envelope" aria-hidden="true"></span> symbol next to a participant's name.</p></li>
+        <li class="list-group-item list-group-item-warning"><p><h3 style="display:inline;">4)</h3> Do not hesitate to use the <span class="fa fa-plus" aria-hidden="true"></span> button once you have accepted a talk to add it
+            to your program. <strong>It will then copy all information (such as abstract, title, speaker's name, ...) directly into the <mark>program scheduler</mark> and it will be visible
+            on your conference website</strong>. You will just have
+            to position this new talk at the right time you want.</p></li>
+        <li class="list-group-item list-group-item-danger"><p><h3 style="display:inline;">5)</h3> Ahead of the conference and as soon as your participants have their participations
+            accepted, they can <mark>add slides or posters</mark> on your conference website (they have to go to 'my participations') that will be uploaded on our side and can be retrieved by you or other participants (or made public).</p></li>
+        <li class="list-group-item list-group-item-info"><p><h3 style="display:inline;">6)</h3> You can decide to <mark>ask for a small participation fee to all of your participants</mark> (if the conference is not free on our side)
+            so that the overall cost is shared across many people. Your organization/institute can even make profits. You can then decide to use this extra money to offset more carbon emissions than produced by your virtual meeting or that it is paid to you (which we do not encourage unless it is for a good cause, e.g. offsetting carbon emissions at your intitute, paying for a poster/research prize at the end of your conference, ...).
+            For instance asking for a small amount of 20 € to each of the 100 potential participants already
+            covers the expenses for the conference and CO<sub>2</sub> offset (about 260 € for three days) and leaves a <strong>profit of about 1,500 €</strong>.</p></li>
+        <li class="list-group-item list-group-item-light"><p><h3 style="display:inline;">7)</h3> <strong>Three private rooms (one for organizers, one for all participants and one for coffee breaks) will be automatically created</strong> in the chat area. If you want, you can
+            create <mark>more private rooms</mark> and invite the specific participants that can access each of them (through the chat room tab). Wait until all participants have subscribed as otherwise they will not be
+            visible in the chat tab.</p></li>
+        <li class="list-group-item list-group-item-dark"><p><h3 style="display:inline;">8)</h3> If posters are allowed, you should tell poster presenters that they can use the private rooms dedicated to their posters in the chat area to
+            <mark>produce a voice recording</mark> that can be listened by other participants. This recording should explain quickly what the poster is about and the main results and it will always be accessible throughout the conference.
+            You may also want to have <strong>some time dedicated to poster in your schedule</strong> where presenters would be present and participants could call them or chat with them about their posters.</p></li>
+        <li class="list-group-item"><p><h3 style="display:inline;">9)</h3> Each day the backstage of the conference <mark>becomes accessible one hour before the official launch time</mark>.
+            You should tell <strong>presenters from the first session to come early and test their presentations</strong> before it goes live. You could plan for 30min breaks between each session that chairs/moderators can
+            use for giving the opportunity to presenters from the coming session to test the virtual interface and see if they can access their presentations without any issue. </p></li>
+        <li class="list-group-item list-group-item-secondary"><p><h3 style="display:inline;">10)</h3> If you record the presentations, you can either push the record button once in the virtual room or record talks one by one by stopping the recording when necessary. If the latter, the talks will then be uploaded one by one on our side and you will be able to give a different title to each of them (e.g. for each different speakers).</p></li>
+    </ul>
+</div>
+
+
+
+{% endblock %}

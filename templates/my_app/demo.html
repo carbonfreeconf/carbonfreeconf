@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+{% block title %} {% trans 'Request a demo to run a virtual conference' %} {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="{% trans 'Request a free demo and we will show you how to organize a research workshop using the CarbonFreeConf platform' %}" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+
+{% block content %}
+
+<div class="comingsoon" style="display: none;">
+  <div>
+    <a href="/{{LANGUAGE_CODE}}/" class="back">{% blocktrans %}Back Home{% endblocktrans %}</a>
+    {% blocktrans %}<h1>Coming <span>Soon</span>.</h1>{% endblocktrans %}
+  </div>
+</div>
+
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">{% blocktrans %}Free demo request{% endblocktrans %}</h1>
+        <form method="post">
+            {% csrf_token %}
+                <div class="row">
+                    <div class="col-12">
+                        {{ demoform.from_email|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ demoform.fname|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ demoform.lname|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ demoform.company|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ demoform.phone|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ demoform.message|as_crispy_field }}
+                    </div>
+                    <div class="col-12">
+                        {{ demoform.captcha|as_crispy_field }}
+                    </div>
+                </div>
+                    <div class="form-actions">
+              <button type="submit" class="btn btn-primary btn-lg mb-2 mt-2">{% trans 'Send' %}</button>
+            </div>
+        </form>
+        {% if messages %}
+            {% for message in messages %}
+                {%if "err" in message.tags %}
+                     <div class="alert alert-danger mt-2" role="alert">
+                        <p>{{ message }}</p>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success mt-2" role="alert">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    $(function() {
+    // Add refresh button after field (this can be done in the template as well)
+    $('img.captcha').after(
+            $('<a href="#void" class="captcha-refresh"><small>  Refresh</small></a>')
+            );
+
+    // Click-handler for the refresh-link
+    $('.captcha-refresh').click(function(){
+        var $form = $(this).parents('form');
+        var url = location.protocol + "//" + window.location.hostname + ":"
+                  + location.port + "/captcha/refresh/";
+
+        // Make the AJAX-call
+        $.getJSON(url, {}, function(json) {
+            $form.find('input[name="captcha_0"]').val(json.key);
+            $form.find('img.captcha').attr('src', json.image_url);
+        });
+
+        return false;
+    });
+});
+    </script>
+
+{% endblock %}

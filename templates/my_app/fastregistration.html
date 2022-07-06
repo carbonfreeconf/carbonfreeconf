@@ -1,0 +1,1315 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load index %}
+{% load el_pagination_tags %}
+{% load thumbnail %}
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title> Carbon-free virtual conference about: "{{ conftopass.title }}" </title>
+        <meta name="description" content="Create a website for your virtual workshops in a few clicks. Example: {{ conftopass.title }}." />
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@ConfFree">
+        <meta name="twitter:title" content="Upcoming virtual conference">
+        <meta name="twitter:description" content="Register to the upcoming carbon-neutral conference about: '{{ conftopass.title }}'.">
+        <meta name="twitter:creator" content="@ConfFree">
+        {% if conftopass.room_logo and imresizetw %}
+            <meta name="twitter:image" content="{{ imresizetw }}">
+        {% else %}
+            <meta name="twitter:image" content="{% static 'images/logotwit.png' %}">
+        {% endif %}
+        <meta name="twitter:domain" content="www.carbonfreeconf.com">
+
+        <meta property="og:url" content="www.carbonfreeconf.com/website/{{ confnum }}/home" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Upcoming virtual conference" />
+        <meta property="og:description" content="Register to the upcoming carbon-neutral conference about: '{{ conftopass.title }}'." />
+        {% if conftopass.room_logo and imresizefb %}
+        <meta property="og:image" content="{{ imresizefb }}" />
+        {% else %}
+        <meta property="og:image" content="{% static 'images/logotwit.png' %}" />
+        {% endif %}
+        <!--<meta property="og:image:width" content="450"/>
+        <meta property="og:image:height" content="298"/>-->
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-165944102-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <!-- Custom styles for this template -->
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="{%  static 'images/trainingred.svg' %}">
+
+    <link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.css" type="text/css">
+    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js" type="text/javascript"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+
+   <!-- <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"></script>-->
+    <!------ Include the above in your HEAD tag ---------->
+
+      <script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+    <style>
+        /* The switch - the box around the slider */
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 50px;
+          height: 28px;
+          float:right;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {display:none;}
+
+        /* The slider */
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 22px;
+          width: 22px;
+          left: 1px;
+          bottom: 3px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+
+        input.default:checked + span {
+          background-color: #444;
+        }
+        input.primary:checked + span {
+          background-color: #2196F3;
+        }
+        input.success:checked + span {
+          background-color: #8bc34a;
+        }
+        input.info:checked + span {
+          background-color: #3de0f5;
+        }
+        input.warning:checked + span {
+          background-color: #FFC107;
+        }
+        input.danger:checked + span {
+          background-color: #f44336;
+        }
+
+        input:focus + span {
+          box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + span:before {
+          -webkit-transform: translateX(26px);
+          -ms-transform: translateX(26px);
+          transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+          border-radius: 34px;
+        }
+
+        .slider.round:before {
+          border-radius: 50%;
+        }
+
+        /*
+         * Globals
+         */
+
+        /* Links */
+        a,
+        a:focus,
+        a:hover {
+          color: #fff;
+        }
+
+        /* Custom default button */
+        .btn-secondary,
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+          color: #333;
+          text-shadow: none; /* Prevent inheritance from `body` */
+          background-color: #fff;
+          border: .05rem solid #fff;
+        }
+
+
+        /*
+         * Base structure
+         */
+
+        html,
+        body {
+          /*height: 100%;*/
+          /*min-height: 100%;*/
+          background-color: #000000;/*let user choose*/
+        }
+
+        html {
+           height: 100%;
+        }
+
+        body {
+           min-height: 100%;
+        }
+
+        body {
+          display: -ms-flexbox;
+          display: -webkit-box;
+          display: flex;
+          -ms-flex-pack: center;
+          -webkit-box-pack: center;
+          justify-content: center;
+          color: rgba(255, 255, 255, 1);/*let user choose color text*/
+          text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+          box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+        }
+
+        .cover-container {
+          max-width: 88em;
+        }
+
+        .resp-container-vid {
+            position: relative;
+            /*overflow: hidden;*/
+            height: 600px;
+            /*padding-top: 56.25%;*/
+        }
+
+       .resp-iframe-vid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /*
+         * Header
+         */
+        .masthead {
+          margin-bottom: 2rem;
+        }
+
+        .masthead-brand {
+          margin-bottom: 0;
+        }
+
+        .nav-masthead .nav-link {
+
+          font-size: 19px;
+
+          padding: .25rem 0;
+          font-weight: 700;
+          color: rgba(255, 255, 255, .5);/*rgba(255, 255, 255, .5);menu color*/
+          background-color: transparent;
+          border-bottom: .25rem solid transparent;
+        }
+
+        .nav-masthead .nav-link2 {
+
+          font-size: 13px;
+
+          padding: .25rem 0;
+          font-weight: 500;
+          color: #98d4f3;
+          background-color: transparent;
+          border-bottom: .25rem solid transparent;
+        }
+
+        .nav-masthead .nav-link:hover{
+          color: rgba(255, 255, 255, 1);
+          border-bottom-color: rgba(155, 155, 155, .25);
+        }
+
+        .nav-masthead .nav-link:focus {
+          color: rgba(255, 155, 155, 1);
+          border-bottom-color: rgba(255, 155, 255, .25);
+        }
+
+        .nav-masthead .nav-link:active {
+          color: rgba(155, 155, 155, 1);
+          border-bottom-color: rgba(155, 255, 255, .25);
+        }
+
+        .nav-masthead .nav-link + .nav-link {
+          margin-left: 1rem;
+        }
+
+        .nav-masthead .active {
+          color: #fff;
+          border-bottom-color: #fff;
+        }
+
+        @media (min-width: 48em) {
+          .masthead-brand {
+            float: left;
+          }
+          .nav-masthead {
+            /*float: right;*/
+          }
+        }
+
+
+        /*
+         * Cover
+         */
+        .cover {
+            padding: 1.0rem;
+
+        }
+        .cover .btn-lg {
+          padding: .75rem 1.25rem;
+          font-weight: 800;
+        }
+
+        .lead{
+            font-size: 35px;
+
+        }
+
+        .lead2{
+            font-size: 25px;
+
+        }
+
+        /*
+         * Footer
+         */
+        .mastfoot {
+            color: rgba(255, 255, 255, .5);
+            position: absolute;
+              bottom: 10px;
+              width: 100%;
+              /*height: 3.5rem;*/
+        }
+
+        .card-body,
+        .card-text,
+        .mailabs a {
+            color: rgba(5, 5, 5, .9);
+
+        }
+
+        .list-group,
+        .list-group a {
+            display:inline-block;
+            color: rgba(5, 5, 5, .9);
+
+        }
+
+        .btn-file {
+            position: relative;
+            overflow: hidden;
+            }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            color:red;
+            cursor: inherit;
+            display: block;
+        }
+
+        .jconfirm-title {
+            color: #f44336;
+
+        }
+        .jconfirm-content {
+            color: rgba(5, 5, 5, .9);
+
+        }
+
+        .container2 {
+          position: relative;
+          width: 40%;
+          left: 43%;
+        }
+
+        .image {
+          opacity: 1;
+          display: block;
+          width: 40%;
+          height: auto;
+          transition: .5s ease;
+          backface-visibility: hidden;
+
+        }
+
+        .middle {
+          transition: .5s ease;
+          opacity: 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-100%, -50%);
+          -ms-transform: translate(-50%, -50%);
+          text-align: center;
+        }
+
+        .container2:hover .image {
+          opacity: 0.3;
+        }
+
+        .container2:hover .middle {
+          opacity: 1;
+        }
+
+        .text {
+          background-color: #f44336;
+          color: white;
+          font-size: 16px;
+          padding: 16px 32px;
+        }
+
+        .middle2 {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+
+
+
+.container3 {
+  position: relative;
+  /*width: 35%;*/
+  left: 0;
+}
+
+.container3:hover .image3 {
+  opacity: 0.3;
+}
+
+.container3:hover .middle2 {
+  opacity: 1;
+}
+
+.image3 {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
+
+}
+
+ #id_type {
+     width: 160px;
+     border: none;
+     border-radius: 20px;
+     outline: none;
+     padding: 10px;
+     font-family: 'Sniglet';/*, cursive;*/
+     font-size: 1em;
+     color: #676767;
+     transition: border 0.5s;
+     -webkit-transition: border 0.5s;
+     -moz-transition: border 0.5s;
+     -o-transition: border 0.5s;
+     border: solid 3px #98d4f3;
+     -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+     box-sizing: border-box;
+ }
+        textarea{
+	width: 500px;
+	border: none;
+	border-radius: 20px;
+	outline: none;
+	padding: 10px;
+	font-family: 'Sniglet';/*, cursive;*/
+	font-size: 1em;
+	color: #676767;
+	transition: border 0.5s;
+	-webkit-transition: border 0.5s;
+	-moz-transition: border 0.5s;
+	-o-transition: border 0.5s;
+	border: solid 3px #98d4f3;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+
+}
+input:focus, textarea:focus{
+	border: solid 3px #77bde0;
+}
+
+textarea{
+	height: 200px;
+	resize: none;
+	overflow: auto;
+}
+
+#id_title{
+	height: 50px;
+	resize: none;
+	overflow: auto;
+}
+#id_biography{
+	height: 100px;
+	resize: none;
+	overflow: auto;
+}
+
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+@media (max-width: 800px) {
+    .minlog{
+        max-width: 300px;
+    }
+    .fbbut{
+    display: inline;
+    position: absolute;
+    left: 5%;
+    top: 0%;
+    transform: translate(0%, -270%);
+}
+.twitbut{
+    display: inline;
+    position: absolute;
+    left: 80%;
+    top: 0%;
+    transform: translate(0%, -235%);
+}
+}
+
+@media (min-width: 800px) {
+    .fbbut{
+    display: inline;
+    position: absolute;
+    left: 20%;
+    top: 50%;
+    transform: translate(-50%, -185%);
+}
+.twitbut{
+    display: inline;
+    position: absolute;
+    left: 80%;
+    top: 50%;
+    transform: translate(-50%, -150%);
+}
+}
+
+    </style>
+
+<script>
+      window.onload = function() {
+  document.getElementById('mylink').onclick = function() {
+    this.style.color = 'red';
+    //window.open(...);
+  }
+}
+</script>
+    <title>Conference Website</title>
+  </head>
+  <body class="text-center">
+
+  <script>
+    tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+    //$(document).ready(function() {
+        $.ajax({
+            method: 'POST',
+            url: '{% url "my_app:set_timezone" %}',//'../../set_timezone',
+            data: {csrfmiddlewaretoken: "{{ csrf_token }}",'timez': tz},
+            //async: false,
+            success: function (data) {
+                 //this gets called when server returns an OK response
+                 //alert("it worked!"+"{{ currenttz }}");
+                if ("{{ currenttz }}" == '')
+                {
+                    //alert('relaod');
+                    location.reload();
+                }
+            },
+            error: function (data) {
+                 //alert("it didnt work");
+            }
+        });
+    //});
+    </script>
+
+      <div id="modal-div"></div>
+      <div id="modal-div3"></div>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_EN/sdk.js#xfbml=1&version=v8.0" nonce="FQvKqGSk"></script>
+
+      {% if status == 25 %}
+    <div class="cover-container d-flex h-100 flex-column">
+    <h2>You cannot access this page</h2>
+        <footer class="mt-auto">
+        <div class="inner">
+          <p style="color: {{ conftopass.website.color_men }};">Website created by <a class="navbar-brand" href="{% url 'my_app:home' %}">
+        <img src={% static "images/carbonfreeconf_logo_title_white.svg" %} width="160" height="40" class="d-inline-block align-top" alt="">
+        </a></p>
+        </div>
+      </footer>
+    </div>
+      {% else %}
+    <div class="cover-container d-flex h-100 flex-column">
+      <header class="masthead mb-auto">
+        <div class="inner">
+          <!--<h3 class="masthead-brand">{{ conftopass.title }}</h3>-->
+          <nav class="nav nav-masthead justify-content-center"  style="text-align: center;" id="r">
+            <a class="nav-link" id="mylink" href="{% url 'my_app:fastregistration' conftopass.id 'home' fastpass %}">Home</a>
+            <a class="nav-link" href="{% url 'my_app:fastregistration' conftopass.id 'registration' fastpass %}">Participate</a>
+            <a class="nav-link" href="{% url 'my_app:fastregistration' conftopass.id 'dates' fastpass %}">Dates</a>
+            <a class="nav-link" href="{% url 'my_app:fastregistration' conftopass.id 'socloc' fastpass %}">Organizers</a>
+            <a class="nav-link" href="{% url 'my_app:fastregistration' conftopass.id 'contact' fastpass %}">Contact</a>
+
+
+            {% if user.is_authenticated %}
+
+                <a class="nav-link2 ml-2 pl-2" href="{% url 'my_app:user_logout' 'fastregistration' conftopass.id fastpass %}">Logout ({{ user.username }})</a>
+
+            {% else %}
+                <a class="nav-link2 ml-5 pl-5" href="{% url 'my_app:fastregistration' conftopass.id 'signin' fastpass %}">Log-in</a>
+            {% endif %}
+
+            </nav>
+
+        </div>
+
+      </header>
+
+
+    {% block content %}
+         <div id="page-container" style="position: relative;min-height: 93vh;">
+        <div style="padding-bottom: 7.5rem; ">
+      <main role="main" class="inner cover mb-3">
+      {% ifequal link 'signin' %}
+          {% include "my_app/login_website.html" with comingfrom="fastregistration" comingfromweb="registration" confnum=conftopass.id linkcode=fastpass %}
+      {% endifequal %}
+
+      {% ifequal link 'home' %}
+
+          {% if conftopass.room_logo %}
+              <p class="mt-5"><img src="{{ conftopass.room_logo.url }}" alt="Logo" height="200" class="d-inline-block align-top minlog" alt="Conference logo"></p>
+          {% else %}
+            <img src={% static "images/carbonfreeconf_logo_title_orange.svg" %} width="250" height="100" class="d-inline-block align-top" alt="CarbonFreeConf logo">
+          {% endif %}
+
+        {% if finished %}
+            {% ifequal conftopass.start_date conftopass.end_date %}
+              <h4 class="mt-5">Conference finished on {{ conftopass.start_date }} </h4>
+          {% else %}
+            <h4 class="mt-5">Conference started on {{ conftopass.start_date }} and finished on {{ conftopass.end_date }} </h4>
+          {% endifequal %}
+            {% else %}
+          {% ifequal conftopass.start_date conftopass.end_date %}
+              <h4 class="mt-5">Conference happening on {{ conftopass.start_date }} </h4>
+          {% else %}
+            <h4 class="mt-5">From {{ conftopass.start_date }} to {{ conftopass.end_date }} </h4>
+          {% endifequal %}
+      {% endif %}
+          <h1 class="cover-heading"><i class="fas fa-star"></i> {{ conftopass.title }} {% if conftopass.daughterconf %}{% if conftopass.daughterconfstarwars %}<h3> (short name of the session: {{ conftopass.masterconfdaughtername }})</h3>{% else %} (Session {{ conftopass.masterconfdaughterposition }}){% endif %} {% endif %}</h1>
+          <div class="row">
+          <div class="col-9" style="margin: 0 auto;">
+          <hr style="background-color: white; border-top:2px solid #fff">
+        <p class="lead2">{{ conftopass.abstract }}</p>
+          <hr style="background-color: white; border-top:2px solid #fff">
+          </div>
+          </div>
+        <p class="lead">
+          <a href="{% url 'my_app:fastregistration' conftopass.id 'registration' fastpass %}" class="btn btn-lg btn-secondary">Register</a>
+        </p>
+          <p>{% if conftopass.fee %} {% if conftopass.fee_variable %}*Participants can pay what they want to participate {% else %}*Participants must pay {{ conftopass.fee_amount }} {{ conftopass.fee_currency }} to participate {% endif %}{% if conftopass.fee_to_carbon %} <br><small>*but the profit made from the participation fees will go towards offsetting more carbon emissions than that produced by the conference as was decided by the altruistic organizers.</small>{% endif %} {% else %} {% if conftopass.masterconfpass != 35500015 %}*The Conference is free for participants{% endif %} {% endif %}</p>
+          {% if free %}<p>Though you are invited and it is free for you!</p>{% endif %}
+          {% comment %}
+          {% if conftopass.daughterconf %}
+              {% if conftopass.daughterconfstarwars %}
+                    <p>{{ conftopass.masterconfdaughtername }} is a session of the master conference "<a style="color: {{ color_guide2 }}" href="{% url 'my_app:fastregistration' confma.id 'home' fastpass %}" target="_blank">{{ confma.title }}</a>" </p>
+              {% else %}
+                    <p>Session {{ conftopass.masterconfdaughterposition }} is part of the master conference "<a style="color: {{ color_guide2 }}" href="{% url 'my_app:fastregistration' confma.id 'home' fastpass %}" target="_blank">{{ confma.title }}</a>" </p>
+              {% endif %}
+          {% endif %}
+          {% if conftopass.masterconf %}
+              {% if confds %}
+                  <h3 class="mb-3">Browse all the sessions of the conference:</h3>
+              {% for confd in confds %}
+                  <p><h5>{% if confd.daughterconfstarwars %}{{ confd.masterconfdaughtername }}{% else %} S{{ confd.masterconfdaughterposition }} {% endif %} - {{ confd.title }} <small>[<a style="color: {{ color_guide2 }}" href="{% url 'my_app:fastregistration' confd.id 'home' fastpass %}" target="_blank">See more...</a>]</small></h5></p>
+              {% endfor %}
+              {% endif %}
+          {% endif %}
+          {% endcomment %}
+
+
+      {% endifequal %}
+
+      {% ifequal link 'registration' %}
+
+        <p class="lead mb-4">Registration/Participation</p>
+          {% if user.is_authenticated %}
+                      {% if finished %}
+                            <hr style="background-color: white; border-top:2px dotted #000">
+              <h5>The meeting is now over and you cannot submit participations anymore</h5>
+              <hr style="background-color: white; border-top:2px dotted #000">
+                          {% else %}
+              {% if talks|length > 1 %}
+                  <div class="col-6" style="width: 50%;margin: 0 auto;">
+            <label for="conf-select">Modify another of your participations instead?</label>
+            <form name=changetalForm action="" method=POST>
+                {% csrf_token %}
+            <select name="tal" id="tal-select" class="browser-default custom-select" onChange="changetalForm.submit();">
+                <option value="">--Please choose another participation to update it--</option>
+                {% for talk in talks %}
+                    <option value="{{ talk.id }}">{{ talk.title }}</option>
+                {% endfor %}
+            </select>
+            </form>
+                  </div>
+            {% endif %}
+            <hr style="background-color: white; border-top:2px dotted #000">
+              <h5>{% if not talkcrea %}Dear {{ user }}, please fill in this form to send your participation to the organizers. {% else %} You have now registered for <strong style="color: {{ color_guide2 }}">{{ talks | length }}</strong> participation{{ talks|length|pluralize:",s" }}, which you can update at will.{% endif %}</h5>
+              <hr style="background-color: white; border-top:2px dotted #000">
+
+                <form enctype="multipart/form-data" method="POST" action="">
+                    {% csrf_token %}
+                    {% if not stattalk %}
+
+                    <p>{{ regtalklight_form.type|as_crispy_field }}</p>
+
+                    {% else %}
+                  <h4>Congrats! This {{ typet }} is accepted</h4>
+                {% endif %}
+
+                    {% if not attend %}
+
+                    <div id="titlehid"><p>{{ regtalk_form.title|as_crispy_field }}</p></div>
+
+
+                    {% comment %}{% if not poster %}{% endcomment %}
+                    <div id="abshid"><p>{{ regtalk_form.abstract|as_crispy_field }}</p></div>
+
+                    <div id="biohid"><p>{{ regtalk_form.biography|as_crispy_field }}</p></div>
+                    {% comment %}{% endif %}{% endcomment %}
+                    {% endif %}
+                    <input type="hidden" name="titch" value="titch" />
+                    {% if messages %}
+                        <div class="container">
+                        <div class="alert alert-success" role="alert">
+                        {% for message in messages %}
+                            {% if forloop.counter == messages|length %}
+                                <h3>{{ message }}</h3>
+                            {% endif %}
+                            {% ifequal message.tags 'warning' %}
+                                <h3>{{ message }}</h3>
+                            {% endifequal %}
+                        {% endfor %}
+                        </div>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                    <div class="col-6 center">
+                        <div class="mt-5"><button type="submit" class="btn btn-outline-info"><strong>{% if not talkcrea %}Submit{% else %} {%ifnotequal request.session.another 'another'%} {%ifequal request.session.another2 'another2'%}  Resubmit {% endifequal %} {% endifnotequal %} {%ifequal request.session.another 'another'%} {%ifnotequal request.session.another2 'another2'%}  Submit {% endifnotequal %} {% endifequal %} {%ifequal request.session.another 'another'%} {%ifequal request.session.another2 'another2'%}  Submit {% endifequal %} {% endifequal %} {%ifnotequal request.session.another 'another' %} {%ifnotequal request.session.another2 'another2' %} Resubmit {% endifnotequal %} {% endifnotequal %}{% endif %} my participation</strong></button> <i data-toggle="tooltip" data-placement="bottom" title="Click here to submit or resubmit your participation: talk, poster or attendance only." class="fas fa-info-circle"></i></div>
+                </form>
+                    </div><div class="col-6 center">
+                <form enctype="multipart/form-data" method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="delete" value="delete" />
+                    <div class="mt-5"><button type="submit" class="btn btn-outline-danger"><strong>Delete this participation?</strong></button> <i data-toggle="tooltip" data-placement="bottom" title="Click here to delete the currently selected participation (talk, poster or attendance only)." class="fas fa-info-circle"></i></div>
+                </form>
+                </div>
+              </div>
+               <form enctype="multipart/form-data" method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden" name="another" value="another" />
+                   <div class="mt-4 mb-5">{% if talkcrea %}<button type="submit" class="btn btn-outline-info"><strong>Submit another participation, talk{% if conftopass.poster %}, poster{% endif %}?</strong></button> <i data-toggle="tooltip" data-placement="bottom" title="Click here to be able to propose another participation: talk, poster or attendance only." class="fas fa-info-circle"></i>{% endif %}</div>
+                </form>
+              {% if conftopass.recording %}
+                  <div class="mb-5 pb-5"><p style="color: rgba(255, 255, 255, .5);">*The presentations will be recorded</p></div>
+              {% endif %}
+
+                {% comment %}
+              {% if conftopass.masterconf or conftopass.daughterconf %}
+                  <div class="mb-5 pb-5">
+                      <h3 class="mb-2"><strong>You can also choose to attend the other sessions of the conference:</strong></h3>
+
+                    {% for con in confa %}
+                        <li class="list-group-item" style="color: black">
+                            <a style="color: black" href="{% url 'my_app:fastregistration' con.id 'home' fastpass %}" target="_blank"><strong>{% if  not con.daughterconfstarwars %} {% if con.masterconfdaughterposition != 0 %}S{{ con.masterconfdaughterposition }}{% else %} Plenaries {% endif %} {% else %}{{ con.masterconfdaughtername }}{% endif %} - {{ con.title }}</strong></a> <strong><span class="valida">{% if vali|index:forloop.counter0 %}<i data-toggle="tooltip" data-placement="right" title="It was validated by organizers" class="fas fa-check-circle"></i>{% else %}<i data-toggle="tooltip" data-placement="right" title="Not yet validated by organizers" class="fas fa-times-circle"></i>{% endif %}</span></strong><!--add tooltip-->
+                            <label id="cb2" class="switch ">
+                            <input type="checkbox" {% if participe|index:forloop.counter0 %}checked{% endif %} id="{{ con.id }}" class="success addtosession">
+                            <span class="slider round"></span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                      <div id="partadd"></div>
+                  </div>
+                  {% endif %}
+                  {% endcomment %}
+            {% endif %}
+          {% else %}
+              {% include "my_app/login_website.html" with comingfrom="fastregistration" comingfromweb="registration" confnum=conftopass.id linkcode=fastpass %}
+      {% endif %}
+      {% endifequal %}
+
+
+      {% ifequal link 'dates' %}
+          <div class="row mx-auto justify-content-center align-items-center flex-column" style="min-height: 85vh;">
+        <p class="lead">Dates <i class="fas fa-calendar"></i></p>
+          <div><h3>From {{ start_date2 }} to {{ end_date2 }}<h3></div>
+          <div><h5>Total duration is: {{ duration_time }}.</h5></div>
+          <div class="row">
+          <div class="col-4" style="margin: 0 auto;">
+          <hr style="background-color: white; border-top:2px dotted #fff">
+          </div>
+          </div>
+          </div>
+      {% endifequal %}
+      {% ifequal link 'socloc' %}
+                    <div class="row mx-auto justify-content-center align-items-center flex-column" style="min-height: 85vh;">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {%if "human" in message.tags %}
+                                <div class="alert alert-danger mt-2" role="alert">
+                                    <h4 style="color: red;"><strong>{{ message }}</strong></h4>
+                                </div>
+                            {% endif %}
+                            {%if "yes" in message.tags %}
+                                <div class="alert alert-success mt-2" role="alert">
+                                    <h4 style="color: blue;"><strong>{{ message }}</strong></h4>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                      {% endif %}
+        {% if progorga %}
+        <p class="lead">Program Committee <i class="fas fa-rocket"></i></p>
+           {% for peop in peoplesocloc %}
+               {% if peop.socloc == 1%}
+            <ul class="list-group mb-5">
+              <li class="list-group-item"> {{ peop.user.first_name }} {{ peop.user.last_name }} / {{ peop.user.userprofileinfo.institute }}
+              <button type="submit" class="btn btn-dark a-btn-slide-text" data-toggle="modall3" rel="tooltip" data-placement="top" title="Send an email to this person" class="open-modal" data-url="{% url 'my_app:contactperson' confnum peop.user.username 'socloc' %}" value="email">
+                                        <span class="fa fa-envelope" aria-hidden="true"></span></button>
+              </li>
+            </ul>
+               {% endif %}
+          {% endfor %}
+        {% endif %}
+        {% if orga %}
+          <p class="lead">Organizers <i class="fas fa-eye"></i></p>
+           {% for peop in peoplesocloc %}
+               {% if peop.socloc == 2%}
+            <ul class="list-group mb-5">
+              <li class="list-group-item"> {{ peop.user.first_name }} {{ peop.user.last_name }} / {{ peop.user.userprofileinfo.institute }}
+                  <button type="submit" class="btn btn-dark a-btn-slide-text" data-toggle="modall3" rel="tooltip" data-placement="top" title="Send an email to this person" class="open-modal" data-url="{% url 'my_app:contactperson' confnum peop.user.username 'socloc' %}" value="email">
+                                        <span class="fa fa-envelope" aria-hidden="true"></span></button>
+              </li>
+            </ul>
+               {% endif %}
+
+          {% endfor %}
+                    {% endif %}
+                    {% if not orga and not progorga %}
+                        <h5>The organizers were not added yet!</h5>
+                    {% endif %}
+
+
+                    </div>
+      {% endifequal %}
+      {% ifequal link 'contact' %}
+          <div class="row mx-auto justify-content-center align-items-center flex-column" style="min-height: 85vh;">
+            {% if messages %}
+                {% for message in messages %}
+                    {%if "human" in message.tags %}
+                        <div class="alert alert-danger mt-2" role="alert">
+                            <h4 style="color: red;"><strong>{{ message }}</strong></h4>
+                        </div>
+                    {% endif %}
+                    {%if "yes" in message.tags %}
+                        <div class="alert alert-success mt-2" role="alert">
+                            <h4 style="color: blue;"><strong>{{ message }}</strong></h4>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+          <h4>The main organizer{{ organisers|length|pluralize:",s" }} <i class="fas fa-eye"></i></h4>
+          {% if organisers %}
+            {% for org in organisers %}
+                <h5>{{ org.user.first_name }} {{ org.user.last_name }} <button type="submit" class="btn btn-secondary a-btn-slide-text" data-toggle="modall3" rel="tooltip" data-placement="top" title="Send an email to this person" class="open-modal" data-url="{% url 'my_app:contactperson' confnum org.user.username 'contact' %}" value="email">
+                                        <span class="fa fa-envelope" aria-hidden="true"></span></button></h5>
+            {% endfor %}
+          {% else %}
+              <p>The organizers will be added soon...</p>
+          {% endif %}
+            <h6 class="font-weight-bold mb-0 mt-5">CarbonFreeConf <i class="fas fa-heart"></i></h6>
+            <p><a href="mailto:support@carbonfreeconf.com">support@carbonfreeconf.com</a></p>
+
+            <!--<h6 class="font-weight-bold mb-0">Tel:</h6>
+            <p>+33 (0) 6XXXXXXXX</p>-->
+          </div>
+      {% endifequal %}
+
+
+      </main>
+</div>
+    {% endblock content %}
+
+
+
+      <footer class="mastfoot mt-auto" >
+
+
+        <div class="inner">
+        {% ifnotequal link 'home' %}
+            <p style="color: rgba(255, 255, 255, .5);">{{ conftopass.title }} {% if conftopass.masterconf %} - Plenaries {% endif %}{% if conftopass.daughterconf %} - Session of {{ confma.title }} {% endif %}</p>
+        {% endifnotequal %}
+          <p style="color: rgba(255, 255, 255, .5);">Website created by <a class="navbar-brand" href="{% url 'my_app:home' %}">
+        <img src={% static "images/carbonfreeconf_logo_title_white.svg" %} width="160" height="40" class="d-inline-block align-top" alt="">
+        </a></p>
+        </div>
+
+      </footer>
+    </div>
+
+
+        <script>
+    //var $unique = $(".uniqueid");
+
+    function refresh(sel) {
+        alert('test')
+        //alert(sel.options[sel.selectedIndex].value);
+        $unique.val(sel.options[sel.selectedIndex].value);
+    }
+
+    //var test=$("#role-select :selected").val();
+    //alert(test);
+    //var $unique = $(".uniqueid");
+    //$unique.val(test);
+
+    </script>
+
+    <script>
+        $(function() {
+           $("#confirm").click(function() {
+               var theThis = $(this);
+               $.confirm({
+                   title: 'Record talk?',
+                   content: 'Do you really want to record this talk now? Note that if you have already recorded this talk, it will then be overridden.',
+                   buttons: {
+                       confirm: function () {
+                            theThis.closest('form').submit();
+                       },
+                       cancel: function () {
+
+                       },
+                   }
+               });
+           });
+        });
+    </script>
+
+        <script>
+        $(function() {
+           $("#testbm").click(function() {
+               var theThis = $(this);
+               $.confirm({
+                   title: 'Test the virtual conference room now?',
+                   content: 'Do you really want to test the virtual conference room now? You can only do it once and for a maximum of 15 mins.',
+                   buttons: {
+                       confirm: function () {
+                            theThis.closest('form').submit();
+                       },
+                       cancel: function () {
+
+                       },
+                   }
+               });
+           });
+        });
+    </script>
+
+
+
+<script>
+    var modalDiv = $("#modal-div");
+    $(function () {
+     $(document).on('click', '[data-toggle="modal"]', function () {
+  //$('[data-toggle="modall"]').on('click', function() {
+      //alert('open');
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                //alert('brah')
+                modalDiv.html(data);
+                $("#extraLargeModal").modal({backdrop: false});
+            }
+        });
+  });
+})
+</script>
+        <script>
+    $(function () {
+        $('body').tooltip({selector: '[data-toggle="tooltip"]'});
+
+      //$('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+    </div>
+
+<script>
+    function getSignedRequest2(filename,file, talknum, loopnum){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "/sign_s3?file_name="+filename+"&file_type=video/mp4");
+        //alert('joe');
+      xhr.onreadystatechange = function(){
+          //alert('joee1'+xhr.readyState);
+        if(xhr.readyState === 4){
+            //alert('joee'+xhr.status);
+          if(xhr.status === 200){
+              //alert('joee3');
+            var response = JSON.parse(xhr.responseText);
+              //alert(response.data+response.url);
+              //alert('joe2');
+            uploadFile2(file, response.data, response.url, talknum, loopnum);
+          }
+          else{
+            alert("Could not get signed URL.");
+          }
+        }
+      };
+      xhr.send();
+    }
+</script>
+<script>
+        async function uploadFile2(file, s3Data, url, talknum, loopnum){
+
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", s3Data.url,false);
+          //alert(file.name+xhr);
+
+          var postData = new FormData();
+          for(key in s3Data.fields){
+            postData.append(key, s3Data.fields[key]);
+          }
+
+          postData.append('file', file);
+          //alert('joe22quenman'+talknum);
+
+          xhr.onreadystatechange = function() {
+              //alert('joe23man');
+            if(xhr.readyState === 4){
+                      //alert('joe23');
+              if(xhr.status === 200 || xhr.status === 204){
+                //alert('joe3'+talknum);
+                updatevaluerecordb2(talknum,url,loopnum);
+                //document.getElementById("preview").src = url;
+                //document.getElementById("avatar-url").value = url;
+                  //un coup d'ajax pour mettre see video et remplir la bdd avec l'url_mp4
+
+              }
+              else{
+                alert("Could not upload file.");
+              }
+           }
+          };
+          xhr.send(postData);
+        }
+</script>
+
+<script>
+        function updatevaluerecordb2(idtalk,url,loopnum) {
+            console.log("record is working!"); // sanity check
+            //console.log(thisObj.closest("form").find('.pfnplus').val());
+            //alert(thisObj.closest("form").find('.pfnplus').val());
+            //alert(idtalk+url+loopnum);
+            $.ajax({
+                url : '/updatevaluerecord2', // the endpoint
+                type : "POST", // http method
+                async: false,
+                data : {    idtalk : idtalk,
+                            loopnum : loopnum,
+                            url : url,
+                            csrfmiddlewaretoken : '{{ csrf_token }}'
+                        }, // data sent with the post request
+                success : function(json) {
+                    //alert('yo2');
+                    //$("div[id='test2']").text('');
+                    $('#test23'+json.loopnum).text('');
+                    $('#teste23'+json.loopnum).text('');
+
+                    //console.log(json); // log the returned json to the console
+                    //document.body.removeChild(child);spinner-border text-warning mt-2
+                     if (json.success == 1) {
+                         //alert('joe success');
+                         //$("#spinner"+json.loopnum).remove();
+                         $("#spin"+json.loopnum).remove();
+                         //$("#h"+json.loopnum).remove();
+                         //$("#col"+json.loopnum).remove();
+                         $("#file-name"+json.loopnum).text("The file was uploaded");
+
+                         if (json.talkrepl == 0) {
+                             $("#test23" + json.loopnum).append('<a href="' + json.url + '" class="btn btn-warning btn-record mt-2" target="_blank" style="color:white"><strong>See your recorded talk</strong></a>');
+                             $('#test23' + json.loopnum).before('<div class="col-sm-3"></div>');
+                         }else {
+                             $("#teste23" + json.loopnum).addClass("col-sm-3 mx-auto");
+                             $("#teste23" + json.loopnum).append('<a href="' + json.url + '" class="btn btn-warning btn-record mt-2" target="_blank" style="color:white"><strong>See your recorded talk</strong></a>');
+                             $('#teste23' + json.loopnum).before('<div class="col-sm-12"></div>');
+                             //alert('#teste23' + json.loopnum);
+                         }
+
+                     //       $("#test22").append("<p>" + json.result + "</p>");
+                    }
+
+                    console.log("success plus"); // another sanity check
+                },
+
+                // handle a non-successful response
+                error: function (xhr, error) {
+                    alert('r');
+                    console.debug(xhr);
+                    console.debug(error);
+                }
+
+            })/*.done(function (data) {
+    debugger;
+}).fail(function (data) {
+    debugger;
+}).always(function(data) {
+    alert("complete");
+});*/
+        };
+</script>
+
+  <script>
+    $("body").on('change','.success.addtosession', function () {
+        var self = $(this);
+        //alert('t');
+        //if (self.is(":checked")) {
+            console.log("checkbox  id =" + self.attr("id") + " is checked ");
+            //$("#content").html('yo');
+            $.ajax({
+            url : '/changesessionmulti', // the endpoint
+            type : "POST", // http method
+            data : {    confnum : self.attr("id"),//thisObj.closest("form").find('.pconfnumplus').val(),//$('#confnumid').val(),
+                        che : self.prop('checked'),
+                        csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //alert('yo2')
+                //$("div[id='content']").text('');
+                //$("#content").remove();
+                //var sched = ;
+                if (json.success == 1) {
+                    //alert('suc');
+                    //$("#content").append(sched)
+                    //$("#content").load()
+                    //$('#content').load('/sched', {'loca':"createconf", 'confnum':"7", 'start_date':"01/01/01",'csrfmiddlewaretoken': "{{ csrf_token }}",});
+                    if(json.peuxpas == 0) {
+                        $('#partadd').text('');
+                        //self.find()$('#valida').text('');
+                        //self.parent().find('span.valida').remove();
+                        self.parents('li').find('.valida').text('');
+                        if(json.sta == 1) {
+                            self.parents('li').find('.valida').append('<i data-toggle="tooltip" data-placement="right" title="It was validated by organizers" class="fas fa-check-circle"></i>');
+                        }else {
+                            self.parents('li').find('.valida').append('<i data-toggle="tooltip" data-placement="right" title="Not yet validated by organizers" class="fas fa-times-circle"></i>');
+                        }
+                        if(json.warn){
+                            self.prop('checked', true);
+                            alert('This session cannot be ticked off as you have one participation that is awaiting acceptance');
+                        }
+                        if(json.cantchange) {
+                            self.prop('checked', true);
+                            alert('As you are the main organizer, you cannot untick your participation');
+                        }
+                        $('#partadd').append('<div class="alert alert-success mt-3 mr-5 ml-5" role="alert"><p>The modification was accounted for.</p></div>');
+
+
+                    }else if (json.peuxpas == 2) {
+                        $('#partadd').text('');
+                        self.prop('checked', true);
+                        alert('The plenary session cannot be ticked off as organizers decided you are automatically added to it once you have a participation accepted!');
+                    }else{
+                        $('#partadd').text('');
+                        self.prop('checked', true);
+                        alert('This session cannot be ticked off as you participate to it');
+                    }
+
+                }
+                console.log("changesessionmulti"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+
+        //} else {
+          //  console.log("Id = " + self.attr("id") + " is Unchecked ");
+        //}
+    });
+</script>
+
+  <script>
+    $(document).ready(function(){
+        $('[rel="tooltip"]').tooltip({trigger: "hover"});
+    });
+</script>
+
+  <script>
+    var modalDiv3 = $("#modal-div3");
+     $(function () {
+      $(document).on('click', '[data-toggle="modall3"]', function() {
+          //alert('open');
+            $.ajax({
+                url: $(this).attr("data-url"),
+                success: function (data) {
+                    //alert('brah')
+                    modalDiv3.html(data);
+                    $("#myEdit3").modal();
+                }
+            });
+      });
+    })
+</script>
+
+          <script>
+    $("body").on('change','#id_type', function () {
+        //alert('re'+$('#id_type').find(":selected").val());
+        $("#titlehid").show();
+        $("#abshid").show();
+        $("#biohid").show();
+
+
+        if ($('#id_type').find(":selected").val()==5) {//Attendance only
+            //alert('yo2');
+            $("#abshid").hide();
+            $("#titlehid").hide();
+            $("#biohid").hide();
+        }
+
+    }
+    )
+      </script>
+
+  <!--<script>
+    tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+    $(document).ready(function() {
+        $.ajax({
+            method: 'POST',
+            url: '{% url "my_app:set_timezone" %}',//'../../set_timezone',
+            data: {csrfmiddlewaretoken: "{{ csrf_token }}",'timez': tz},
+            success: function (data) {
+                 //this gets called when server returns an OK response
+                 //alert("it worked!");
+            },
+            error: function (data) {
+                 //alert("it didnt work");
+            }
+        });
+    });
+</script>-->
+
+   <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+   <!-- Start of Rocket.Chat Livechat Script -->
+    <script type="text/javascript">
+    (function(w, d, s, u) {
+        w.RocketChat = function(c) { w.RocketChat._.push(c) }; w.RocketChat._ = []; w.RocketChat.url = u;
+        var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+        j.async = true; j.src = 'https://chat.carbonfreeconf.com/livechat/rocketchat-livechat.min.js?_=201903270000';
+        h.parentNode.insertBefore(j, h);
+    })(window, document, 'script', 'https://chat.carbonfreeconf.com/livechat');
+    </script>
+    <!-- End of Rocket.Chat Livechat Script -->
+    {% endif %}
+  </body>
+</html>

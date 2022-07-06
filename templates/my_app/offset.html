@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Offsetting virtual conferences {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="We believe we are the only company that allows to offset emissions when organizing virtual conferences. Check it out." />
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">Offsetting carbon emissions in virtual meetings</h1>
+      <p class="lead"> We spent a lot of time reviewing the best ways to offset carbon emissions produced by our online conferences.
+          Our policy on this is to use techniques that are effective at actually removing CO<sub>2</sub> from our atmospheres,
+          in quantities, which can be measured accurately so that we know we are offsetting the right quantity.</p>
+        <p class="lead">So far we compensate using the (direct air capture) technology offered
+            by <a target="_blank" rel="noopener noreferrer" href="https://climeworks.shop/how-it-works">Climeworks.</a>
+            They basically build big vacuum cleaners that are sucking up some air from our atmospheres and storing the carbon dioxide
+            that goes through them. They then pump it underground and within a few years the CO<sub>2</sub> reacts
+            with rocks and turns into solid stones that are permanently put off our atmosphere. Skeptical? Climeworks air capture technique works efficiently and is indeed carbon negative
+            as is described in an independent paper <a href="https://chemrxiv.org/articles/preprint/How_Carbon_Negative_Is_Direct_Air_Capture_Life_Cycle_Assessment_of_an_Industrial_Temperature-Vacuum_Swing_Adsorption_Process/12833747/1?file=24363143" target="_blank">here</a>.
+        For the carbon storage underground, you can check this <a href="https://www.nature.com/articles/s43017-019-0011-8" target="_blank">paper</a> or the whole ERC project about it <a href="https://www.carbfix.com/" target="_blank">here.</a></p>
+        <hr class="my-4">
+        <p class="lead">Another important part of the work is quantifying accurately how much emission will be produced for a given conference,
+            be it a 10 people workshop for a day or a 1000 people conference for a week. For video streaming during the conference,
+            we assume that <strong>40 g of CO<sub>2</sub> are emitted per hour per person (international average)</strong>
+            (<a href="https://www.carbonbrief.org/factcheck-what-is-the-carbon-footprint-of-streaming-video-on-netflix" target="_blank">see source here</a>).
+            Another way to get this number is to take the average electricity consumption per Gb of transmitted data, which is ~0.04 kWh/Gb
+            (which is the average of the range given by the <a href="https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines" target="_blank">IEA</a> or see <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jiec.12630" target="_blank">Aslan et al. 2017</a> for a similar value).
+            And then convert it to (<a href="https://www.nature.com/articles/s41550-020-1207-z">Burtscher et al. 2020</a>) the quantity of CO<sub>2</sub> emitted using that it is 0.24 kg/kWh (see <a href="https://www.eea.europa.eu/data-and-maps/indicators/overview-of-the-electricity-production-2/assessment-4">ref</a>). For 4Mbps (similar to the Netflix average), it leads to 17 gCO2e.
+            Accounting for the electricity consumption of devices, this number goes up by roughly a factor 2 (<a href="https://www.nature.com/articles/s41550-020-1207-z">Burtscher et al. 2020</a>), which is similar to the previous value.
+            We then reduce
+            this value by a factor 2 to account for the difference between the mean bitrate used by Netflix (4 Mbps) and that of our tool (~2 Mbps for the default medium resolution).
+            We then multiply by the time the conference
+            lasts and the number of participants and can work out the final carbon dioxide mass emitted by the virtual conference that needs to be offset.
+        </p>
+        <p class="lead">For conference video storage, we offset their emission over 3
+        years based on the number of averaged views we could estimate but that will be refined when we have more statistics from our
+        website. After 3 years, the organisers or their company will be contacted to check whether the videos should be put offline (as some more recent
+        conferences on the same field or by the same participants may have already happened)
+        or if they otherwise want to keep on offsetting their produced carbon emissions (if the video is still state-of-the-art).</p>
+        <p class="lead">Finally we convert this mass of CO<sub>2</sub> that needs to be offset in money. <a target="_blank" rel="noopener noreferrer" href="https://climeworks.shop/how-it-works">Climeworks.</a> needs
+        1 euro to offset 1 kilo of CO<sub>2</sub> and bury it underground so that every hour of streaming for each participant costs 0.02 € to offset
+            <strong>or roughly 0.16 € (or 0.16 kg of CO<sub>2</sub>) per day</strong>. Given this 0.16 € per day per person, you can easily find an estimate of how much your conference will cost to offset.
+        For 100 participants for 3 days, it would be 0.16 € * 100 persons * 3 days = 48 € (to offset 48 kg). But note that if you want the conference to be recorded and
+        hosted on our platform, there will be extra emissions to offset.</p>
+        <hr class="my-4">
+        <p>You will be given a certificate from <a target="_blank" rel="noopener noreferrer" href="https://climeworks.shop/how-it-works">Climeworks</a> that shows you
+            the amount we paid to them and how much emission they offset thanks to you. We are open to diversifying the ways we compensate carbon emissions and if you have effective solutions to suggest,
+            please <a href="mailto:sales@carbonfreeconf.com">contact us.</a></p>
+        <p>Note that we developed a calculator (<a href="{% url 'my_app:calculator' %}" target="_blank">see here</a>) for you to be able to quantify how much emission your conference will produce (that needs to be offset).</p>
+        <div style="text-align: center">
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:createconf' %}" role="button">Create a conference</a>
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:calculator' %}" role="button">See our carbon emission calculator</a>
+        </div>
+    </div>
+
+    <p>Trusted company to offset carbon emissions:<a target="_blank" rel="noopener noreferrer" href="https://climeworks.shop/how-it-works"><img src={% static "images/climeworks.png" %} height="50" class="d-inline-block align-top" alt="Climeworks"></a></p>
+
+    <p>Sources we used to quantify how much carbon should be offset for a given conference:
+        <a href="https://iopscience.iop.org/article/10.1088/1748-9326/9/5/054007" target="_blank">Shehabi et al. 2014</a>,
+        <a href="https://ieeexplore.ieee.org/document/6957153" target="_blank">Schien et al. 2014</a>,
+        <a href="https://www.mdpi.com/2078-1547/6/1/117" target="_blank">Andrae et al. 2015</a>,
+        <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jiec.12630" target="_blank">Aslan et al. 2017</a>,
+        <a href="https://link.springer.com/article/10.1007/s12053-016-9500-5?shared-article-renderer" target="_blank">Park et al. 2017</a>,
+        <a href="https://www.carbonbrief.org/factcheck-what-is-the-carbon-footprint-of-streaming-video-on-netflix" target="_blank">CarbonBrief</a>,
+        <a href="http://data.iea.org/payment/products/122-emissions-factors-2017-edition.aspx" target="_blank">IEA</a>.
+    </p>
+</div>
+
+
+{% endblock %}

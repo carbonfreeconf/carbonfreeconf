@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load index %}
+
+{% block title %} Watch the videos of the conference {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Do you want to see the videos of a research meeting? Come watch them for free in a carbon-neutral fashion." />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+<div class=container>
+                  <!--<div class="border">-->
+
+    {% if cansee == 0 %}
+                {% if status == '0' %}
+
+        <div class="mt-2"><i class="fas fa-file-video"></i> {{ archiveurl|length|pluralize:"This is,These are" }} the video{{ archiveurl|length|pluralize:",s" }} for the meeting: <strong>{{ title }}</strong> {% if conftopass.masterconf %}(and its parallel sessions){% endif %}</div>
+        {% for vid in archiveurl %}
+        <div class="mt-3">Here is a video for the session{% if conftopass.masterconf %}: '{{ sessiontit|index:forloop.counter0 }}'{% endif %} that started on {{ start|index:forloop.counter0 }} and finished at {{ end|index:forloop.counter0|date:"g:i a" }}</div>
+            <p><i><strong>Title:</strong> {% if titles|index:forloop.counter0 %}{{ titles|index:forloop.counter0 }}{% else %} No title {% endif %}</i></p>
+
+            {% comment %}
+            {% ifnotequal videostatus 'available' %}
+                <p style="color: #ee3535"><strong>You need to wait a few more minutes before being able to see the conference recording as we are
+                transcoding the video in different formats and sizes to be more user-friendly when watching it on e.g. mobile, tablets, ... Reload the page in a moment.</strong></p>
+            {% endifnotequal %}
+            {% endcomment %}
+        <div class="resp-container-vid mb-3">
+
+            <iframe class="resp-iframe-vid"
+                src="{{ vid }}" frameborder="0" allow="autoplay; fullscreen"
+                allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+            </iframe>
+        </div>
+            {% if nbviews %}
+            <p class="mt-2"><small>Viewed {{ nbviews|index:forloop.counter0 }} time{{ nbviews|index:forloop.counter0|pluralize:",s" }}</small></p>
+            {% endif %}
+        <!--<div><a href="{{ mp4downloadurl|index:forloop.counter0 }}" target="_blank">See the video on Vimeo</a></div>-->
+        {% endfor %}
+    {% endif %}
+
+
+        {% if status == '2c' or status == '4' or status == '2b' or status == '2' or status == '3' %}
+                <h5 class="mt-2"><strong>The organizers decided to record the meeting: {{ title }}. </strong></h5>
+                <p>All the conference videos will appear here (and on the conference website) once they are recorded and imported.</p>
+            <p><i>In the meantime, you can go check the archived videos <a href="{% url 'my_app:archive' %}">here</a> if you are looking for some specific content close to your research field.</i></p>
+
+                  {% endif %}
+
+            {% if status == '5' %}
+                <h5 class="mt-2"><strong>The organizers decided not to record this meeting: {{ title }}. </strong></h5>
+                <p>You can go check the archived videos <a href="{% url 'my_app:archive' %}">here</a> if you are looking for some specific content in your research field.</p>
+
+            {% endif %}
+    {% else %}
+    {% if status != '6' %}
+
+            <h5 class="mt-2"><strong>Only the participants of the meeting '{{ title }}' can see the recordings. </strong></h5>
+                <p>You can go check the archived videos <a href="{% url 'my_app:archive' %}">here</a> if you are looking for some specific content in your research field.</p>
+        {% endif %}
+    {% endif %}
+        {% if status == '6' %}
+                <h5 class="mt-2"><strong>This page does not exist</strong></h5>
+                <p>You can go check the archived videos <a href="{% url 'my_app:archive' %}">here</a> if you are looking for some specific content in your research field.</p>
+
+        {% endif %}
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,12 @@
+{% extends 'qa/create_question.html' %}
+
+{% block action_url %}
+{% url 'qa_update_question' view.kwargs.question_id %}
+{% endblock action_url %}
+
+{% block deletebutton %}
+    <form method="post" id="qform" action="{% if idconf %}{% url 'qa_delete_question' view.kwargs.question_id idconf %}{% else %}{% url 'qa_delete_question' view.kwargs.question_id %}{% endif %}">
+        {% csrf_token %}
+        <input class="btn pull-right btn-danger" type="submit" value="Delete Question" style="margin-right: 10px;"/>
+    </form>
+{% endblock %}

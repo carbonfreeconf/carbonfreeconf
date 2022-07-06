@@ -1,0 +1,892 @@
+{% extends 'base.html' %}
+{% load djmoney %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} {% trans 'How much for organizing a research webinar?'%}' {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="{% trans 'You can make research conferences very effectively and easily with our platform. Find out the pricing and how you can make profits.'%}" />
+    <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
+        <!--<link rel="stylesheet" href="{% static 'css/global.css'%}" />-->
+        <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+
+         <style>
+        /* Variables */
+* {
+  box-sizing: border-box;
+}
+
+
+.form2 {
+  width: 30vw;
+  min-width: 500px;
+  align-self: center;
+  box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1),
+    0px 2px 5px 0px rgba(50, 50, 93, 0.1), 0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
+  border-radius: 7px;
+  padding: 40px;
+}
+
+input {
+  border-radius: 6px;
+  margin-bottom: 6px;
+  padding: 12px;
+  border: 1px solid rgba(50, 50, 93, 0.1);
+  height: 44px;
+  font-size: 16px;
+  width: 100%;
+  background: white;
+}
+
+input[type=checkbox] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -border-radius: 6px;
+    height: 15px;
+    width: 15px;
+    background: #fff;
+    border: 2px solid #ccc;
+}
+
+input[type="checkbox"]:checked {
+  background: green;
+  margin:0px;
+  position: relative;
+}
+
+.result-message {
+  line-height: 22px;
+  font-size: 16px;
+}
+
+.result-message a {
+  color: rgb(89, 111, 214);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}
+
+#card-error {
+  color: rgb(105, 115, 134);
+  text-align: left;
+  font-size: 13px;
+  line-height: 17px;
+  margin-top: 12px;
+}
+
+#card-element {
+  border-radius: 4px 4px 0 0 ;
+  padding: 12px;
+  border: 1px solid rgba(50, 50, 93, 0.1);
+  height: 44px;
+  width: 100%;
+  background: white;
+}
+
+#payment-request-button {
+  margin-bottom: 32px;
+}
+
+
+/* Buttons and links */
+.button2 {
+  background: #5469d4;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  border-radius: 0 0 4px 4px;
+  border: 0;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  transition: all 0.2s ease;
+  box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
+  width: 100%;
+}
+.button2:hover {
+  filter: contrast(115%);
+}
+.button2:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* spinner/processing state, errors */
+.spinner,
+.spinner:before,
+.spinner:after {
+  border-radius: 50%;
+}
+.spinner {
+  color: #ffffff;
+  font-size: 22px;
+  text-indent: -99999px;
+  margin: 0px auto;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  box-shadow: inset 0 0 0 2px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.spinner:before,
+.spinner:after {
+  position: absolute;
+  content: "";
+}
+.spinner:before {
+  width: 10.4px;
+  height: 20.4px;
+  background: #5469d4;
+  border-radius: 20.4px 0 0 20.4px;
+  top: -0.2px;
+  left: -0.2px;
+  -webkit-transform-origin: 10.4px 10.2px;
+  transform-origin: 10.4px 10.2px;
+  -webkit-animation: loading 2s infinite ease 1.5s;
+  animation: loading 2s infinite ease 1.5s;
+}
+.spinner:after {
+  width: 10.4px;
+  height: 10.2px;
+  background: #5469d4;
+  border-radius: 0 10.2px 10.2px 0;
+  top: -0.1px;
+  left: 10.2px;
+  -webkit-transform-origin: 0px 10.2px;
+  transform-origin: 0px 10.2px;
+  -webkit-animation: loading 2s infinite ease;
+  animation: loading 2s infinite ease;
+}
+
+@-webkit-keyframes loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes loading {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .form2 {
+    width: 80vw;
+  }
+}
+
+        </style>
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+    <div class="container">
+    {% if not alpaid and not notexist %}
+      <div class="py-5 text-center">
+        <h2>{% trans 'Checkout form' %}</h2>
+        <p class="lead">{% trans 'Please provide name and address of the person or institute that is paying if it is not you directly'%}.</p>
+      </div>
+
+    {% if prepeuro == 0 %}
+    <div class="text-center mb-5">
+        <h6>{% trans 'The conference is FREE except for offsetting the carbon emissions, which you can pay for on this page or directly on the websites of the companies we recommend'%} <a href="/{{LANGUAGE_CODE}}{% url 'my_app:offset' %}" target="_blank">{% trans 'here'%}</a>. {% trans 'If you offset the
+        emissions by yourself then please provide us with a certificate from the company and we will consider the conference as paid.'%}</h6>
+        {% if conftopass.fee_to_carbon %}
+          <p>{% trans '*Note that the profit made from the participation fees will go towards offsetting more carbon emissions than that produced by the conference as was decided by you, the altruistic organizers. If the conference fees exceed the cost to offset emissions, we will pay you back the amount you pay here and use the rest to offset more carbon emissions'%}.</p>
+          {% endif %}
+        <h5>{% trans 'However, we do spend money to run this conference and you can help us and pay this amount. This will also ensure that you have full and
+            quick support from our technical staff if needed before, during or after the conference. {% if conftopass.fee_to_carbon %} *As you decided to give your profits for offsetting more carbon emissions, we will reimburse you the amount you pay if the profits from the conference fees exceed the total you pay.'%}{% endif %}</h5>
+            <input type="checkbox" id="support" name="sup" class="tech" value="tech">
+            <label for="support">{% trans 'For supporting us and get technical support, please tick this box.'%}</label><br>
+    </div>
+    {% endif %}
+      <div class="row">
+        <div class="col-md-4 order-md-2 mb-4">
+          <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-muted">{% trans 'Your cart'%}</span>
+          </h4>
+          <ul class="list-group mb-3">
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div class="row">
+                    <div class="col-md-8" style="float: left;">
+                        <h6 class="my-0">{% trans 'Conference'%}</h6>
+                <small class="text-muted">{% trans 'Preparation online and webinar'%}</small>
+              </div>
+                    <div class="col-md-4" style="float: right;text-align: right;">
+              <span class="text-muted"><span id="prepb"></span><span id="prep">{{ prepeuro|stringformat:".2f" }}</span><span id="prepa"> €</span></span>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <div class="row">
+                    <div class="col-md-8" style="float: left;">
+                <h6 class="my-0">{% trans 'Offsetting'%}</h6>
+                  <small class="text-muted">{% trans 'Offsetting of'%} {{ offseteuro|stringformat:".2f" }} {% trans 'kg of'%} CO<sub>2</sub> {% trans 'with'%} <a target="_blank" rel="noopener noreferrer" href="https://climeworks.shop/how-it-works">Climeworks</a></small>
+                        </div>
+                    <div class="col-md-4" style="float: right;text-align: right;">
+                <span class="text-muted"><span id="offb"></span><span id="off">{{ offseteuro|stringformat:".2f" }}</span><span id="offa"> €</span></span>
+                    </div>
+                    </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>{% trans 'Total (VAT)'%}</span>
+              <strong><span id="totab"></span><span id="tota">{{ total|stringformat:".2f" }}</span><span id="totaa"> €</span></strong>
+            </li>
+          </ul>
+            <div id="wrapper" style="text-align: center">
+            <div class="row" style="display: inline-block;">
+              <div class="col-md-7 mb-3" style="display: inline-block;">
+                <!--<form method="POST" action="#" id="currencyform">-->
+                    <label for="currencyy">{% trans 'Currency'%}</label>
+                    <select id="id_currency">
+                            <option value="">{% trans 'Change currency?'%}</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                    </select>
+                    <label for="firstName" class="mt-2">{% trans 'Coupon Code'%}</label>
+                    <input type="text" id="coupon" value="">
+                    <div id="couponacc"></div>
+                    <div id="couponused" class="hidden">0</div>
+
+                <!--</form>-->
+              </div>
+            </div>
+            </div>
+            <script>
+            $("#id_currency").change(function () {
+                //changecurrencyb(thisObj);
+                //alert('ch');
+
+                changecurrencyb($(this));
+
+                //var firstDropVal = $('#pick').val();
+            });
+            </script>
+             <script>
+            $(document).on('input', '[id="coupon"]', function (event) {
+                event.preventDefault();
+                //alert($(this).closest("form").attr('id'));
+                //alert('onfoc');
+                changecurrencyb($(this));
+                return false;
+            });
+            </script>
+            <!--{% money_localize '4.5' 'GBP' %}-->
+
+        </div>
+        <div class="col-md-8 order-md-1">
+          <h4 class="mb-3">{% trans 'Billing address'%}</h4>
+          <form class="needs-validation" id="payform">
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName">{% trans 'Name'%}</label>
+                <input type="text" class="form-control" id="firstName" placeholder="{% trans 'Institute or a person'%}" value="" required>
+                  <div id="wrongfirst"></div>
+              </div>
+            </div>
+
+
+            <div class="mb-3">
+              <label for="email">{% trans 'Email'%}</label>
+              <input type="email" class="form-control" id="email" placeholder="{% trans 'you@example.com'%}">
+              <div id="wrongemail"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="vat">{% trans 'VAT identification number (mandatory for Europeans)'%}</label>
+              <input type="vatnumber" class="form-control" id="vat" placeholder="{% trans 'Your institute VAT number'%}">
+              <div id="wrongvat"></div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address">{% trans 'Address'%}</label>
+              <input type="text" class="form-control" id="address" placeholder="{% trans '12 Flower Street'%}" required>
+                <div id="wrongaddress"></div>
+
+            </div>
+            <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="zip">{% trans 'Zip code'%}</label>
+                <input type="text" class="form-control" id="zip" placeholder="75020" required>
+                <div id="wrongzip"></div>
+              </div>
+            <div class="col-md-6 mb-3">
+              <label for="city">{% trans 'City'%}</label>
+              <input type="text" class="form-control" id="city" placeholder="Paris" required>
+                <div id="wrongcity"></div>
+            </div>
+            </div>
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label for="country">{% trans 'Country'%}</label>
+                <select class="custom-select d-block w-100" id="country" required>
+                  <option value="">{% trans 'Choose...'%}</option>
+                    {% for country in countries %}
+                        <option>{{ country.name }}</option>
+                    {% endfor %}
+                </select>
+                  <div id="wrongcountry"></div>
+              </div>
+
+
+            </div>
+
+            <hr class="mb-4">
+
+            <h4 class="mb-3">{% trans 'Payment'%}</h4>
+
+            <p>{% trans 'If you want to pay via a bank transfer, please'%} <a href="mailto:sales@carbonfreeconf.com"> {% trans 'contact us'%}</a> {% trans 'with the details of your conference.'%}</p>
+             <input type="hidden" name="confnum" id="conum" value="{{ confnum }}" />
+
+          <span class="list-item">
+          <label>
+              <input type="checkbox" name="acceptpay" id="accpay"> {% trans 'I declare that I have read the applicable'%} <a href="/{{LANGUAGE_CODE}}{% url 'my_app:saleterms' %}" target="_blank">{% trans 'general terms and conditions of sale'%}</a> {% trans 'and accept them without restriction'%} <small>{% trans '(this box needs to be checked to be able to proceed)'%}</small>.
+          </label>
+        </span>
+        <div id="wrongaccpay"></div>
+
+          <div id="card-element"><!--Stripe.js injects the Card Element--></div>
+      <button class=button2 id="submit">
+        <div class="spinner hidden" id="spinner"></div>
+        <span id="button-text">{% trans 'Pay now'%}</span>
+      </button>
+      <p id="card-error" role="alert"></p>
+      <p class="result-message hidden">
+        {% trans 'Payment succeeded'%}<!--, see the result in your
+        <a href="" target="_blank">Stripe dashboard.</a> Refresh the page to pay again.-->
+      </p>
+              <div id="checkout-message"></div>
+
+              <!--<div id="checkout-message"></div>
+              <div id="dropin-container"></div>
+                <hr class="mb-4">
+            <button class="btn btn-primary btn-lg btn-block" id="submit-button">Pay the conference fees for: "{{ title }}"</button>-->
+              <!--<button id="submit-button">Submit payment</button>-->
+
+
+          </form>
+        </div>
+      </div>
+        <div id="alpaid"></div>
+
+
+
+<script>
+    $('[id="support"]').on('change', function() {
+        if($("#support").prop('checked') == true){
+            //alert('true');
+            //$('#id_currency').val('EUR');
+            supportus(1);
+        }else{
+            //alert('false');
+            supportus(0);
+        }
+    });
+</script>
+
+     <script>
+    function supportus(tick) {
+        console.log("support is working!");// sanity check
+        //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+        //alert($('#id_currency option:selected').val());
+        $.ajax({
+            url : "/supportus",//the endpoint
+            type : "POST", // http method
+            data : {
+                        ticked:tick,
+                        confnum:{{ confnum }},
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //$("div[id='test2']").text('');
+                //$('#id_firstname').val(''); // remove the value from the input
+                console.log(json); // log the returned json to the console
+                //$('#couponacc').text('');
+
+
+                //diva.appendTo("body");
+                //document.getElementById('test').innerHTML = diva;
+                if (json.good) {
+                    $('#prep').text(json.prep);
+                    $('#off').text(json.off);
+                    $('#tota').text(json.tota);
+                    if (json.currency == 'EUR') {
+                            $('#prepa').text(json.unit);
+                            $('#offa').text(json.unit);
+                            $('#totaa').text(json.unit);
+                            $('#prepb').text('');
+                            $('#offb').text('');
+                            $('#totab').text('');
+                        } else {
+                            $('#prepb').text(json.unit);
+                            $('#offb').text(json.unit);
+                            $('#totab').text(json.unit);
+                            $('#prepa').text('');
+                            $('#offa').text('');
+                            $('#totaa').text('');
+                        }
+                    //if (json.currency == 'EUR'){
+                      //  $('#prepa').text(json.unit);
+
+                    //}
+                    //alert(json.currency);
+                }
+
+                //$(document.body).append(html);
+
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+    </script>
+
+       <!--<script src="https://js.braintreegateway.com/web/dropin/1.27.0/js/dropin.min.js"></script>
+
+<script>
+  var button = document.querySelector('#submit-button');
+
+  braintree.dropin.create({
+    // Insert your tokenization key here
+    authorization: '{{ token }}',
+    container: '#dropin-container',
+    /*paypal: {
+        flow: 'vault'
+    },*/
+    card: {
+        cardholderName: {
+            required: false
+            // to make cardholder name required
+            // required: true
+        }
+    },
+    vaultManager: true
+  }, function (createErr, instance) {
+    button.addEventListener('click', function (event) {
+        event.preventDefault();
+        //alert($('#id_currency option:selected').val());
+        instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+        // When the user clicks on the 'Submit payment' button this code will send the
+        // encrypted payment information in a variable called a payment method nonce
+        $.ajax({
+          type: 'POST',
+          url: '/checkout',
+          data: {'paymentMethodNonce': payload.nonce,
+              firstname: $("#firstName").val(),
+              email: $("#email").val(),
+              vat: $("#vat").val(),
+              address: $("#address").val(),
+              zip: $("#zip").val(),
+              city: $("#city").val(),
+              country: $("#country").val(),
+              conum: $("#conum").val(),
+              prep: $("#prep").text(),
+              off: $("#off").text(),
+              total: $("#tota").text(),
+              totaleuro: {{ total }},
+              coupon:$('#coupon').val(),
+              currency:$('#id_currency option:selected').val(),
+              csrfmiddlewaretoken : '{{ csrf_token }}',}
+        }).done(function(result) {
+
+            $('#wrongemail').text('');
+            $('#wrongfirst').text('');
+            $('#wrongaddress').text('');
+            $('#wrongcity').text('');
+            $('#wrongzip').text('');
+            $('#wrongcountry').text('');
+            $('#alpaid').text('');
+
+          if (result.success) {
+              // Tear down the Drop-in UI
+            instance.teardown(function (teardownErr) {
+            if (teardownErr) {
+              console.error('Could not tear down Drop-in UI!');
+            } else {
+              console.info('Drop-in UI has been torn down!');
+              // Remove the 'Submit payment' button
+              $('#submit-button').remove();
+            }
+          });
+            $('#checkout-message').html('<div class="alert alert-success mt-2" role="alert" style="text-align: center;"><h3><b>Payment accepted</b></h3></div></br><a href="{% url "my_app:createconf" %}">Back to your conference</a>');
+          } else {
+              if (result.wrongemail) {
+                  $('#wrongemail').html('<p>The email address format is incorrect</p>');
+              } if(result.firstname){
+                  $('#wrongfirst').html('<p>This field is empty</p>');
+              } if(result.address){
+                  $('#wrongaddress').html('<p>This field is empty</p>');
+              } if(result.city){
+                  $('#wrongcity').html('<p>This field is empty</p>');
+              } if(result.zip){
+                  $('#wrongzip').html('<p>This field is empty</p>');
+              } if(result.country) {
+                  $('#wrongcountry').html('<p>This field is empty</p>');
+              }if(result.alreadypaid){
+                  $('#alpaid').html('<p>This conference is already paid for</p>');
+              }
+              if (!result.wrongemail && !result.firstname && !result.address && !result.city && !result.zip && !result.country) {
+                  console.log(result);
+                  $('#checkout-message').html('<p>Error while paying</p>');
+              }
+          }
+        });
+      });
+
+        return false;
+
+    });
+  });
+</script>-->
+
+    <script>
+
+//console.log("Sanity check1!");
+
+// Get Stripe publishable key
+fetch("{% url 'my_app:stripeconfig' %}")
+.then((result) => { return result.json(); })
+.then((data) => {
+    // Initialize Stripe.js
+    const stripe = Stripe(data.publicKey);
+
+
+// The items the customer wants to buy
+var purchase = {
+  items: [{ id: "conference" }]
+};
+
+// Disable the button until we have Stripe set up on the page
+document.querySelector(".button2").disabled = true;
+
+    var elements = stripe.elements();
+
+    var style = {
+      base: {
+        color: "#32325d",
+        fontFamily: 'Arial, sans-serif',
+        fontSmoothing: "antialiased",
+        fontSize: "16px",
+        "::placeholder": {
+          color: "#32325d"
+        }
+      },
+      invalid: {
+        fontFamily: 'Arial, sans-serif',
+        color: "#fa755a",
+        iconColor: "#fa755a"
+      }
+    };
+
+    var card = elements.create("card", { style: style });
+    // Stripe injects an iframe into the DOM
+    card.mount("#card-element");
+
+    card.on("change", function (event) {
+      // Disable the Pay button if there are no card details in the Element
+      document.querySelector(".button2").disabled = event.empty;
+      document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
+    });
+
+    var form = document.getElementById("payform");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault();
+      // Complete payment when the submit button is clicked
+        //alert('stripe'+stripe+' '+card+' '+data.clientSecret);
+        $.ajax({
+          type: 'POST',
+          url: '/checkout',
+          data: {'paymentMethodNonce': 'payload.nonce',
+              firstname: $("#firstName").val(),
+              email: $("#email").val(),
+              accpay:$('#accpay').prop('checked'),
+              vat: $("#vat").val(),
+              address: $("#address").val(),
+              zip: $("#zip").val(),
+              city: $("#city").val(),
+              country: $("#country").val(),
+              conum: $("#conum").val(),
+              prep: $("#prep").text(),
+              off: $("#off").text(),
+              total: $("#tota").text(),
+              totaleuro: {{ total }},
+              coupon:$('#coupon').val(),
+              currency:$('#id_currency option:selected').val(),
+              csrfmiddlewaretoken : '{{ csrf_token }}',}
+        }).done(function(result) {
+
+            $('#wrongemail').text('');
+            $('#wrongfirst').text('');
+            $('#wrongaddress').text('');
+            $('#wrongcity').text('');
+            $('#wrongzip').text('');
+            $('#wrongaccpay').text('');
+            $('#wrongcountry').text('');
+            $('#alpaid').text('');
+
+          if (result.success) {
+              payWithCard(stripe, card, result.clientSecret);
+              //payWithCard(stripe, card, data.clientSecret);
+
+              // Tear down the Drop-in UI
+            /*instance.teardown(function (teardownErr) {
+            if (teardownErr) {
+              console.error('Could not tear down Drop-in UI!');
+            } else {
+              console.info('Drop-in UI has been torn down!');
+              // Remove the 'Submit payment' button
+              $('#submit-button').remove();
+            }
+          });*/
+            //$('#checkout-message').html('<div class="alert alert-success mt-2" role="alert" style="text-align: center;"><h3><b>Payment accepted</b></h3></div></br><a href="{% url "my_app:createconf" %}">Back to your conference</a>');
+          } else {
+              if (result.wrongemail) {
+                  $('#wrongemail').html('<p style="color: red;">*The email address format is incorrect</p>');
+              } if(result.firstname){
+                  $('#wrongfirst').html('<p style="color: red;">*This field is empty</p>');
+              } if(result.accpay){
+                  $('#wrongaccpay').html('<p style="color: red;">*You should accept our terms and conditions of sale before paying</p>');
+              } if(result.address){
+                  $('#wrongaddress').html('<p style="color: red;">*This field is empty</p>');
+              } if(result.city){
+                  $('#wrongcity').html('<p style="color: red;">*This field is empty</p>');
+              } if(result.zip){
+                  $('#wrongzip').html('<p style="color: red;">*This field is empty</p>');
+              } if(result.country) {
+                  $('#wrongcountry').html('<p style="color: red;">*This field is empty</p>');
+              }if(result.alreadypaid){
+                  $('#alpaid').html('<p style="color: red;">*This conference is already paid for</p>');
+              }
+
+              if (!result.wrongemail && !result.firstname && !result.address && !result.city && !result.zip && !result.country && !result.accpay && result.pb) {
+                  console.log(result);
+                  //alert("3"+result.pb);
+                  $('#checkout-message').html('<p style="color: red;">*Error while paying</p>');
+              }
+          }
+        });
+
+    });
+  });
+   // });
+
+
+// Calls stripe.confirmCardPayment
+// If the card requires authentication Stripe shows a pop-up modal to
+// prompt the user to enter authentication details without leaving your page.
+var payWithCard = function(stripe, card, clientSecret) {
+  loading(true);
+  stripe
+    .confirmCardPayment(clientSecret, {
+      receipt_email: '{{ user.email }}',//document.getElementById('email').value,
+      payment_method: {
+        card: card
+      }
+    })
+    .then(function(result) {
+      if (result.error) {
+        // Show error to your customer
+        showError(result.error.message);
+
+      } else {
+        // The payment succeeded!
+        orderComplete(result.paymentIntent.id);
+      }
+    });
+};
+
+/* ------- UI helpers ------- */
+
+// Shows a success message when the payment is complete
+var orderComplete = function(paymentIntentId) {
+  loading(false);
+  /*document
+    .querySelector(".result-message a")
+    .setAttribute(
+      "href",
+      "https://dashboard.stripe.com/test/payments/" + paymentIntentId
+    );
+   */
+  $.ajax({
+    url: "{% url 'my_app:validatepay' %}",
+    type: "POST",
+    data: {
+          firstname: $("#firstName").val(),
+          email: $("#email").val(),
+          accpay:$('#accpay').prop('checked'),
+          vat: $("#vat").val(),
+          address: $("#address").val(),
+          zip: $("#zip").val(),
+          city: $("#city").val(),
+          country: $("#country").val(),
+          conum: $("#conum").val(),
+          prep: $("#prep").text(),
+          off: $("#off").text(),
+          total: $("#tota").text(),
+          totaleuro: {{ total }},
+          coupon:$('#coupon').val(),
+          currency:$('#id_currency option:selected').val(),
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+    },
+    success: function () {
+        $('#checkout-message').html('<div class="alert alert-success mt-2" role="alert" style="text-align: center;"><h3><b>Payment accepted</b></h3></div></br><a href="{% url "my_app:createconf" %}">Back to your conference</a>');
+    },
+    error: function () {
+        $('#checkout-message').html('<p style="color: red;">*Error while paying</p>');
+    }
+});
+
+  document.querySelector(".result-message").classList.remove("hidden");
+  document.querySelector(".button2").disabled = true;
+};
+
+// Show the customer the error from Stripe if their card fails to charge
+var showError = function(errorMsgText) {
+  loading(false);
+  var errorMsg = document.querySelector("#card-error");
+  errorMsg.textContent = errorMsgText;
+  //alert('error:'+errorMsgText);
+    $('#checkout-message').html('<p style="color: red;">*Error while paying: '+errorMsgText+'</p>');
+
+  setTimeout(function() {
+    errorMsg.textContent = "";
+  }, 4000);
+};
+
+// Show a spinner on payment submission
+var loading = function(isLoading) {
+  if (isLoading) {
+    // Disable the button and show a spinner
+    document.querySelector(".button2").disabled = true;
+    document.querySelector("#spinner").classList.remove("hidden");
+    document.querySelector("#button-text").classList.add("hidden");
+  } else {
+    document.querySelector(".button2").disabled = false;
+    document.querySelector("#spinner").classList.add("hidden");
+    document.querySelector("#button-text").classList.remove("hidden");
+  }
+};
+
+
+//console.log("Sanity check2!");
+
+</script>
+        {% elif alpaid %}
+
+        <p class="ml-2 mt-3"><strong><i class="fas fa-moon"></i> This conference is already paid for!</strong> Please contact <a href="mailto:sales@carbonfreeconf.com">CarbonFreeConf</a> if you need more info.</p>
+
+        {% else %}
+
+        <p class="ml-2 mt-3"><strong><i class="fas fa-bomb"></i> We do not know how you arrived here but it is the wrong place to be!</strong> Please contact <a href="mailto:sales@carbonfreeconf.com">CarbonFreeConf</a> if you need any info or go back to the <a href="{% url 'my_app:home' %}">homepage</a>.</p>
+
+    {% endif %}
+    </div>
+
+    <script>
+    function changecurrencyb(thisObj) {
+        console.log("change currency is working!");// sanity check
+        //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+        //alert($('#id_currency option:selected').val());
+        $.ajax({
+            url : "/changecurrency",//the endpoint
+            type : "POST", // http method
+            data : {    currency:$('#id_currency option:selected').val(),//thisObj.val(),//$('#id_currency option:selected').val(),//thisObj.val(),//        var end = this.value;
+                        prep:$('#prep').text(),
+                        prepinit:{{ prepeuro|stringformat:".2f" }},//, off, tota
+                        off:$('#off').text(),//{{ offseteuro|stringformat:".2f" }},
+                        tota:$('#tota').text(),//{{ total|stringformat:".2f" }},
+                        oldcurra:$('#prepa').text(),//{{ total|stringformat:".2f" }},
+                        oldcurrb:$('#prepb').text(),//{{ total|stringformat:".2f" }},
+                        coupon:$('#coupon').val(),
+                        couponused:$('#couponused').text(),
+                        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //$("div[id='test2']").text('');
+                //$('#id_firstname').val(''); // remove the value from the input
+                console.log(json); // log the returned json to the console
+                $('#couponacc').text('');
+
+                //diva.appendTo("body");
+                //document.getElementById('test').innerHTML = diva;
+                if (json.good) {
+                    if(json.couponused == 0) {
+                        $('#prep').text(json.prep);
+                        $('#off').text(json.off);
+                        $('#tota').text(json.tota);
+                        if (json.currency == 'EUR') {
+                            $('#prepa').text(json.unit);
+                            $('#offa').text(json.unit);
+                            $('#totaa').text(json.unit);
+                            $('#prepb').text('');
+                            $('#offb').text('');
+                            $('#totab').text('');
+                        } else {
+                            $('#prepb').text(json.unit);
+                            $('#offb').text(json.unit);
+                            $('#totab').text(json.unit);
+                            $('#prepa').text('');
+                            $('#offa').text('');
+                            $('#totaa').text('');
+                        }
+                        //alert(json.currency);
+                    }
+                }
+                if(json.coupon) {
+                    if(json.couponused == 1){
+                        $('#couponacc').text('Coupon already used');
+                    }else {
+                        $('#couponacc').text('Coupon accepted');
+                        $('#couponused').text(json.couponused2);
+
+                    }
+                }
+                //$(document.body).append(html);
+
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    };
+    </script>
+
+
+
+{% endblock %}
+
+

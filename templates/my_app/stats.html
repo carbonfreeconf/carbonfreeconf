@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load index %}
+
+{% block title %} See the statistics of the conference {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Check out how your conference performed." />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+<div class=container>
+    {% if status == '6' %}
+                <h5 class="mt-2"><strong>This page does not exist.</strong></h5>
+                <p>You can go check the archived videos <a href="{% url 'my_app:archive' %}">here</a> if you are looking for some specific content in your research field.</p>
+
+    {% else %}
+    {% if notexist %}
+        <p class="ml-2 mt-3"><strong><i class="fas fa-bomb"></i>OOPS! We do not know how you arrived here but it is the wrong place to be!</strong> Please contact <a href="mailto:sales@carbonfreeconf.com">CarbonFreeConf</a> if you need any info or go back to the <a href="{% url 'my_app:home' %}">homepage</a>.</p>
+    {% else %}
+    {% if mastconf %}
+            <h2><i class="fas fa-info-circle"></i> Some interesting numbers regarding the meeting entitled: {{ conftopass.title }}</h2>
+
+    <p>This can only be seen by superusers and organizers but feel free to send these numbers to your participants once the conference has ended</p>
+
+        {% if not ready %}
+        <div class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+<div class="d-flex justify-content-center"><p>Wait until we load all the numbers from different places (it can take a while for large conferences)...</p></div>
+
+        <div id="totest"></div>
+        {% if statmastid %}
+            <script>
+                window.setInterval(function(){
+                    /// call your function here
+                    checkcelerytaskstatb({{ statmastid }});
+
+                }, 30000);//do it every 2 min: 1000*60*2=120000
+            </script>
+        {% endif %}
+            {% else %}
+
+    <ul>
+        <li>Total number of participants who registered: {{ nbpartsevensubmm }}</li>
+        <li>Total number of participants who have been accepted: {{ nbpartsm }}</li>
+        <li>Total number of participants that are only attending including non-accepted participants (no talks{% if nbpostersm != 0 %} or posters{% endif %}): {{ nbattonlym }}</li>
+        <li>Total number of participants that are only attending and are not yet accepted (no talks{% if nbpostersm != 0 %} or posters{% endif %}): {{ nbattonlynonaccm }}</li>
+        <li>Total number of participants who have only registered to daughter sessions and not the plenary session: {{ nbdiffm }}</li>
+        <li>Total number of accepted talks: {{ nbtalksm }}</li>
+        <li>Total number of hours of video conferencing: {{ nbhourzoomm }}</li>
+        <li>Total number of CO<sub>2</sub> emission offset (in kg): {{ CO2m }}</li>
+        {% if countvm != 0 %}
+        <li>Total number of imported recorded videos: {{ countvm }}</li>
+        <!--<li>Total number of times videos have been watched so far{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ countvviewm }} {% endif %}</li>
+        <li>Total number of hours videos have been watched so far{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ countvdurationm }} {% endif %}</li>-->
+        {% endif %}
+        <li>Total number of chat groups created: {{ nbroomm }}</li>
+        <li>Total number of messages on the chat: {{ nbmesm }}</li>
+        {% if nbpostersm != 0 %}
+        <li>Total number of accepted posters: {{ nbpostersm }}</li>
+        <li>Total number of times posters were viewed: {{ nbviewpm }}</li>
+        <li>Total number of chat messages about posters: {{ nbmespom }}</li>
+        {% if bestposter %}
+            <li>Best poster: {{ bestposter.title }} by {{ bestposter.user.first_name }} {{ bestposter.user.last_name }} in {{ bestposter.conference.title }} (votes: {{ votes }}, view: {{ view }})</li>
+        {% endif %}
+        {% if bestposter2 %}
+            <li>Poster with most views: {{ bestposter2.title }} by {{ bestposter2.user.first_name }} {{ bestposter2.user.last_name }} in {{ bestposter2.conference.title }} (votes: {{ votes2 }}, view: {{ view2 }})</li>
+        {% endif %}
+        {% endif %}
+    <!--
+        <li>Total number of people who watched the live sessions{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ nbpartm }}{% endif %}</li>
+        <li>Total number of connections to the live sessions{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ nbparttotm }}{% endif %}</li>
+
+    {% ifnotequal conftopass.twitterhashtag '#' %}
+        <li>Total number of posts on social media tagging {{ conftopass.twitterhashtag }} in the last seven days: {{ nbpostsm }}</li>
+    {% endifnotequal %}
+    -->
+    </ul>
+
+            {% endif %}
+        <script>
+function checkcelerytaskstatb(statmastid) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //alert(thisObj.closest("div[class='modal-body']").next().closest("form").find('.email2').val());.attr('id')
+    //alert(thisObj.closest("form").find("input[name=title]").val());
+    //alert(thisObj.closest("form").find("textarea[name=abstract]").val());
+
+    $.ajax({
+        url : '/checkcelerytaskstat/', // the endpoint
+        type : "POST", // http method
+        data : {    //talktype : thisObj.val(),//$('#confnumid').val(),
+                    statmastid: {{ statmastid }},
+                    confnum: {{ conftopass.id }},
+                    //confnum: thisObj.closest("form").find("input[name=confnum2]").val(),
+                    csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+
+                }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $("#totest").text('');
+            //alert('aqui'+json.success);
+
+            console.log(json); // log the returned json to the console
+            if (json.success) {//it's over
+                //alert('aqui'+json.confnum);
+
+                var url = "{% url 'my_app:stats' 64 %}";
+
+                var id = json.confnum;
+
+                window.location = url.replace('64', id);
+
+                // Construct the full URL with "id"
+                //window.location = url + "/" + id;
+                //$("#"+json.talknumber+".test3").append('<div class="alert alert-danger" role="alert"><p>You reached the maximum number of participants you set up initially, go for a bigger size conference if needed.</p></div>');
+
+            }else{
+
+                $("#totest").append('<div class="alert alert-success" role="alert"><p>Still loading data...</p></div>');
+
+            }
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><strong>Abstract:</strong><textarea class="form-control" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+    {% endif %}
+        {% if mastconf %}
+            <h2 class="mb-3">And for the plenary session only</h2>
+            {% else %}
+    <h2><i class="fas fa-info-circle"></i> Some interesting numbers regarding the meeting entitled: {{ conftopass.title }}</h2>
+
+    <p>This can only be seen by superusers and organizers but feel free to send these statistics to your participants once the conference has ended</p>
+    {% endif %}
+    <ul>
+        <li>Total number of participants who registered: {{ nbpartsevensubm }}</li>
+        <li>Total number of participants who have been accepted: {{ nbparts }}</li>
+        <li>Total number of participants that are only attending (no talks{% if conftopass.poster %} or posters{% endif %}): {{ nbattonly }}</li>
+        <li>Total number of accepted talks: {{ nbtalks }}</li>
+        <li>Total number of hours of video conferencing: {{ nbhourzoom }}</li>
+        <li>Total number of CO<sub>2</sub> emission offset (in kg): {{ CO2 }}</li>
+        {% if conftopass.recording %}
+        <li>Total number of imported recorded videos: {{ countv }}</li>
+        <li>Total number of times videos have been watched so far{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ countvview }} {% endif %}</li>
+        <li>Total number of hours videos have been watched so far{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ countvduration }} {% endif %}</li>
+        {% endif %}
+        <li>Total number of chat groups created: {{ nbroom }}</li>
+        <li>Total number of messages on the chat: {{ nbmes }}</li>
+        {% if conftopass.poster %}
+        <li>Total number of accepted posters: {{ nbposters }}</li>
+        <li>Total number of times posters were viewed: {{ nbviewp }}</li>
+        <li>Total number of chat messages about posters: {{ nbmespo }}</li>
+        {% if bestposter %}
+        <li>Best poster: {{ bestposter.title }} by {{ bestposter.user.first_name }} {{ bestposter.user.last_name }} (votes: {{ votes }}, view: {{ view }})</li>
+        {% endif %}
+        {% if bestviewpos %}
+        <li>Poster with most views: {{ bestviewpos.title }} by {{ bestviewpos.user.first_name }} {{ bestviewpos.user.last_name }} in {{ bestviewpos.conference.title }} (votes: {{ bestvotes }}, view: {{ bestview }})</li>
+        {% endif %}
+
+        {% endif %}
+        <li>Total number of people who watched the live sessions{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ nbpart }}{% endif %}</li>
+        <li>Total number of connections to the live sessions{% if not timeover %} (will be given one day after the conference starts): -{% else %}: {{ nbparttot }}{% endif %}</li>
+
+    {% ifnotequal conftopass.twitterhashtag '#' %}
+        <li>Total number of posts on social media tagging {{ conftopass.twitterhashtag }} in the last seven days: {{ nbposts }}</li>
+    {% endifnotequal %}
+    </ul>
+<br>
+        <p><i>If you need some other numbers, or some statistics, please <a href="mailto:support@carbonfreeconf.com">contact us</a>.</i></p>
+<br>
+
+        {% if visio %}
+        {% if conftopass.masterconfpass == 35500015 and conftopass.masterconf == True %}
+            <p>Zoom links </p>
+            {% for l in visio %}
+                <p>{{ l.conference.title }}-{{ l.date }}-{{ l.duration }}min-{{ l.joinurlzoom }}-{{ hostacc|index:forloop.counter0 }}</p>
+            {% endfor %}
+        {% endif %}
+        {% endif %}
+    {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}
+

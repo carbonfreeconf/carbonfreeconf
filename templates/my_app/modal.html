@@ -1,0 +1,511 @@
+{% load static %}
+{% load index %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+
+
+<script>
+    var $unique = $(".uniqueid");
+
+    function myNewFunction(sel) {
+        if($unique.val()==3 && sel.options[sel.selectedIndex].value != 3){
+            alert('Warning: If you save the changes then the status of superuser will be lost and the person will not have access to the admin panel anymore!');
+        }
+        //alert(sel.options[sel.selectedIndex].value+' '+$unique.val());
+        $unique.val(sel.options[sel.selectedIndex].value);
+    }
+
+    //var $unique2 = $(".uniqueid2");
+
+    function myNewFunction2(sel,idu) {
+        //alert(sel.options[sel.selectedIndex].value);
+        $("#"+idu+".uniqueid2").val(sel.options[sel.selectedIndex].value);
+    }
+
+    var $unique3 = $(".uniqueid3");
+
+    function myNewFunction3(sel) {
+        //alert(sel.options[sel.selectedIndex].value);
+        $unique3.val(sel.options[sel.selectedIndex].value);
+    }
+
+   $('#switch1').ready(function() {
+        {% for inst in instance %}
+            {% if  forloop.counter0 == 0%}
+                if("{{ inst.free }}"=="True"){
+                    //alert('what');
+                    $paid = true;
+                }
+                else{
+                    //alert("yo");
+                    $paid = false;
+                }
+            {% endif %}
+        {% endfor %}
+        //alert($paid);
+        if ($paid){
+            $('#switch1').prop('checked',true)
+        }else{
+            //alert("Checkbox statedd (method 1) = " + $('#switch1').prop('checked'));
+            $('#switch1').prop('checked',false)
+        }
+        //alert("Checkbox state (method 2) = " + $('#test').is(':checked'));
+    });
+
+    $('#switch1').click(function() {
+        if ($('#switch1').prop('checked')){
+            $(".uniqueid4").val('true');
+        }else{
+            //alert("Checkbox statedd (method 1) = " + $('#switch1').prop('checked'));
+            $(".uniqueid4").val('false');
+        }
+        //alert("Checkbox state (method 2) = " + $('#test').is(':checked'));
+    });
+
+    //var test=$("#role-select :selected").val();
+    //alert(test);
+    //var $unique = $(".uniqueid");
+    //$unique.val(test);
+</script>
+
+<div class="modal fade" id="myEdit">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="fas fa-user"></i>
+				</div>
+				<h4 class="modal-title">{% trans "Information about the person's registration" %}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+
+
+            {% for inst in instance %}
+
+            {% if  forloop.counter0 == 0%}
+
+
+			<div class="modal-body">
+                <div class="row">
+                    <div class="col-8">
+                        {% if inst.user.userprofileinfo.orcid %}
+                            <p><strong>{% trans "Person's info"%}:</strong> <a href="https://orcid.org/{{ inst.user.userprofileinfo.orcid }}" target="_blank" style="color: blue;">{{ inst.user.first_name }} {{ inst.user.last_name }}</a> / {{ inst.user.email }} {% if inst.user.userprofileinfo.job %} / {{ inst.user.userprofileinfo.job }} {% endif %} {% if inst.user.userprofileinfo.institute %} / {{ inst.user.userprofileinfo.institute }} {% endif %} </p>
+                        {% else %}
+				            <p><strong>{% trans "Person's info"%}:</strong> {{ inst.user.first_name }} {{ inst.user.last_name }} / {{ inst.user.email }} {% if inst.user.userprofileinfo.job %} / {{inst.user.userprofileinfo.job}} {% endif %} {% if inst.user.userprofileinfo.institute %} / {{inst.user.userprofileinfo.institute}} {% endif %}  </p>
+                        {% endif %}
+                    </div>
+                    {% if inst.user.userprofileinfo.profile_pic %}
+                    <div class="col">
+                        <img src="{{ inst.user.userprofileinfo.profile_pic.url }}" alt="{% trans 'Profile pic'%}" height="120">
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+                {% if inst.conference.fee %}
+                {% if not inst.haspaid %}
+
+                <div class="modal-body">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="switch1">
+                    <label class="custom-control-label" for="switch1">{% trans 'Free conference for' %} {{ inst.user.first_name }} {{ inst.user.last_name }}?</label>
+                </div>
+                </div>
+                    <div class="modal-body" id="free"></div>
+                {% endif %}
+                {% if inst.free %}
+                    <div class="modal-body" id="alfree"><i>{% trans 'The conference is free for this participant' %}</i></div>
+                {% endif %}
+                {% if not inst.free %}
+                    <div class="modal-body" id="notfree">
+                        {% if inst.haspaid %}
+                            <p>{% trans 'The participant already paid the conference fees.' %}</p>
+                        {% else %}
+                            <p>{% trans 'The participant has not yet paid the conference fees and will not be able to access the conference room.' %}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% endif %}
+
+                <div class="modal-body">
+
+                <label for="soc-select">{% trans 'Organizer or program committee member?' %}</label><i data-toggle="tooltip" data-placement="bottom" title="{% trans 'Select the members of the Program Committee or Organizers here.' %}" class="fas fa-info-circle"></i>
+
+                <select name="loc" id="loc-select" onChange="myNewFunction3(this);" onLoad="myNewFunction3(this);">
+                <option value="0" {% if inst.socloc == 0 %}selected="selected"{% endif %}>{% trans 'Not part of the organizers/decision panel' %}</option>
+                <option value="1" {% if inst.socloc == 1 %}selected="selected"{% endif %}>{% trans 'Program committee member' %}</option>
+                <option value="2" {% if inst.socloc == 2 %}selected="selected"{% endif %}>{% trans 'Organizer' %}</option>
+                </select>
+			</div>
+            <div class="modal-body">
+
+                <label for="role-select">{% trans 'Change role?' %}</label><i data-toggle="tooltip" data-placement="bottom" title="{% trans 'Be very accurate in your choice. If you give a superuser role to someone, they can change every settings of the conference in the same way as you can. Moderators cannot access the conference settings but they will have all controls in the conference room.' %}" class="fas fa-info-circle"></i>
+
+                <select name="role" id="role-select" onChange="myNewFunction(this);" onLoad="myNewFunction(this);">
+                <option value="0" {% if inst.role == 0 %}selected="selected"{% endif %}>{% trans 'Presenter' %}</option>
+                <option value="1" {% if inst.role == 1 %}selected="selected"{% endif %}>{% trans 'Moderator' %}</option>
+                <option value="2" {% if inst.role == 2 %}selected="selected"{% endif %}>{% trans 'Attendee' %}</option>
+                <option value="3" {% if inst.role == 3 %}selected="selected"{% endif %}>{% trans 'Superuser' %}</option>
+                </select>
+			</div>
+            {% endif %}
+
+            <div class="modal-body">
+
+                <label for="part-select">{% trans 'Change participation type?' %}</label><i data-toggle="tooltip" data-placement="bottom" title="{% trans 'You can choose a different type, if you want the speaker to give a review or discuss a subject rather than a normal talk or you can choose to downgrade a talk to a poster if limited places are available.' %}" class="fas fa-info-circle"></i>
+
+                <select class="partb" name="part" id="part-selectb" onLoad="myNewFunction2(this,{{ forloop.counter0 }});">
+                <option value="6" {% if inst.type == 6 %}selected="selected"{% endif %}>{% trans 'Talk' %}</option>
+                <option value="1" {% if inst.type == 1 %}selected="selected"{% endif %}>{% trans 'Invited Talk' %}</option>
+                <option value="2" {% if inst.type == 2 %}selected="selected"{% endif %}>{% trans 'Discussion' %}</option>
+                <option value="3" {% if inst.type == 3 %}selected="selected"{% endif %}>{% trans 'Review' %}</option>
+                <option value="4" {% if inst.type == 4 %}selected="selected"{% endif %}>{% trans 'Poster' %}</option>
+                <option value="5" {% if inst.type == 5 %}selected="selected"{% endif %}>{% trans 'Attendance only' %}</option>
+
+                </select>
+			</div>
+
+            <div class="modal-footer"></div>
+            <div class="modal-body">
+            {% if inst.mp4_url %}
+                <p>{% trans 'There is a' %} {% if inst.type == 4 %}{% trans 'poster' %}{% else %}{% trans 'talk' %}{% endif %} {% trans 'pre-recorded (the author' %} {% if inst.mp4show %}{% trans 'allowed' %}{% else %}{% trans 'disallowed' %}{% endif %} {% trans 'it to be shown on the document section of the conference website). Click' %} <a href="{{ inst.mp4_url }}" target="_blank">{% trans 'here' %}</a> {% trans 'to check it out.' %}</p>
+            {% endif %}
+                <form enctype="multipart/form-data" method="POST" id="f{{ forloop.counter0 }}" action="{% url 'my_app:valperson' inst.user.email inst.conference.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="tittalk2" value="{{ conftopass.id }}" />
+                    <input type="hidden" name="confnum2" value="{{ inst.conference.id }}" />
+                    <input type="hidden" name="confnummast" value="{{ conftopass.id }}" />
+                    <input type="hidden" name="email2" value="{{ inst.user.email }}" />
+                    <input type="hidden" name="forloop2" value="{{ forloop.counter0 }}" />
+                    <input type="hidden" name="role2" class="uniqueid" id="{{ forloop.counter0 }}" value="{{ inst.role }}" />
+                    <input type="hidden" name="part2" class="uniqueid2" id="{{ forloop.counter0 }}" value="{{ inst.type }}" />
+                    <input type="hidden" name="loc2" class="uniqueid3" id="{{ forloop.counter0 }}" value="{{ inst.socloc }}" />
+                    <input type="hidden" name="paid2" class="uniqueid4" id="{{ forloop.counter0 }}" value="{% if inst.free %}true{% else %}false{% endif %}" />
+                    <input type="hidden" name="abs2" value="{{ inst.abstract }}" />
+                    <input type="hidden" name="bio2" value="{{ inst.biography }}" />
+                    <input type="hidden" name="abs3" class="uniqueid5" id="{{ forloop.counter0 }}" value='{{ inst_form|index:forloop.counter0 }}' />
+
+
+                {% if conftopass.masterconf %}
+                    <p><strong>{% trans 'Participation for the session:' %} {{ inst.conference.title }}</strong></p>
+                    {% ifnotequal conftopass.id inst.conference.id %}<p style="color: red;"><i class="fas fa-exclamation-triangle"></i> {% trans 'This participation is not part of the plenary session' %}</p>{% endifnotequal %}
+                {% endif %}
+                    <div class="mb-3">{% trans 'The participation was created on'%} {{ inst.created }}</div>
+                    <div class="titley mb-3" id="{{ forloop.counter0 }}" {% if inst.type == 5 %} style="display: none;" {% endif %}><p><strong>{% trans 'Participation title:'%}</strong></p><input type="text" class="form-contr" name="title" placeholder="{{ inst.title }}" value="{{ inst.title }}" required></div>
+
+                    <!--<div class="abs2 mb-3" id="{{ forloop.counter0 }}"><p><strong>Abstract:</strong></p>{{ inst.abstract|safe }}</div>-->
+                    <!--This displays summernote with content and it works-->
+                    <div class="abs" id="{{ forloop.counter0 }}" {% if inst.type == 5 %} style="display: none;" {% endif %}><p><strong>{% trans 'Abstract:'%}</strong></p>{{ inst_form|index:forloop.counter0 }}</div>
+                    <!--<div class="bio" id="{{ forloop.counter0 }}"><p><strong>Person's mini-biography:</strong></p><textarea class="form-contro" name="biography" cols="80" rows="4" placeholder="{{ inst.biography }}">{{ inst.biography }}</textarea></div>-->
+
+
+                    <div class="bio mb-4" id="{{ forloop.counter0 }}" {% if not inst.biography %} style="display: none;" {% endif %}><p><strong>{% trans "Person's mini-biography:"%}</strong></p>{{ inst.biography }}</div>
+
+                    {% if conftopass.hybrid %}
+                        <div class="ftf mb-4" id="{{ forloop.counter0 }}"><p><strong>{% trans 'Will'%} {{ inst.user.first_name }} {{ inst.user.last_name }} {% trans 'come in person to the conference for this participation?'%}:</strong></p>{% if inst.facetoface %}{% trans 'Yes'%}{% else %}{% trans 'No'%}{% endif %}</div>
+                    {% endif %}
+                    <div class="test2" id="{{ forloop.counter0 }}"></div>
+                    <div class="test3" id="{{ forloop.counter0 }}"></div>
+
+				<button type="submit" class="btn btn-primary btn-upd">{% trans 'Update your changing'%}</button>
+
+                </form>
+                <i data-toggle="tooltip" data-placement="bottom" title="{% trans 'When clicked, this will update the role, title, abstract and biography if changed'%}" class="fas fa-info-circle"></i>
+
+                {% if inst.slides %}
+                    <p><a href="{{ inst.slides.url }}" target="_blank" class="btn btn-secondary px-4 py-2 btn-sm mt-2">{% trans 'See'%} {% if inst.type == 4 %} {% trans 'their Poster'%}{% else %} {% trans 'the document they uploaded'%}{% endif %}</a> <small>- {% trans 'The author'%} {% if inst.slideshow %}{% trans 'allowed'%}{% else %}{% trans 'disallowed'%}{% endif %} {% trans 'it to be shown on the document section of the conference website.'%}</small></p>
+                {% endif %}
+                {% if inst.paperurl %}
+                    <p><a href="{{ inst.paperurl }}" target="_blank" class="btn btn-secondary px-4 py-2 btn-sm mt-2">{% trans 'See the paper they linked to'%}</a></p>
+                {% endif %}
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Cancel'%}</button>
+                <form enctype="multipart/form-data" method="POST" id="formvalida{{ forloop.counter0 }}" action="{% url 'my_app:valperson' inst.user.email inst.conference.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="tittalk" value="{{ conftopass.id }}" />
+                <input type="hidden" name="confnum" value="{{ conftopass.id }}" />
+                <input type="hidden" name="confnummast" value="{{ conftopass.id }}" />
+                <input type="hidden" name="confnum2" value="{{ inst.conference.id }}" />
+                <input type="hidden" name="forloop2" value="{{ forloop.counter0 }}" />
+
+				<button type="submit" id="{{ forloop.counter0 }}" class="btn btn-warning valida" {% if toomany %}disabled{% endif %}>{% if toomany %} {% trans 'Too many participants already'%} {% else %}{% ifequal inst.status 1 %} {% trans 'Participation accepted (undo?'%}{% if inst.conference.masterconf %} {% if inst.conference.subtomastautomatic %} {% trans 'it will undo validated participations in other sessions as well'%}{% endif %}{% endif %}) {% else %} {% trans 'Validate this participation'%} {% endifequal %}{% endif %}</button>
+                
+                </form>
+                <i data-toggle="tooltip" data-placement="bottom" title="{% ifequal inst.status 1 %} {% trans 'The talk will appear as still submitted, not accepted if you undo.'%} {% else %}{% trans 'This will accept the participation from that person (be it a talk, attendance or poster).'%}{% endifequal %}" class="fas fa-info-circle"></i>
+
+			</div>
+                <div class="modal-footer"></div>
+            <script>
+            //$('#part-selectb').on('change', function() {
+                //alert('test');
+              //  changetalktypeb($(this));
+            //});
+            </script>
+            {% endfor %}
+		</div>
+	</div>
+</div>
+
+ <script>
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
+<script>
+    $('input[type=checkbox] ').change(function() {
+      if ($(this).is(':checked')) {
+        //alert("checked for : " + this.id);
+        $("#free").text('');
+        $("#alfree").text('');
+        $("#notfree").text('');
+        $("#free").append('<i>The conference is free for this participant</i>');
+      }
+      if ($(this).is(':not(:checked)')) {
+        //alert("unchecked for : " + this.id);
+        $("#free").text('');
+        $("#alfree").text('');
+        $("#free").append("<p>The participant has not yet paid the conference fees and will not be able to access the conference room.</p>")
+      }
+    });
+</script>
+<script>
+function changetalktypeb(thisObj) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //alert(thisObj.closest("div[class='modal-body']").next().closest("form").find('.email2').val());.attr('id')
+    //alert(thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=email2]").val());
+    var thisjs = thisObj.get(0);
+
+    myNewFunction2(thisjs,thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=forloop2]").val());
+    //var $unique2 = $(".uniqueid2");
+    //alert(thisObj.selectedIndex);
+    //$unique2.val(thisObj.options[thisObj.selectedIndex].value);
+
+    //var num = thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=forloop2]").val();
+
+    //var html = $('#id_form-'+num+'-abstract_iframe').html();//.contents().find('.note-editable.card-block').html();
+
+    $.ajax({
+        url : '/changetalktype/', // the endpoint
+        type : "POST", // http method
+        data : {    talktype : thisObj.val(),//$('#confnumid').val(),
+                    email: thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=email2]").val(),
+                    confnum: thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=confnum2]").val(),
+                    confnummast: thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=confnummast]").val(),
+                    abs3: thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=abs3]").val(),
+                    //abs4:html,
+                    talknumber: thisObj.closest(".modal-body").next().next().closest(".modal-body").children("form").find("input[name=forloop2]").val(),
+                    csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+
+                }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $("#"+json.talknumber+".test3").text('');
+            //alert('yo2')
+            //$("div[id='test2']").text('');
+            //$("#"+json.talknumber+".abs").hide();
+            //$("#id0.abs").remove();//ca marche
+            //$("#"+json.talknumber+".bio").hide();
+            //$("#"+json.talknumber+".titley").hide();
+
+            //$("div[class='bio']").remove();
+            //$("div[class='titley']").remove();
+            //$("#my_id .my_class")
+
+            console.log(json); // log the returned json to the console
+            //if (json.talktype<4 || json.talktype == 6) {//Poster
+            $("#"+json.talknumber+".abs").show();
+            $("#"+json.talknumber+".titley").show();
+            $("#"+json.talknumber+".bio").show();
+
+            //$("#"+json.talknumber+".test2").append('<div class="titley mb-3" id="'+json.talknumber+'"><p><strong>Participation title:</strong></p><input type="text" class="form-contr" name="title" placeholder="'+json.titley+'" value="'+json.titley+'" required></div>');
+            //$("#"+json.talknumber+".test2").append('<div class="abs mb-3" id="'+json.talknumber+'"><p><strong>Abstract:</strong></p>'+json.abs+'</div>');
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><p><strong>Abstract:</strong></p>'+json.abs3+'</div>');
+
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><p><strong>Abstract:</strong></p><textarea class="form-contro" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            //$("#"+json.talknumber+".test2").append('<div class="bio" id="'+json.talknumber+'"><p><strong>Person\'s mini-biography:</strong></p><textarea class="form-contro" name="biography" cols="80" rows="4" placeholder="'+json.bio+'">'+json.bio+'</textarea></div>');
+            console.log('re'+json.bio)
+            if (json.bio=="" || json.bio==null){
+                $("#"+json.talknumber+".bio").hide();
+                //$("#"+json.talknumber+".test2").append('<div class="bio mb-4" id="'+json.talknumber+'"><p><strong>Person\'s mini-biography:</strong></p>'+json.bio+'</div>');
+            }
+
+            //if (json.talktype==4) {//Poster
+                //alert('yo');
+                //$("#"+json.talknumber+".titley").show();
+                //$("#"+json.talknumber+".abs").hide();
+                //$("#id0.abs").remove();//ca marche
+                //$("#"+json.talknumber+".bio").hide();
+
+            //}
+            if (json.talktype==5) {//Attendance only
+                //alert('yo2')
+                $("#"+json.talknumber+".abs").hide();
+                //$("#id0.abs").remove();//ca marche
+                $("#"+json.talknumber+".bio").hide();
+                $("#"+json.talknumber+".titley").hide();
+            }
+            //var child = document.getElementById(json.idarg);
+            //document.body.removeChild(child);
+             //if (json.result2 == 0) {
+               // $("#test2").append("<p>" + json.result + "</p>");
+                //scheduler.setCurrentView();
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+
+<script>
+function updatetalkb(thisObj) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //alert(thisObj.closest("div[class='modal-body']").next().closest("form").find('.email2').val());.attr('id')
+    //alert(thisObj.closest("form").find("input[name=title]").val());
+    //alert(thisObj.closest("form").find("textarea[name=abstract]").val());
+    //alert(thisObj.find("div[class='note-control-selection']").html()+'q');
+    //alert(thisObj.closest("html").find("note-editable card-block").html());
+    //alert($('.note-control-selection').innerHTML);
+    //var html = $("<div />").append($("#id_form-0-abstract").clone()).html();
+    //var html = $(".note-editable.card-block").html();
+    //var html = $('#id_form-0-abstract').find('.note-editable.card-block').html();
+    //var html = $("div#id_form-0-abstract").find("div.note-editable.card-block").html();
+    var num = thisObj.closest("form").find("input[name=forloop2]").val();
+
+    var html = $('#id_form-'+num+'-abstract_iframe').contents().find('.note-editable.card-block').html();
+
+    //var html = $("#id_form-0-abstract").contents().find("#summernote").text();
+    //console.log('a'+html+num);
+    //var num=closest("form").find("input[name=forloop2]").val();
+    $.ajax({
+        url : '/updatetalkmodal/', // the endpoint
+        type : "POST", // http method
+        data : {    //talktype : thisObj.val(),//$('#confnumid').val(),
+                    email: thisObj.closest("form").find("input[name=email2]").val(),
+                    confnum: thisObj.closest("form").find("input[name=confnum2]").val(),
+                    confnummast: thisObj.closest("form").find("input[name=confnummast]").val(),
+                    talknumber: thisObj.closest("form").find("input[name=forloop2]").val(),
+                    title: thisObj.closest("form").find("input[name=title]").val(),
+                    //abs: thisObj.closest("form").find("textarea[name=abstract]").val(),
+                    abs: thisObj.find(".note-editable.card-block").text(),
+                    bio: thisObj.closest("form").find("textarea[name=biography]").val(),
+                    role: thisObj.closest("form").find("input[name=role2]").val(),
+                    part: thisObj.closest("form").find("input[name=part2]").val(),
+                    paid: thisObj.closest("form").find("input[name=paid2]").val(),
+                    //abs3: thisObj.closest("form").find("input[name=abs3]").val(),
+                    abs3: html,
+                    loc: thisObj.closest("form").find("input[name=loc2]").val(),
+                    //formsub: $("#f"+num).serialize(),
+
+                    csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+
+                }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $("#"+json.talknumber+".test3").text('');
+
+            console.log(json); // log the returned json to the console
+            if (json.toomany) {//Poster
+
+                $("#"+json.talknumber+".test3").append('<div class="alert alert-danger" role="alert"><p>You reached the maximum number of participants you set up initially, go for a bigger size conference if needed.</p></div>');
+
+            }else if(json.cant){
+                $("#"+json.talknumber+".test3").append('<div class="alert alert-warning" role="alert"><p>Cannot change the status of the master conference organizer.</p></div>');
+            }
+            else{
+
+                $("#"+json.talknumber+".test3").append('<div class="alert alert-success" role="alert"><p>Participation updated</p></div>');
+
+            }
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><strong>Abstract:</strong><textarea class="form-control" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+
+
+<script>//$('#part-selectb').on('change', function() {
+                //alert('test');
+          //      changetalktypeb($(this));
+            //});
+    $(document).on('change', '.partb', function (event) {
+        //$('.bt-del').live('click', function (event) {
+        //$('.bt-del').click(function(event){
+        event.preventDefault();
+        //alert($(this).closest("form").attr('id'));
+        //$('.del').each(function(index, value) {
+        //alert($(this));
+        //  console.log($(this).attr('id'));
+        //});
+        changetalktypeb($(this));
+        return false;
+    });
+</script>
+
+<script>//$('#part-selectb').on('change', function() {
+                //alert('test');
+          //      changetalktypeb($(this));
+            //});
+    $(document).on('click', '.btn.btn-primary.btn-upd', function (event) {
+        //$('.bt-del').live('click', function (event) {
+        //$('.bt-del').click(function(event){
+        event.preventDefault();
+        $("#modal-div").attr("data-name", "updated");
+        //alert($(this).closest("form").attr('id'));
+        //$('.del').each(function(index, value) {
+        //alert($(this));
+        //  console.log($(this).attr('id'));
+        //});
+        updatetalkb($(this));
+        return false;
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+    $(".btn.btn-warning.valida").click(function() {
+      // disable button
+      $(this).prop("disabled", true);
+      // add spinner to button
+      $(this).html(
+        `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+      );
+      //alert($(this).attr('id'));
+        idtosubmit='#formvalida'+$(this).attr('id');
+      $(idtosubmit)[0].submit()
+    });
+});
+    </script>

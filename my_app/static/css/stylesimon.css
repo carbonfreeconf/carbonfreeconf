@@ -1,0 +1,170 @@
+                                /* ==========================================================================
+#SIMON GAME STYLES
+========================================================================== */
+
+
+.game {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+
+.hidden {
+display: none !important;
+}
+
+.invisble {
+visibility: hidden;
+}
+
+header {
+text-align: center;
+margin-bottom: 5px;
+}
+
+.heading {
+font-size: 3em;
+}
+
+.tile-container {
+display: grid;
+grid-template-rows: 180px 180px;
+grid-template-columns: 180px 180px;
+grid-gap: 40px;
+position: relative;
+margin-top: 30px;
+margin-bottom: 50px;
+}
+
+.unclickable {
+pointer-events: none;
+}
+
+.tile-red {
+background-color: #f25022;
+box-shadow: 0 0 0 1px #f25022 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #c93a12, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+transition: 0.15s;
+}
+
+.tile-red:hover,
+.tile-red:focus {
+background-color: #ff451a;
+box-shadow: 0 0 0 1px #FF3000 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 10px 0 0 #e62b00, 0 10px 0 1px rgba(0, 0, 0, 0.4), 0 10px 8px 1px rgba(0, 0, 0, 0.6);
+}
+
+.tile-red:active,
+.tile-red.activated {
+box-shadow: 0 0 0 1px #ff5c36 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 0 0 1px rgba(0, 0, 0, 0.4);
+background-color: #ff5c36;
+transform: translateY(10px);
+}
+
+.tile-green {
+background-color: #7fba00;
+box-shadow: 0 0 0 1px #7fba00 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #638f05, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+transition: 0.15s;
+}
+
+.tile-green:hover,
+.tile-green:focus {
+background-color: #8cc218;
+box-shadow: 0 0 0 1px #8cc218 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 10px 0 0 #74a802, 0 10px 0 1px rgba(0, 0, 0, 0.4), 0 10px 8px 1px rgba(0, 0, 0, 0.6)
+}
+
+.tile-green:active,
+.tile-green.activated {
+box-shadow: 0 0 0 1px #a0ea00 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 0 0 1px rgba(0, 0, 0, 0.4);
+background-color: #a0ea00;
+transform: translateY(10px);
+}
+
+.tile-yellow {
+background-color: #ffb900;
+box-shadow: 0 0 0 1px #ffb900 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #c28e07, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+transition: 0.15s;
+}
+
+.tile-yellow:hover,
+.tile-yellow:focus {
+background-color: #ffb900;
+box-shadow: 0 0 0 1px #ffb900 inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #c28e07, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+}
+
+.tile-yellow:active,
+.tile-yellow.activated {
+box-shadow: 0 0 0 1px #ffca3d inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 0 0 1px rgba(0, 0, 0, 0.4);
+background-color: #ffca3d;
+transform: translateY(10px);
+}
+
+.tile-blue {
+background-color: #00a4ef;
+box-shadow: 0 0 0 1px #00a4ef inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #0883bc, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+transition: 0.15s;
+}
+
+.tile-blue:hover,
+.tile-blue:focus {
+background-color: #139ddd;
+box-shadow: 0 0 0 1px #139ddd inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 10px 0 0 #0c7cb0, 0 10px 0 1px rgba(0, 0, 0, 0.4), 0 10px 8px 1px rgba(0, 0, 0, 0.6);
+}
+
+.tile-blue:active,
+.tile-blue.activated {
+box-shadow: 0 0 0 1px #2bbcff inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 0 0 1px rgba(0, 0, 0, 0.4);
+background-color: #2bbcff;
+transform: translateY(10px);
+}
+
+.info-section {
+text-align: center;
+}
+
+.start-button {
+display: inline-block;
+height: 38px;
+padding: 0 30px;
+color: #FF9933;
+text-align: center;
+font-size: 14px;
+font-weight: 600;
+line-height: 38px;
+letter-spacing: 0.1rem;
+text-transform: uppercase;
+text-decoration: none;
+white-space: nowrap;
+background-color: #FFFFFF;
+border-radius: 4px;
+border: 1px solid #bbb;
+cursor: pointer;
+}
+
+.start-button:hover {
+color: #33b35a;
+border-color: #888;
+outline: 0;
+}
+
+.info {
+font-size: 22px;
+}
+
+@media screen and (max-width: 550px) {
+.game {
+width: 100%;
+padding-left: 20px;
+padding-right: 20px;
+}
+
+.heading {
+font-size: 2em;
+}
+
+.tile-container {
+width: 100%;
+height: 100%;
+grid-template-rows: 150px 150px;
+grid-template-columns: 150px 150px;
+}
+}

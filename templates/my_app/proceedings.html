@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} Write research proceedings {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="You want to create a research workshop and make your participants write proceedings when the conference is over? You can do that with us, you will handle everything from our website. We will store the proceedings and archive them for other researchers to see." />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+<script src="https://unpkg.com/stackedit-js@1.0.7/docs/lib/stackedit.min.js" defer></script>
+
+<style>
+    .stackedit-container{ margin-top: 80px;}
+</style>
+
+<main class="participations">
+
+  <div class="wrapper">
+    {% if status == '2' %}
+        <div class="jumbotron mt-4">
+        <h3>No participations in this conference</h3>
+        </div>
+    {% elif status == '4' %}
+        <div class="jumbotron mt-4">
+        <h3>You cannot access proceedings for this conference</h3>
+        </div>
+    {% else %}
+    <h3>Proceeding for the conference "{{ title }} "</h3>
+    <h4>Talk title: {{ talktitle }}</h4>
+    <div class="row">
+    {% if conf_list_user_inv2|length > 0 %}
+        <div class="col-6">
+        <label for="confinv-select">Write the proceeding for another conference instead?</label>
+        <form name=changeconfinvForm action="{% url 'my_app:proceedings' %}" method=POST>
+            {% csrf_token %}
+        <select name="confinv" class="browser-default custom-select" id="confinv-select" onChange="changeconfinvForm.submit();">
+            <option value="">--Please choose another conference--</option>
+            {% for conf in conf_list_user_inv2 %}
+                <option value="{{ conf.id }}">{{ conf.title }}</option>
+            {% endfor %}
+        </select>
+        </form>
+        </div>
+        <div class="col-6">
+        <label for="confpinv-select">Write the proceeding for another participation?</label>
+        <form name=changeconfpinvForm action="{% url 'my_app:proceedings' %}" method=POST>
+            {% csrf_token %}
+        <select name="confpinv" class="browser-default custom-select" id="confpinv-select" onChange="changeconfpinvForm.submit();">
+            <option value="">--Please choose another participation--</option>
+            {% for talk in talks %}
+                <option value="{{ talk.id }}">{{ talk.title }}</option>
+            {% endfor %}
+        </select>
+        </form>
+        </div>
+    {% endif %}
+    </div>
+    {% if status == '3' %}
+        <div class="jumbotron mt-4">
+            <h4>Proceedings are not required for this conference</h4>
+        </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+    <form enctype="multipart/form-data" method="POST" action="{% url 'my_app:proceedings' %}">
+        {% csrf_token %}
+        <p>{{ proceeding_form.title|as_crispy_field }}</p>
+
+        <p><blockquote>{{ proceeding_form.text|as_crispy_field }}</blockquote></p>
+
+        <div class="col-12">
+            <div class="tags_select"><small><a href="#">Use a typical template for proceedings</a></small></div>
+        </div>
+        <div class="col-12">
+            <div class="tags_select2"><small><a href="#">Add an example to cite other works</a></small></div>
+        </div>
+
+        <p>{{ proceeding_form.status|as_crispy_field }}</p>
+
+        <p><i data-toggle="tooltip" data-placement="bottom" title="If you need to cite other works, you can use latex bibliography and fill in a bibtex file down here. Then just use @name or [@name] to cite with or without parantheses, respectively. Click on 'Add an example to cite other works' to get an example." class="fas fa-info-circle"></i> Bibtex file if needed</p>
+        <p>{{ proceeding_form.bibtex|as_crispy_field }}</p>
+
+        <input type="hidden" name="confnum" class="confnumproc" value="{{ confnum }}" />
+        <input type="hidden" name="htmlproc" id="htmlproc" value="" />
+        <input type="hidden" name="exppdf" id="exppdf" value="no" />
+
+        <div class="mt-4 mb-3"><button type="submit" class="btn btn-success mb-3">Save proceeding</button></div>
+
+    </form>
+        </div>
+
+        <div class="col-12 mt-3">
+            {% if messages %}
+                    <div class="alert alert-success role="alert">
+                        {% for message in messages %}
+                            <h3>{{ message }}</h3>
+                        {% endfor %}
+                    </div>
+            {% endif %}
+        </div>
+        <div class="col-12">
+    <form enctype="multipart/form-data" method="POST" action="{% url 'my_app:proceedings' %}" target="_blank">
+        {% csrf_token %}
+        <input type="hidden" name="exppdf" id="exppdf" value="yes" />
+        <input type="hidden" name="htmlproc2" id="htmlproc2" value="" />
+        <input type="hidden" name="bibproc2" id="bibproc2" />
+
+        <div class="mt-4 mb-3"><button type="submit" class="btn btn-warning">Export to pdf</button></div>
+    </form>
+        </div>
+    </div>
+        {% if noproc %}
+            <p>The proceeding must be saved before converting to pdf</p>
+        {% endif %}
+    <!--<blockquote>
+    <div id="htmlse"></div>
+    </blockquote>-->
+        {% endif %}
+    {% endif %}
+  </div>
+
+</main>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).on('input', '[id="id_bibtex"]', function (event) {
+    event.preventDefault();
+    //alert($(this).closest("form").attr('id'));
+    //alert('onfoc');
+    console.log($('#id_bibtex').val())
+    document.getElementById("bibproc2").value = $('#id_bibtex').val();
+    return false;
+});
+</script>
+
+<script>
+    function modtext() {
+
+        const el = document.querySelector('textarea');
+        const stackedit = new Stackedit();
+
+        // Open the iframe
+        stackedit.openFile({
+            name: 'Filename', // with an optional filename
+            content: {
+                text: el.value // and the Markdown content.
+            }
+        });
+
+        // Listen to StackEdit events and apply the changes to the textarea.
+        stackedit.on('fileChange', (file) => {
+            el.value = file.content.text;
+            //$('#htmlse').text = file.content.text;
+            //$('#htmlse').html(file.content.html).show(); // Brought up in comments
+            //$('#htmlproc_hid').val(file.content.html);
+            document.getElementById("htmlproc").value = file.content.html;
+            document.getElementById("htmlproc2").value = file.content.text;
+            //document.getElementById("bibproc2").value = file.content.text;
+
+            //$('#htmlproc').html(file.content.html).show();
+            //alert(file.content.html);
+        });
+    };
+</script>
+
+<script>
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        $('.tags_select a').click(function() {
+            var value = "**Proceeding on the role of debris disks on planet formation**\n" +
+                "\n" +
+                "*Abstract*:Planet formation[^footnote1] is important both from a theoretical and an observational point of view. We will use ALMA data [@examplename] to fill in the gap..\n" +
+                "\n" +
+                "# Introduction\n" +
+                "\n" +
+                "There you are (you can use latex) $t\\sim7 \\gtrsim 6.66$\n" +
+                "\n" +
+                "# Results\n" +
+                "\n" +
+                "[Some link](https://image.shutterstock.com/image-vector/cartoon-solar-system-planets-astronomical-260nw-1129245656.jpg)\n" +
+                "\n" +
+                "# Conclusion\n" +
+                "\n" +
+                "Cool image and a reference: @examplename!!" +
+                "[cool](https://image.shutterstock.com/image-vector/cartoon-solar-system-planets-astronomical-260nw-1129245656.jpg){ width=50% }\n" +
+                "\n" +
+                "\n" +
+                "[Link to Introduction](#Introduction)\n" +
+                "\n" +
+                "\n" +
+                "[^footnote1]: Planets form very early on after a few million years.";
+            var input = $('#id_text');
+            input.val(input.val()+'\n'+ value);
+            var inputbib = $('#id_bibtex');
+            var value2 = "@ARTICLE{examplename,\n" +
+                "           author ={{Last name}, first name and {last name 2}, first name 2 and {last name 3}, first name 3 and {last name 4}, firstname 4},\n"+
+                "           title = \"{The title}\",\n"+
+                "           journal = {journal name},\n"+
+                "           year = 2016,\n"+
+                "           month = oct,\n"+
+                "           volume = {462},\n"+
+                "           number = {1},\n"+
+                "           pages = {pageinf-pagesup},\n"+
+                "           doi = {doinumber},\n"+
+                "           archivePrefix = {arXiv},\n"+
+                "           eprint = {arxivnumber},\n"+
+                "           primaryClass = {astro-ph.EP},\n"+
+                "         }";
+            inputbib.val(inputbib.val() +'\n'+ value2);
+            return false;
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        $('.tags_select2 a').click(function() {
+            var value = "@examplename or [@examplename]";
+            var input = $('#id_text');
+            //var input = $('#id_bibtex');
+            input.val(input.val() +' '+ value);
+            var inputbib = $('#id_bibtex');
+            var value2 = "@ARTICLE{examplename,\n" +
+                "           author ={{Last name}, first name and {last name 2}, first name 2 and {last name 3}, first name 3 and {last name 4}, firstname 4},\n"+
+                "           title = \"{The title}\",\n"+
+                "           journal = {journal name},\n"+
+                "           year = 2016,\n"+
+                "           month = oct,\n"+
+                "           volume = {462},\n"+
+                "           number = {1},\n"+
+                "           pages = {pageinf-pagesup},\n"+
+                "           doi = {doinumber},\n"+
+                "           archivePrefix = {arXiv},\n"+
+                "           eprint = {arxivnumber},\n"+
+                "           primaryClass = {astro-ph.EP},\n"+
+                "         }";
+            inputbib.val(inputbib.val() +'\n'+ value2);
+
+            return false;
+        });
+    });
+</script>
+
+<script>
+        $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+</script>
+{% endblock %}

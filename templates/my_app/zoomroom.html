@@ -1,0 +1,286 @@
+{% load static %}
+{% load i18n %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title> Webinar meeting room" </title>
+      <meta name="description" content="Webinar meeting room for your conference." />
+      <meta http-equiv="origin-trial" content="Am01xjFqpxOImHK8gajNHIO/9EFQDJWrQLU0EmlKWHBW5XXDYazLgMkyNzsqI2lZczgyVtWELZo0ItcK8RAEFAIAAABgeyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiVW5yZXN0cmljdGVkU2hhcmVkQXJyYXlCdWZmZXIiLCJleHBpcnkiOjE2NTg4Nzk5OTl9"><!--localhost shared buffer-->
+      <meta http-equiv="origin-trial" content="Aq0DoEi0Iqzt7nzyWfMAEznNZY/Fe+bcoj/KwOv8k3e9W86gt1OR8+PJaOpw6+54U4jU9ywUqnSTVIQHxdWUAA0AAABSeyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiV2ViQXNzZW1ibHlTaW1kIiwiZXhwaXJ5IjoxNjQ5ODA3OTk5fQ=="><!--SIMD localhost-->
+        <!--<meta http-equiv="origin-trial" content="Ao5fkqG1p0L9ZBKXh71J78m3AU23gcVSQYgRThh4lL4gGErN0T7PE+V2YE67tOAeoPtFibG+buKyE/Tca94QlAUAAABYeyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiV2ViQXNzZW1ibHlFeGNlcHRpb25zIiwiZXhwaXJ5IjoxNjM5NjEyNzk5fQ==">--><!--webassembly error handling localhost-->
+      <meta http-equiv="origin-trial" content="Aucwn0FpNP4s1desL90Fu+CUJPOALkdlWSE4BkML5/u6rJDkIiaVdfFqTJfbosXDEFmcV4EOINdprvmHqcLATwwAAAByeyJvcmlnaW4iOiJodHRwczovL3d3dy5jYXJib25mcmVlY29uZi5jb206NDQzIiwiZmVhdHVyZSI6IldlYkFzc2VtYmx5U2ltZCIsImV4cGlyeSI6MTY0OTgwNzk5OSwiaXNTdWJkb21haW4iOnRydWV9"><!--SIMD-->
+      <meta http-equiv="origin-trial" content="Atf7lQnKHceBddsSaemXcPTfJj3St1XtPa5DGfj5n1J9MfG/6cIeCEh3nZECX92JDTODMKbM1CkYE0B0QDoJMgAAAABteyJvcmlnaW4iOiJodHRwczovL3d3dy5jYXJib25mcmVlY29uZi5jb206NDQzIiwiZmVhdHVyZSI6IlVucmVzdHJpY3RlZFNoYXJlZEFycmF5QnVmZmVyIiwiZXhwaXJ5IjoxNjU4ODc5OTk5fQ=="><!--Shared array buffer-->
+
+      <meta http-equiv="origin-trial" content="AsBk8Q5Bg8b0ZMS5lAs/x29B+0xyw4clqf98xajZUI9/vCVCWi+bGfYsqZXegmeM23742T2p/ZUWCg4O+V/BJAAAAAB7eyJvcmlnaW4iOiJodHRwczovL215YXBwY29uZi1zdGFnaW5nLmhlcm9rdWFwcC5jb206NDQzIiwiZmVhdHVyZSI6IldlYkFzc2VtYmx5U2ltZCIsImV4cGlyeSI6MTY0OTgwNzk5OSwiaXNTdWJkb21haW4iOnRydWV9"><!--SIMD for staging-->
+      <meta http-equiv="origin-trial" content="AkD27I7xRKpn3F1Sohp/O8AonTlr62C3eju8hRUJkj0vPOeDfvWlCckvDb1ywn9y7uvAwQrzQKRvu6IEpYbt/AYAAACJeyJvcmlnaW4iOiJodHRwczovL215YXBwY29uZi1zdGFnaW5nLmhlcm9rdWFwcC5jb206NDQzIiwiZmVhdHVyZSI6IlVucmVzdHJpY3RlZFNoYXJlZEFycmF5QnVmZmVyIiwiZXhwaXJ5IjoxNjU4ODc5OTk5LCJpc1N1YmRvbWFpbiI6dHJ1ZX0="><!--Shared array buffer for staging-->
+
+      <!--<meta http-equiv="origin-trial" content="AmSLIkB9M0WXm2P4mEvnmPfFLjJtZ65hlD9m8w8NjiiI6la2wjnKxmHUGkIPM+KAeGgj3HWLCSbk/p9BvrMcrQ4AAAB1eyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiQ3Jvc3NPcmlnaW5FbWJlZGRlclBvbGljeUNyZWRlbnRpYWxsZXNzT3JpZ2luVHJpYWwiLCJleHBpcnkiOjE2MzU4OTc1OTl9">--><!--credentialess localhost-->
+      <!--<meta http-equiv="origin-trial" content="Alj+B+evlvJMFLcjg5tLQ0NvmGa6cNf5JrWnA6QcM9OXiIalYzJfju+UYpdiOjiym+S0pkFMuA8Y/cOKMEhYbQoAAABZeyJvcmlnaW4iOiJodHRwczovL3d3dy5jYXJib25mcmVlY29uZi5jb206NDQzIiwiZmVhdHVyZSI6IldlYkNvZGVjcyIsImV4cGlyeSI6MTYzODQwMzE5OX0=">--><!--Webcodec-->
+
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.4.0/css/bootstrap.css" />
+    <link type="text/css" rel="stylesheet" href="https://source.zoom.us/2.4.0/css/react-select.css" />
+
+  </head>
+  <body>
+
+  {% if problem == 1 %}
+
+    <p>{% trans 'You have no accepted participations' %}</p>
+
+  {% else %}
+
+    <p>{% trans 'The conference room is loading' %}</p>
+
+    <!-- import ZoomMtg dependencies -->
+    <script src="https://source.zoom.us/2.4.0/lib/vendor/react.min.js"></script>
+    <script src="https://source.zoom.us/2.4.0/lib/vendor/react-dom.min.js"></script>
+    <script src="https://source.zoom.us/2.4.0/lib/vendor/redux.min.js"></script>
+    <script src="https://source.zoom.us/2.4.0/lib/vendor/redux-thunk.min.js"></script>
+    <!--<script src="https://source.zoom.us/1.9.5/lib/vendor/jquery.min.js"></script>-->
+    <script src="https://source.zoom.us/2.4.0/lib/vendor/lodash.min.js"></script>
+
+    <!-- import ZoomMtg -->
+    <script src="https://source.zoom.us/zoom-meeting-2.4.0.min.js"></script>
+    <!--<script src="https://source.zoom.us/2.4.0/zoom-meeting-embedded-2.4.0.min.js"></script>-->
+
+    <!-- import local .js file -->
+    <!--<script src="{% static 'js/index.js' %}"></script>-->
+
+  <script>
+    ZoomMtg.setZoomJSLib('https://source.zoom.us/2.4.0/lib', '/av');
+    ZoomMtg.preLoadWasm();
+    /*ZoomMtg.prepareJssdk();*/
+    
+    /*ZoomMtg.prepareJssdk(['WebAssembly SIMD']);*/
+    ZoomMtg.prepareWebSDK()
+
+
+    //ZoomMtg.i18n.load('fr-FR')
+    //ZoomMtg.i18n.load('en-US')
+    //var ll="{{ langua }}";
+    //alert('kl'+ll+'lm');
+    {% if langua == "fr" %}
+      //alert('okfrr');
+    ZoomMtg.i18n.load('fr-FR')
+    {% else %}
+      //alert('okenr');
+    ZoomMtg.i18n.load('en-US')
+    {% endif %}
+    /*ZoomMtg.reRender({lang: 'en-US' });*/
+
+
+    //alert('ok')
+    //meetingnumber,name,email,passwordmeeting,role
+
+    //'meetingnumber':99772159552,'userName':request.user.first_name+' '+request.user.last_name,'userEmail':request.user.email,'password':"avfhfghjk",'role':
+
+    //alert("{{exit}}");
+// make an http request to your server to get the signature
+    var linkend = '{{ exit }}';//"https://www.carbonfreeconf.com/"#http://127.0.0.1:8000/exitpageparticipants
+
+    const meetConfig = {
+        apiKey: '{{ APIKEYZOOM }}',
+        meetingNumber: {{ meetingnumber }},//,93435590076,
+        leaveUrl: linkend,
+        userName: '{{ userName }}',
+        userEmail: '{{ userEmail }}',
+        passWord: '{{ password }}',//0syZm3', // if required
+        role: {{ role }}, // 1 for host; 0 for attendee, //5 for host not visible
+        };
+
+function getCookie(name) {
+    if (!document.cookie) {
+      return null;
+    }
+    const token = document.cookie.split(';')
+      .map(c => c.trim())
+      .filter(c => c.startsWith(name + '='));
+
+    if (token.length === 0) {
+      return null;
+    }
+    return decodeURIComponent(token[0].split('=')[1]);
+  }
+
+  const csrftoken = getCookie('csrftoken');
+  //console.log(csrftoken);
+
+function getSignature(meetConfig){
+    var recordornot = {{ recordornot|yesno:"true,false" }};
+    var qandaact = {{ qandaact }};
+
+	fetch('{% url "my_app:signaturezoom" %}', {
+			method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
+            },
+			body: JSON.stringify({ meetingData: meetConfig }),
+            credentials: 'same-origin',
+		})
+		.then(result => result.text())
+		.then(response => {
+			ZoomMtg.init({
+				leaveUrl: meetConfig.leaveUrl,
+				isSupportAV: true,
+                screenShare: true,
+                isSupportChat: true,
+                //disableJoinAudio: true,
+                //disableCallOut: true,
+				success: function() {
+				    var obj = JSON.parse(response);
+                    //console.log('sig'+obj.sign+' '+meetConfig.role+' '+recordornot);
+					ZoomMtg.join({
+						signature: obj.sign,
+						apiKey: meetConfig.apiKey,
+						meetingNumber: meetConfig.meetingNumber,
+						userName: meetConfig.userName,
+						// password optional; set by Host
+            userEmail: meetConfig.userEmail,//for webinars
+						passWord: meetConfig.passWord,
+						success: function (res) {
+                            console.log("join meeting success");
+                            //console.log("get attendee list");
+                            ZoomMtg.muteAll({
+                                muteAll: true
+                            });
+                            ZoomMtg.record({
+                                record: false
+                            });
+                            ZoomMtg.showRecordFunction({
+                                show: recordornot
+                            });
+                            ZoomMtg.getAttendeeslist({});
+                            ZoomMtg.getCurrentUser({
+                              success: function (res) {
+                                console.log("success getCurrentUser");//, res.result.currentUser);
+                              },
+                            });
+
+                            //line to add a button q&a-polls to zoom in browser
+                            //$('.footer__inner').children().closest('div').next().append('<button id="qandapolls" class="footer-button__button ax-outline" type="button" aria-label="open the Q&A-Polls pane"><div class="footer-button__img-layer"><div class="footer-button__polls-ico"></div></div><span class="footer-button__button-label">Q&A-Polls</span></button>');
+                            //$('#wc-footer-left').append('<button id="qandapolls" class="footer-button__button ax-outline" type="button" aria-label="open the Q&A-Polls pane"><div class="footer-button__img-layer"><div class="footer-button__polls-ico"></div></div><span class="footer-button__button-label">Q&A-Polls</span></button>');
+                            /*$('#wc-footer-left').prepend('<div class="join-audio-container">\n' +
+                                '<button id="qandapolls" title="Q&A - Polls" tabindex="0" type="button" class="zm-btn send-video-container__btn zm-btn--default zm-btn__outline--blue zm-btn-icon" aria-label="Q&A - Polls"><h5><i class="fas fa-comments"></i></h5>Q&A - Polls<span class="loading" style="display: none;"></span></button><div class="video-option-menu dropup btn-group">\n' +
+                                '</div>')*/
+                           /*document.getElementById("#wc-footer-left").prepend('<div class="join-audio-container">\n' +
+                                '<button id="qandapolls" title="Q&A - Polls" tabindex="0" type="button" class="zm-btn send-video-container__btn zm-btn--default zm-btn__outline--blue zm-btn-icon" aria-label="Q&A - Polls"><h5><i class="fas fa-comments"></i></h5>Q&A - Polls<span class="loading" style="display: none;"></span></button><div class="video-option-menu dropup btn-group">\n' +
+                                '</div>');*/
+                           //const box2 = document.getElementById('box2')
+                            if(qandaact=='1') {
+                                const jack2 = document.createElement("div");
+                                jack2.className = 'join-audio-container';
+                                /*var ll2="{{ LANGUAGE_CODE }}";*/
+                                /*alert(ll2);*/
+                                {% if langua == "fr" %}
+                                    //alert('okfr');                                  
+                                    var textpoll='Q&A';
+                                    var textpoll2='Sondages';
+                                {% else %}
+                                    var textpoll='Q&A';
+                                    var textpoll2='Polls';
+                                {% endif %}
+
+                                //alert(textpoll);
+                                //var textpoll="Q&A - Polls";
+
+                                jack2.innerHTML = '<button id="qandapolls" title='+textpoll+' tabindex="0" type="button" class="send-video-container__btn" aria-label='+textpoll+' style="font-size:15px!important;">Q&A <br> '+textpoll2+'<span class="loading" style="display: none;"></span></button>';
+                                document.getElementsByClassName("footer__inner")[0].insertBefore(jack2, document.getElementsByClassName("footer__inner")[0].firstChild.nextSibling)
+                            }
+                          },
+                        error: function (res) {
+                                    console.log(res);
+                                  },
+					})
+				}
+			})
+	})
+}
+
+getSignature(meetConfig);
+
+
+
+
+
+  </script>
+
+<!--<script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>-->
+
+
+<script>
+    /*$(document).on('click', '#qandapolls', function (event) {
+        window.parent.openNav()
+    });*/
+
+    /*document.querySelector('body').addEventListener('click', function(event) {
+    if (event.target.id == 'qandapolls') {
+    // do your action on your 'li' or whatever it is you're listening for
+        window.parent.openNav();
+     }
+    });*/
+    var qandaact = {{ qandaact }};
+
+    if(qandaact == '1') {
+
+        document.addEventListener("click", someListener);
+
+        function someListener(event) {
+            var element = event.target;
+            if (element.id == 'qandapolls') {
+            //if (window.parent.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || document.msFullscreenElement){
+            //if( window.parent.document.innerHeight == screen.height) {
+                if( (screen.availHeight || screen.height-30) <= window.innerHeight) {
+
+                //alert('i');
+                //if (document.fullscreenElement) {
+                    if(window.parent.document.getElementById("mySidenav").style.width == "400px") {
+                        window.parent.document.getElementById("mySidenav").style.width = "";
+                        window.parent.document.getElementById("main").style.marginRight = "40px";
+                    }
+                    if (document.exitFullscreen) {
+                        //alert('r');
+                        document.exitFullscreen();
+                        parent.exitfs();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitCancelFullScreen) {
+                        document.webkitCancelFullScreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                }
+
+                window.parent.openNav();
+            }
+        }
+    }
+    /*
+element.tagName == 'A' && element.classList.contains("someBtn")
+    document.addEventListener("DOMContentLoaded", function(event) {
+
+        var button = document.getElementById("qandapolls");
+        button.addEventListener("click", function (e) {
+            window.parent.openNav()
+        }, false);
+
+    })*/
+
+
+
+</script>
+
+  {% endif %}
+
+</body>
+</html>

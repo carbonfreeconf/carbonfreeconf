@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header_class %}no-header{% endblock %}
+{% block footer_class %}no-footer{% endblock %}
+
+<!-- Used on: archive.html, demo.html -->
+
+{% block content %}
+
+<div class="comingsoon">
+  <div>
+    <a href="{% url 'my_app:home' %}" class="back">Back to Home</a>
+    <h1>Coming <span>Soon</span>.</h1>
+  </div>
+</div>
+
+{% endblock %}

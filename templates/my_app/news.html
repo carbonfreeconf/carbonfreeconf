@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load el_pagination_tags %}
+
+{% block title %} News about CarbonFreeConf {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Get some news about CarbonFreeConf" />
+        <link rel="canonical" href="https://www.carbonfreeconf.com/news/" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+
+{% block content %}
+
+
+
+<div class="container">
+    <h1 style="margin-top: 20px;">The latest news on CarbonFreeConf</h1>
+
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-8 mt-3 left">
+            {% paginate object_list %}
+            {% for post in object_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
+                    <p class="card-text">{{post.content|safe }}</p>
+                    <a href="{% url 'my_app2:post_detail' post.slug  %}" class="btn btn-primary" style="margin-top: 20px;">Read More &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% show_pages %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

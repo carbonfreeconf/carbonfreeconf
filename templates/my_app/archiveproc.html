@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load index %}
+{% load el_pagination_tags %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block title %} Archived meeting proceedings {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Want to read recent proceedings about your research field? Come to CarbonFreeConf, which hosts online research webinars and store their proceedings." />
+{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css" media="print" onload="this.media='all'">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" media="print" onload="this.media='all'">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" defer></script>
+
+  <!-- To automatically render math in text elements, include the auto-render extension: -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body);"></script>
+  <script src="{% static "js/summernote-math.js" %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+    {% if procs %}
+        <div class="row justify-content-center mt-2 mb-2">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form action="{% url 'my_app:searcharchiveproc' %}" method="GET" class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="search" placeholder="Search archived proceedings (by title or content)">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-info" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+            <!--end of col-->
+        </div>
+        {% if search %}
+            <p class="mt-4"><strong class="text-danger">{{ procs|length }} proceeding{{ procs|length|pluralize:",s" }}</strong> found for your request "{{ qs }}"</p>
+            <p><a href="{% url "my_app:archiveproc" %}">Go back to the archived proceedings?</a></p>
+        {% else %}
+          <p class="mt-4">There {{ procs|length|pluralize:"is,are" }} currently {{ procs | length }} proceeding{{ procs|length|pluralize:",s" }}</p>
+        {% endif %}
+            {% paginate 10 ind %}
+            {% show_current_number as page_number %}
+            {%  comment  %}{% for proc in procs %}{% endcomment %}
+            {% for i in ind %}
+                {% with procs|index:i as proc %}
+                <div class="card text-center mb-3">
+                  <div class="card-header" style="background-color: #E0CBA8;">
+                      <font color="#FF6542">{{ proc.user }} | Created on {{ proc.created_on }} | {{ proc.conference.subject }}</font>
+                  </div>
+                  <div class="card-body">
+                        <h5 class="card-title">Proceeding title: {{ proc.title }}</h5>
+                        <p class="card-text">{{ html|index:i|safe}}</p>
+
+                  </div>
+                  <div class="card-footer text-muted" style="background-color: #E0CBA8;">
+                      <font color="#94599A">Proceeding for the {{ proc.regconf.get_type_display }} ({{ proc.regconf.title }}) given at the conference entitled "{{ proc.conference.title }}"</font>
+                  </div>
+                </div>
+                {% endwith %}
+            {% endfor %}
+            {% show_pages %}
+
+
+        {% else %}
+        {% if search %}
+            <div class="jumbotron mt-4">
+                <h2>No results found.</h2>
+                <p><a href="{% url "my_app:archiveproc" %}">Go back to the archived proceedings?</a></p>
+            </div>
+        {% else %}
+        <div class="jumbotron mt-4">
+          <h3>There are no proceedings so far</h3>
+        </div>
+        {% endif %}
+        {% endif %}
+</div>
+
+<script>
+    var math = document.getElementsByClassName('math');
+    for (var i = 0; i < math.length; i++) {
+        katex.render(math[i].textContent, math[i]);
+    }
+</script>
+
+{% endblock %}
+

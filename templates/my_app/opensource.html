@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} CarbonFreeConf is an open-source all-in-one conference platform {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="Our platform is the only open-source conference platform for researchers." />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/about" />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<div class="intro-about">
+  <div class="content">
+    {% blocktrans %}
+    <div class="pretitle">Open source</div>
+    <h1>Our platform is the only open-source conference platform for researchers around the world.</h1>
+    <p>CarbonFreeConf allows you to use our code, share it and collaborate in a way that will benefit to all researchers.</p>
+    {% endblocktrans %}
+    <div class="buttons-group">
+      <a class="btn" onclick="scrollToContainer()">{% blocktrans %}Want to hop in?{% endblocktrans %}</a>
+      <a class="btn alt" href="https://github.com/carbonfreeconf/carbonfreeconf">{% blocktrans %}See the open-source code{% endblocktrans %}</a>
+    </div>
+  </div>
+</div>
+
+<main id="scrollTarget">
+
+  <section class="about">
+    <div class="grid">
+      <div class="content">
+        {% blocktrans %}
+        <h2><a href="/{{LANGUAGE_CODE}}/">CarbonFreeConf</a> is an open source and collaborative platform to run your meetings</h2>
+        <p>The global goal of the platform is to create a unique place where researchers can gather to share their research efficiently. 
+          The open source access allows for a myriad of contributions to make it more efficient and more suited to the different types of problematics that can be encountered by researchers across different fields.</p>
+        <p>Our code can be checked by your IT team to verify how we handle data and you can also decide to deploy our code on your own servers and run your conference from there. 
+          Thie idea behind open sourcing the code is that everybody can create a meeting really quickly and make it compatible to what they have in mind.</p>
+        <p>Everybody can check the entirety of our code and is free to make changes that will benefit to the whole community.</p>
+        {% endblocktrans %}
+        <a class="btn" href="https://github.com/carbonfreeconf/carbonfreeconf">{% trans 'Check our open-source code' %}</a>
+      </div>
+      <figure>
+        <img src="{% static "images/opensource1.jpg" %}" alt="A fire-like painting mainly made of orange and blue">
+      </figure>
+    </div>
+  </section>
+
+
+  <section class="about">
+    <div class="grid">
+      <figure>
+        <img src="{% static "images/opensource2.jpg" %}" alt="A blue wave in dark depths">
+      </figure>
+      <div class="content">
+        {% blocktrans %}
+        <h2>Open source is in our DNA!</h2>
+        <p>CarbonFreeConf gives you the ability to extend and customize the platform's code. You can build the exact tool you'd like rather than relying on a proprietary solution.</p>
+        <p>You want to help make CarbonFreeConf a stronger platform for everyone? Join the developer community and benefit from all their support.</p>
+        <p>You can contribute at all levels. From writing tutorials to building features or more complex tools, you can help improve the platform in many ways. 
+          CarbonFreeConf releases a new version of the code including all new implementations every time changes are made and verified. </p>
+        <p>No need to find a place to host your website and another to handle the video-conference and another for Q&A and polls and a place to handle the abstracts and posters or the chat rooms... Here, everything is already included and talking to each other.
+          Spend time on organizing rather than gathering the different pieces and if you really want something customized, you can leverage our tool and spend a little time to develop what you envision, which will ultimately benefit to every other researchers.
+        </p>
+        {% endblocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">{% trans 'Try the current solution now' %}</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

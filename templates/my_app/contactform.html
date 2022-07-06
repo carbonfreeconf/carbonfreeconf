@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+{% block title %} CarbonFreeConf contact form for running a conference {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="Contact us to find out how to organize a research workshop" />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/contactform/" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<main>
+
+  <div class="contact">
+    <address>
+      {% blocktrans %}
+      <div class="pretitle">Contact</div>
+      <h1>Get in touch.</h1>
+      <p>Tell us how we can help, and we'll get in touch shortly.</p>
+      <div class="title">Prefer to email us directly?</div>
+      <ul>
+        <li>General Inquiries</li>
+        <li>
+          <a href="mailto:hello@carbonfreeconf.com">hello@carbonfreeconf.com</a>
+        </li>
+        <li>Sales</li>
+        <li>
+          <a href="mailto:sales@carbonfreeconf.com">sales@carbonfreeconf.com</a>
+        </li>
+        <li>Support</li>
+        <li>
+          <a href="mailto:support@carbonfreeconf.com">support@carbonfreeconf.com</a>
+        </li>
+      </ul>
+      {% endblocktrans %}
+
+      <p class="looking-for">{% blocktrans %}Looking for a specific answer?{% endblocktrans %}</p>
+      <p>Visit our <a href="{% url 'my_app:faq' %}">{% blocktrans %}FAQ{% endblocktrans %}</a></p>
+    </address>
+    <form method="post">
+      {% csrf_token %}
+      {{ contactform.from_email|as_crispy_field }}
+      {{ contactform.subjecte|as_crispy_field }}
+      {{ contactform.message|as_crispy_field }}
+      {{ contactform.captcha|as_crispy_field }}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg mt-3">{% blocktrans %}Send{% endblocktrans %}</button>
+      </div>
+      {% if messages %}
+      {% for message in messages %}
+        {%if "err" in message.tags %}
+        <div class="alert alert-danger mt-2" role="alert">
+          <p>{{ message }}</p>
+        </div>
+        {% else %}
+        <div class="alert alert-success mt-2" role="alert">
+          <p>{{ message }}</p>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    </form>
+    
+
+  </div>
+
+  
+
+</main>
+
+
+<script>
+  $(function() {
+  // Add refresh button after field (this can be done in the template as well)
+  $('img.captcha').after(
+    $('<a href="#void" class="captcha-refresh"></a>')
+  );
+
+  // Click-handler for the refresh-link
+  $('.captcha-refresh').click(function(){
+    var $form = $(this).parents('form');
+    var url = location.protocol + "//" + window.location.hostname + ":"
+            + location.port + "/captcha/refresh/";
+
+    // Make the AJAX-call
+    $.getJSON(url, {}, function(json) {
+      $form.find('input[name="captcha_0"]').val(json.key);
+      $form.find('img.captcha').attr('src', json.image_url);
+    });
+
+    return false;
+  });
+});
+</script>
+
+{% endblock %}

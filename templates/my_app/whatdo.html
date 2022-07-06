@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} How to run and plan a virtual conference? {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Do you want to see how to make a carbon-free research conference in a few clicks? This is the place!" />
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">What do we do <i class="far fa-question-circle"></i></h1>
+      <p class="lead"> <strong>CarbonFreeConf allows you to create online conferences</strong>, where all participants (presenters, organizers, attendees)
+                    are gathered in a virtual classroom. They can then communicate online via audio and video.
+                    Each participant can watch the online presentations, and participate interactively,
+          with questions or remarks that can be up-voted by other participants. If it had to be summarized in a few words, it is a mixture between Zoom+Slack+Indico+Live streaming+archived videos.</p><p> <strong>It is a novel way of bringing
+                        our research work to reality, while avoiding the costs of traveling as well as too much carbon emission</strong>.
+                    Just imagine how much CO<sub>2</sub> a single commercial flight releases into the atmosphere? And now 50 or a 100?
+                    <strong>Attending online conferences can save carbon emissions associated with travelling</strong> to meetings, workshops, and
+                    schools. Organising virtual conferences will still produce a slight amount of emissions but CarbonFreeConf
+        offsets this emission using the services of <a href="{% url 'my_app:offset' %}">companies</a> specialized in pumping carbon from our atmospheres.
+    </p><p><strong>We also provide all the tools to make the experience unique and organize your conference as easily as possible</strong> by only
+                    clicking a few buttons that will create your conference or meeting website (<a href="{% url 'my_app:website' 1 'home' %}">see an example</a>), which will be used by your attendees to register
+                    or connect to the conference on the big day!
+    </p><p>As a conclusion, these online conferences are
+                    an efficient way to communicate our research work, save time and money, and most of all, to reduce our carbon footprints!</p>
+      <hr class="my-4">
+        <p>To check the ways we use to offset carbon emissions, check <a href="{% url 'my_app:offset' %}">this page</a>. Our policy on this is to use
+        methods that are effective at actually removing CO<sub>2</sub> from our atmospheres, in quantities, which can be measured accurately.</a></p>
+        <div style="text-align: center">
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:offset' %}" role="button">How do we offset carbon emissions?</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

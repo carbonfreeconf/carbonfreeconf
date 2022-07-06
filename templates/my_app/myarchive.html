@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load index %}
+{% load i18n %}
+
+{% block title %} {% trans 'Upload the recording of your research conference' %} {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="{% trans 'Do you want to organize and record a research meeting? Do it with us in a carbon-neutral fashion.' %}" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+<div class=container>
+    {% if status == '4' %}
+    <div class="jumbotron mt-4">
+        <h4>{% trans 'There are no conferences under your name yet, go create one.' %}</h4>
+    </div>
+    {% endif %}
+
+    {% if status == '4b' %}
+    <div class="jumbotron mt-4">
+        <h4>{% trans 'No recording or no access authorized.' %}</h4>
+    </div>
+    {% endif %}
+
+    {% if status == '2' or status == '2b' or status == '2c' or status == '8'%}
+
+    <div class="jumbotron mt-4">
+    {% if status != '2c' %}
+        <h4><i class="fas fa-file-video mr-3"></i>{% trans 'No video found for the conference entitled' %} "{{ title }}"</h4>
+    {% endif %}
+    {% if status == '8' %}
+        <h4> {% trans 'The organizers decided not to record the conference!' %}</h4>
+    {% else %}
+            {% if status == '2c' %}
+                <h4> {% trans 'Your conference video is being imported in the background, please wait and it will automatically show you the video when it is finished.
+                    You can also leave the page and come back later as it may take a little while.' %}</h4>
+                <div><small>If it has not uploaded within 24 hours, contact us...</small></div>
+                <button class="btn btn-primary mt-3" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  {% trans 'Upload in progress...' %}
+                </button>
+                <div id="countdown"></div>
+                <div id="totest"></div>
+                <script>
+                    window.setInterval(function(){
+                        /// call your function here
+                        checkcelerytaskb({{ createvisioid }});
+
+                    }, 20000);//do it every 2 min: 1000*60*2=120000
+                </script>
+
+            {% else %}
+        <h4> {% trans 'If your conference is over and was recorded, import it by clicking on the below button' %}</h4>
+        <form enctype="multipart/form-data" method="POST" id="importform" action="{% url 'my_app:myarchive' %}">
+                {% csrf_token %}
+                <div class="mt-4 mb-4"><button type="submit" id="importbutton" class="btn btn-success">{% trans 'Import my recordings' %}</button></div>
+                <div id="att"></div>
+        </form>
+            {% endif %}
+        {% if status == '2b' or statusb == '2b' %}
+                <h5> {% trans 'No video found yet for this conference, try again later (it may take a few hours to have it loaded on our side)' %}</h5>
+        {% endif %}
+    {% endif %}
+    </div>
+    {% endif %}
+
+    {% if status == '3' %}
+
+        <h4>{% trans 'No conference ID created yet' %}</h4>
+
+    {% endif %}
+
+    {% if status == '4' %}
+
+        <h4>{% trans "You don't have access to the archive for this conference" %}</h4>
+
+    {% endif %}
+
+   {% if status == '4b' %}
+
+        <h4>{% trans 'Ask to be granted access to organizers or allow recording in your set-up' %}</h4>
+
+    {% endif %}
+
+    {% if status == '0' or status == '2' or status == '3' or status == '2b' or status == '4' or status == '4b' or status == '8'%}
+            {% if conf_list_user|length > 1 %}
+            <div class="mt-3">
+            <label for="conf-select">{% trans 'Access another of your conference videos instead?' %}</label>
+            <form name=changeconfForm action="{% url 'my_app:myarchive' %}" method=POST>
+                {% csrf_token %}
+            <select name="conf" class="browser-default custom-select mb-3" id="conf-select" onChange="changeconfForm.submit();">
+                <option value="">--{% trans 'Please choose another conference video' %}--</option>
+                {% for conf in conf_list_user %}
+                    <option value="{{ conf.id }}">{{ conf.title }}</option>
+                {% endfor %}
+            </select>
+            </form>
+            </div>
+            {% endif %}
+    {% endif %}
+    {% if status == '0' %}
+    <div class="jumbotron mt-4">
+
+    {% if conftopass.finishimport %}
+        <h5>{% trans 'The imports for this conference are finished' %} <small>{% trans '(please contact the administrator if you still need to make changes)' %}</small></h5>
+        {% else %}
+        <h5> {% trans 'If you have more recordings to import, do so by clicking on the below button' %}</h5>
+        <form enctype="multipart/form-data" method="POST" id="importform2" action="{% url 'my_app:myarchive' %}">
+                {% csrf_token %}
+                <div class="mt-4 mb-4"><button type="submit" id="importbutton2" class="btn btn-success">{% trans 'Import more recordings' %}</button></div>
+                <div id="att2"></div>
+        </form>
+        {% if load == 1 %}<p><strong>***{% trans 'More recordings are being imported in the background. Reload the page soon to check them out.' %}***</strong><small> {% trans '(contact us if they do not appear here within 24 hours)' %}</small></p>
+
+        {% elif load == 0 %}
+            <p><strong>***{% trans 'No more recordings were found' %}***.</strong><small> {% trans "If the conference is over and you expect no more recordings, you should click on the 'All videos are imported' button." %}</small></p>
+        {% endif %}
+
+        <h5> {% trans 'If all your videos are imported (double check it is the case), click the button below' %}</h5>
+
+        <form enctype="multipart/form-data" method="POST" id="importform3" action="{% url 'my_app:myarchive' %}">
+                {% csrf_token %}
+                <input type="hidden" name="finishimport" id="finishimport" value="finishimport" />
+                <div class="mt-4 mb-4"><button type="submit" id="importbutton3" class="btn btn-success">{% trans 'All videos are imported' %}</button></div>
+        </form>
+        {% endif %}
+    </div>
+
+        <div>Video{{ archiveurl|length|pluralize:",s" }} {% trans 'for the conference:' %} <strong>{{ title }}</strong></div>
+        {% for vid in archiveurl %}
+        <div class="mt-3">{% trans 'Here is a video for the session that started on' %} {{ start|index:forloop.counter0 }} {% trans 'and finished at' %} {{ end|index:forloop.counter0|date:"g:i a" }} (<a href="#" data-toggle="modal" data-target="#exampleModal{{ forloop.counter0 }}" style="color: red;">{% trans 'Delete?' %}</a>)</div>
+            <p><small><a href="{% url 'my_app:video' redvimurl2|index:forloop.counter0  %}">{% trans 'Go to individual video page' %}</a></small></p>
+
+
+            <div class="row" style="display: flex;align-items: center;">
+            <div class="col-xl-3 col-sm-7 col-lg-4 col-md-5 col-xs-2">
+                <label for="title">Title: </label>
+                <input class="mb-2 mt-2" type="text" id="title{{ forloop.counter0 }}" name="title{{ forloop.counter0 }}" value="{% if titles %}{{ titles|index:forloop.counter0 }}{% endif %}"/>
+            </div>
+            <div class="col-xl-3 col-sm-5 col-lg-3 col-md-5 col-xs-2">
+                <form enctype="multipart/form-data" method="POST" action="">
+                {% csrf_token %}
+                    <input type="hidden" name="public" value="public" />
+                    <input type="hidden" name="videoid" value={{ vid }} />
+                    <input type="hidden" name="righ" value="{{ public|index:forloop.counter0 }}" />
+                    <input type="hidden" name="confnumid" value={{ conftopass.id }} />
+
+				<button type="submit" class="btn btn-primary" id="publictalk">{{ public|index:forloop.counter0 }}</button>
+                </form>
+            </div>
+            </div>
+
+
+
+
+            <br>
+            <div id="{{ forloop.counter0 }}"></div>
+            <input type="hidden" name="visioid{{ forloop.counter0 }}" id="visioid{{ forloop.counter0 }}" value="{{ tabid|index:forloop.counter0 }}" />
+            <input type="hidden" name="visionum{{ forloop.counter0 }}" id="visionum{{ forloop.counter0 }}" value="{{ tabnum|index:forloop.counter0 }}" />
+
+            {% ifnotequal videostatus 'available' %}
+                <p style="color: #ee3535"><strong>{% trans 'You need to wait a few more minutes before being able to see the conference recording as we are
+                transcoding the video in different formats and sizes to be more user-friendly when watching it on e.g. mobile, tablets, ... Reload the page in a moment.' %}</strong></p>
+            {% endifnotequal %}
+        <div class="resp-container-vid mb-3">
+
+            <iframe class="resp-iframe-vid"
+                src="{{ vid }}" frameborder="0" allow="autoplay; fullscreen"
+                allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+            </iframe>
+        </div>
+
+        <!--<div><a href="{{ mp4downloadurl|index:forloop.counter0 }}" target="_blank">See the video on Vimeo</a></div>-->
+            <div id="exampleModal{{ forloop.counter0 }}" class="modal fade">
+	<div class="modal-dialog modal-confirm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box">
+					<i class="material-icons">&#xE5CD;</i>
+				</div>
+				<h4 class="modal-title">{% trans 'Are you sure?' %}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<p>{% trans 'Do you really want to delete this video? This process cannot be undone.' %}</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">Cancel</button>
+                <form enctype="multipart/form-data" method="POST" action="">
+                {% csrf_token %}
+                    <input type="hidden" name="delete" value="delete" />
+                    <input type="hidden" name="videoid" value={{ vid }} />
+                    <input type="hidden" name="confnumid" value={{ conftopass.id }} />
+
+				<button type="submit" class="btn btn-danger" id="deletetalk">{% trans 'Delete' %}</button>
+                </form>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+        {% endfor %}
+    {% endif %}
+
+    <script>
+        $(document).ready(function() {
+            $("#importbutton").click(function() {
+              // disable button
+              $(this).prop("disabled", true);
+              // add spinner to button
+              $(this).html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {% trans "Uploading..." %}'
+              );
+              $("#att").append('<p><strong>{% trans "Do not exit this page when importing or the video will not work..." %}</strong></p>');
+              $('form#importform').submit();
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#importbutton2").click(function() {
+              // disable button
+              $(this).prop("disabled", true);
+              // add spinner to button
+              $(this).html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {% trans "Uploading..." %}'
+              );
+              $("#att2").append('<p><strong>{% trans "Do not exit this page when importing or the video will not work..." %}</strong></p>');
+              $('form#importform2').submit();
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $("#importbutton3").click(function() {
+              // disable button
+              $(this).prop("disabled", true);
+              // add spinner to button
+              $(this).html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ...`
+              );
+              //$("#att2").append('<p><strong>Do not exit this page when importing or the video will not work...</strong></p>');
+              $('form#importform3').submit();
+            });
+        });
+    </script>
+    <script>
+function checkcelerytaskb(createvisioid) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //alert(thisObj.closest("div[class='modal-body']").next().closest("form").find('.email2').val());.attr('id')
+    //alert(thisObj.closest("form").find("input[name=title]").val());
+    //alert(thisObj.closest("form").find("textarea[name=abstract]").val());
+    $.ajax({
+        url : '/checkcelerytask/', // the endpoint
+        type : "POST", // http method
+        data : {    //talktype : thisObj.val(),//$('#confnumid').val(),
+                    createvisioid: createvisioid,
+                    confnum: {{ conftopass.id }},
+                    //confnum: thisObj.closest("form").find("input[name=confnum2]").val(),
+                    csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+
+                }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $("#totest").text('');
+            //alert('aqui'+json.success);
+
+            console.log(json); // log the returned json to the console
+            if (json.success) {//it's over
+                //alert('aqui'+createvisioid);
+
+                window.location = "{% url "my_app:myarchive" %}";
+                //$("#"+json.talknumber+".test3").append('<div class="alert alert-danger" role="alert"><p>You reached the maximum number of participants you set up initially, go for a bigger size conference if needed.</p></div>');
+
+            }else{
+
+                $("#totest").append('<div class="alert alert-success" role="alert"><p>{% trans "Still Uploading..." %}</p></div>');
+
+            }
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><strong>Abstract:</strong><textarea class="form-control" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+</div>
+
+    <script>
+        $("input[name^='title']").keyup(function () {
+                //var regExp = $("#id_twitterhashtag").val();
+                //alert($(this).attr("id")+$(this).val());
+                //var text=$(this).attr("id").val()
+            var newid=$(this).attr('id');
+            var updatedString = newid.replace("title", "");
+            //console.log($("#visioid"+updatedString));
+            //alert("#visioid"+updatedString);
+            var arr = $("#visioid"+updatedString).val();
+            var arr2 = $("#visionum"+updatedString).val();
+            //alert(arr2);
+            //var jsonText = JSON.stringify(arr);
+            //console.log(jsonText);
+
+            $.ajax({
+        url : '/updatetitlerec/', // the endpoint
+        type : "POST", // http method
+        data : {    //talktype : thisObj.val(),//$('#confnumid').val(),
+                    createvisioid: {{ createvisioid }},
+                    idinput:$(this).attr("id"),
+                    textval:$(this).val(),
+                    tabid:arr,
+                    tabnum:arr2,
+                    //confnum: thisObj.closest("form").find("input[name=confnum2]").val(),
+                    csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+
+                }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+
+            $("#"+updatedString).text('');
+            //alert('aqui'+json.success);
+
+            //console.log(json); // log the returned json to the console
+            if (json.success) {//it's over
+
+                //alert(updatedString);
+                $("#"+updatedString).append('<div class="ml-5" style="color: green;margin-top:-15px!important;margin-bottom:10px!important;">{% trans "Saved automatically" %}</div>');
+
+                //$("#"+json.talknumber+".test3").append('<div class="alert alert-danger" role="alert"><p>You reached the maximum number of participants you set up initially, go for a bigger size conference if needed.</p></div>');
+
+            }else{
+
+                $("#"+updatedString).append('<p class="ml-5" style="color: red;margin-top:-15px!important;margin-bottom:10px!important;">{% trans "Oops, Houston there is a problem. Not saved" %}</p>');
+
+            }
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><strong>Abstract:</strong><textarea class="form-control" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+
+            }
+        )
+    </script>
+
+{% endblock %}
+

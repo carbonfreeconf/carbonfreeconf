@@ -1,0 +1,642 @@
+{% load static %}
+{% load i18n %}
+
+<!--<script src="{% static 'js/dhtmlxscheduler_readonly.js' %}"></script>
+<script src="{% static 'js/dhtmlxscheduler_editors.js' %}"></script>-->
+
+<script>
+    scheduler.plugins({
+   editors: true,
+   readonly: true
+});
+</script>
+<style>
+
+    .dhx_cal_light{
+        z-index: 10000!important;
+        margin-top: 75px!important; 
+    }
+
+    .buttonmod {
+  background-color: #008CBA; /* Blue */
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  /*float: right;*/
+  border: 1px solid green;
+}
+
+    .button {
+  background-color: #008CBA; /* Blue */
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  float: right;
+  border: 1px solid green;
+}
+    .button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.94), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+                        /*event in day or week view*/
+        .dhx_cal_event.talk_event div{
+            background-color: #FF9933!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event.disc_event div{
+            background-color: #f44336 !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event.poster_event div{
+            background-color: #b0078F!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+         }
+        .dhx_cal_event.attendance_event div {
+            background-color: #f5dd5d !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event.invtalk_event div{
+            background-color: #209966!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event.review_event div{
+            background-color: #a8778F !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event.pause_event div{
+            background-color: #e83e8c!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+
+        /*multi-day event in month view*/
+        .dhx_cal_event_line.talk_event div{
+            background-color: #FF9933!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_line.disc_event div{
+            background-color: #f44336 !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_line.poster_event div{
+            background-color: #b0078F!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+         }
+        .dhx_cal_event_line.attendance_event div {
+            background-color: #f5dd5d !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_line.invtalk_event div{
+            background-color: #209966!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_line.review_event div{
+            background-color: #a8778F !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_line.pause_event div{
+            background-color: #e83e8c!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        /*event with fixed time, in month view*/
+        .dhx_cal_event_clear.talk_event div{
+            background-color: #FF9933!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_clear.disc_event div{
+            background-color: #f44336 !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_clear.poster_event div{
+            background-color: #b0078F!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+         }
+        .dhx_cal_event_clear.attendance_event div {
+            background-color: #f5dd5d !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_clear.invtalk_event div{
+            background-color: #209966!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_clear.review_event div{
+            background-color: #a8778F !important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_cal_event_clear.pause_event div{
+            background-color: #e83e8c!important;
+            opacity:{{ opacity }};!important;
+            color: black !important;
+        }
+        .dhx_menu_icon.icon_location:before{
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: 15px;
+            content: "\f0ac";/*\f007*/
+            padding-left: 3px;
+            /*bottom: -10px;
+            height: 20px;
+            width: 20px;
+            position: absolute;*/
+            position: relative;
+            top: 4px;
+            background-color: transparent;
+            color: white;
+
+            /*background-image:none;*/
+            /*background-image: url('');*/
+        }
+        .dhx_menu_icon.icon_location{
+            background-image: none;
+        }
+
+</style>
+  <input value="{% trans 'Export to PDF' %}" type="button" class="button" onclick='scheduler.exportToPDF({ name:"carbonfreeconfcalendar.pdf", header:"<style>" +
+   ".dhx_cal_event.talk_event div{\n"+
+"            background-color: #FF9933!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event.disc_event div{\n"+
+"            background-color: #f44336 !important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event.invtalk_event div{\n"+
+"            background-color: #209966!important;\n"+
+"            color: black !important;\n"+
+"         }\n"+
+"        .dhx_cal_event.poster_event div{\n"+
+"            background-color: #b0078F!important;\n"+
+"            color: black !important;\n"+
+"         }\n"+
+"        .dhx_cal_event.attendance_event div{\n"+
+"            background-color: #f5dd5d!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event.review_event div{\n"+
+"            background-color: #a8778F !important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"\n"+
+"        /*multi-day event in month view*/\n"+
+"        .dhx_cal_event_line.talk_event div{\n"+
+"            background-color: #FF9933!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_line.disc_event div{\n"+
+"            background-color: #f44336 !important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_line.poster_event div{\n"+
+"            background-color: #b0078F!important;\n"+
+"            color: black !important;\n"+
+"         }\n"+
+"        .dhx_cal_event_line.attendance_event div{\n"+
+"            background-color: #f5dd5d!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_line.invtalk_event div{\n"+
+"            background-color: #209966!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_line.review_event div{\n"+
+"            background-color: #a8778F !important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"\n"+
+"        /*event with fixed time, in month view*/\n"+
+"        .dhx_cal_event_clear.talk_event div{\n"+
+"            background-color: #FF9933!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_clear.disc_event div{\n"+
+"            background-color: #f44336 !important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_clear.poster_event div{\n"+
+"            background-color: #b0078F!important;\n"+
+"            color: black !important;\n"+
+"         }\n"+
+"        .dhx_cal_event_clear.attendance_event div{\n"+
+"            background-color: #f5dd5d!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_clear.invtalk_event div{\n"+
+"            background-color: #209966!important;\n"+
+"            color: black !important;\n"+
+"        }\n"+
+"        .dhx_cal_event_clear.review_event div{\n"+
+"            background-color: #a8778F !important;\n"+
+"            color: black !important;\n"+
+"        }" +
+     "</style>" });'>
+<input value="{% trans 'Export to Excel'%}" type="button"  class="button" onclick="expToExc()">
+<input value="{% trans 'Export to your Calendar'%}" type="button" class="button" data-toggle="tooltip" data-placement="top" title="This will download the calendar as a .ics file. If want .ical instead, just change the extension to .ical after download" onclick="scheduler.exportToICal({name: 'carbonfreeconfcalschedule.ics'})">
+<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100vh;'>
+<div class="dhx_cal_navline">
+        <div class="dhx_cal_prev_button"></div>
+        <div class="dhx_cal_next_button"></div>
+        <div id = "test" class="dhx_cal_today_button"></div>
+        <div class="dhx_cal_date"></div>
+        <div id = "test2" class="dhx_cal_tab" name="day_tab"></div>
+        <div class="dhx_cal_tab" name="week_tab"></div>
+        <div class="dhx_cal_tab" name="month_tab"></div>
+    </div>
+    <div class="dhx_cal_header"></div>
+   <div class="dhx_cal_data"></div>
+</div>
+
+<script>
+    function expToExc() {
+        scheduler.exportToExcel({
+            name: "carbonfreeconfprogram.xlsx",
+            columns: [
+                {id: "start_date", header: "Start date", width: 25, type: "date"},
+                {id: "end_date", header: "End date", width: 25, type: "date"},
+                {id: "text", header: "Title", width: 50},
+                {id: "speaker", header: "Speaker", width: 25},
+            ],
+            //visual: true,
+            //cellColors: true,
+            //date_format: "dddd d, mmmm yyyy"
+        });
+    }
+</script>
+
+
+<script type="text/javascript">
+        var localisation = "{{ loca }}";
+        var confnum = "{{ confnum }}";
+        //var initially = "{{ initially }}";
+        var session = "{{ session }}";
+        var len2 = "{{ len2 }}";
+        var interactive = "{{ interactive }}";
+        var initially = "{{ test }}";
+        var starting_date= "{{ start_date }}";
+        //document.write(localisation);
+        //document.write(confnum);
+        //document.write(initially);
+        //document.write(starting_date);
+        //document.getElementById("test").innerHTML = localisation;
+        //document.getElementById("test").innerHTML = confnum;
+        //document.getElementById("test").innerHTML = initially;
+
+
+        function getDateTime(dayadd, houradd) {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1;
+            var dayinit = now.getDate();
+            var day = now.getDate() + dayadd;
+            var hourinit = now.getHours();
+            var hour = now.getHours() + houradd;
+            if ((hourinit + 7) > (24)) {
+                hour = hourinit - 7 + houradd;
+            }
+            var minute = now.getMinutes();
+            var second = now.getSeconds();
+            if (month.toString().length == 1) {
+                month = '0' + month;
+            }
+            if (day.toString().length == 1) {
+                day = '0' + day;
+            }
+            if (hour.toString().length == 1) {
+                hour = '0' + hour;
+            }
+            if (minute.toString().length == 1) {
+                minute = '0' + minute;
+            }
+            if (second.toString().length == 1) {
+                second = '0' + second;
+            }
+            var dateTime = year + '/' + month + '/' + day + ' ' + hour + ':' + minute;//+second;
+            return dateTime;
+        }
+
+// example usage: realtime clock
+      //  setInterval(function () {
+        //    currentTime = getDateTime();
+          //  document.getElementById("digital-clock").innerHTML = currentTime;
+        //}, 1000);
+
+</script>
+
+
+
+<script type="text/javascript">
+
+    //alert('1');
+    scheduler.config.first_hour = {{ timestart }};
+    scheduler.config.last_hour = {{ timefinish }};
+    //scheduler.config.multi_day = true;
+    scheduler.config.hour_size_px = {% widthratio heighthr 1 44 %};//make it a variable
+    //scheduler.xy.scale_height = 88; //height of x-scale
+    //scheduler.xy.scale_width = 220; //width of y-scale
+
+    scheduler.templates.xml_format = scheduler.date.date_to_str("%Y-%m-%d %H:%i");
+
+    //scheduler.templates.event_text = function(start,end,ev){   return 'Title: ' + ev.text + '';};
+    scheduler.attachEvent("onTemplatesReady", function(){
+        //alert(end+'r'+start+'r'+end-start);
+
+        scheduler.templates.event_text=function(start,end,ev){
+            if ((end - start)/60000>{{ minieventtime }}) {//if event is longer than 10 minutes
+                //alert(end+'r'+start+'r'+end-start);
+
+                return "<b>" + ev.text + "</b><br><i>" + ev.speaker + "</i>";
+            }else{
+                return "<b>"+scheduler.templates.event_date(start)+"</b>"+"<i> " + ev.text + "</i>";
+            }
+        }
+    });
+    scheduler.templates.event_class = function(start, end, ev){
+        return "";
+        };
+    scheduler.templates.event_class = function (start, end, event) {
+        if (event.type == 3) return "review_event";
+        if (event.type == 2) return "disc_event";
+        if (event.type == 1) return "invtalk_event";
+        if (event.type == 4) return "poster_event";
+        if (event.type == 5) return "attendance_event";
+        if (event.type == 7) return "pause_event";
+
+        return "talk_event";
+        };
+    scheduler.attachEvent("onTemplatesReady", function(){
+        scheduler.templates.event_header = function(start,end,ev){
+        if ((end - start)/60000>{{ minieventtime }}) {//if event is longer than 10 minutes
+            if (ev.important == true){
+                return ("<img src={% static "images/Red_star.svg" %} width=\"10\" height=\"10\"> <b style='color:#FFFFFF'>"+scheduler.templates.event_date(start)+" - "+scheduler.templates.event_date(end)+"</b>")
+            } else {
+                return(scheduler.templates.event_date(start)+" - "+scheduler.templates.event_date(end))
+            }
+        }else{
+            return ""
+        }
+    };
+    });
+
+
+
+        //(0, "Talk"),
+        //(1, "Invited Talk"),
+        //(2, "Discussion"),
+        //(3, "Review"),
+        //(4, "Poster"),
+        //(5, "Attendance only"),
+    scheduler.locale.labels.section_checkme = "I'm going to participate";
+
+    //default lightbox definition
+    scheduler.config.lightbox.sections=[
+        {name:"{% trans 'Talk Title' %}", height:100, map_to:"text", type:"textarea" , focus:true},
+        {name:"{% trans 'Speaker Name' %}", height:50, map_to:"speaker", type:"textarea"},
+        {name:"{% trans 'Abstract' %}", height:400, map_to:"abstract", type:"textarea"},
+        {name:"{% trans 'Talk Type' %}", height:50, map_to:"type", type:"select" , options:[
+            {key:6, label:"{% trans 'Talk' %}"},
+            {key:1, label:"{% trans 'Invited Talk' %}"},
+            {key:2, label:"{% trans 'Discussion' %}"},
+            {key:3, label:"{% trans 'Review' %}"},
+            {key:4, label:"{% trans 'Poster' %}"},
+            {key:5, label:"{% trans 'Attendance Only' %}"},
+            {key:7, label:"{% trans 'Pause' %}"}
+            ]},
+        {name:"{% trans 'time' %}", height:72, type:"time", map_to:"auto"},
+        {name:"{% trans 'Important' %}", height:50, map_to:"important", type:"checkbox",checked_value: "1", unchecked_value: "0"},
+        {name:"{% trans 'Not part of the conference?' %}", height:50, map_to:"notpart", type:"checkbox",checked_value: "1", unchecked_value: "0"},
+        {name:"{% trans 'ID Rand' %}", height:50, map_to:"rand", type:"textarea"},
+        {name:"{% trans 'Conference' %}", height:50, map_to:"conference", type:"textarea"},
+        {name:"{% trans 'User' %}", height:50, map_to:"user", type:"textarea"},
+        {name:"{% trans 'Schedule ID' %}", height:32, type:"textarea", map_to:"id"}
+    ];
+
+
+
+    scheduler.attachEvent("onEventCreated", function(id,e){
+        scheduler.getEvent(id).text = 'Talk title';
+        scheduler.getEvent(id).speaker = 'John Smith';
+        scheduler.getEvent(id).abstract = "This is the speaker's abstract";
+        scheduler.getEvent(id).type = 6;
+        scheduler.getEvent(id).important = "0";
+        scheduler.getEvent(id).notpart = "0";
+        var max=10000000
+        var min=100
+        rando=Math.floor(Math.random() * (max - min + 1)) + min;
+
+        scheduler.getEvent(id).rand = rando;
+
+        scheduler.updateEvent(id); // renders the updated event
+        //scheduler.changeEventId(scheduler.getEvent(id).id, id);
+        return true;
+    });
+
+    /*scheduler.attachEvent("onLightbox", function(){
+    var section = scheduler.formSection("User");
+    section.control.disabled = true;
+    var section = scheduler.formSection("Conference");
+    section.control.disabled = true;
+    var section = scheduler.formSection("Schedule ID");
+    section.control.disabled = true;
+    var section = scheduler.formSection("ID Rand");
+    section.control.disabled = true;
+    });*/
+
+    scheduler.attachEvent("onLightbox", function(){
+    //scheduler.formSection('User').node.classList.add('hidden');
+    scheduler.formSection('User').node.parentNode.style.display = 'none';
+    scheduler.formSection('Conference').node.parentNode.style.display = 'none';
+    scheduler.formSection('Schedule ID').node.parentNode.style.display = 'none';
+    scheduler.formSection('ID Rand').node.parentNode.style.display = 'none';
+    scheduler.setLightboxSize(); //correct size of lightbox
+
+    return true
+    });
+
+    // define configs
+    const compactHeader = {
+        rows: [
+            {
+                cols: [
+                    "prev",
+                    "date",
+                    "next",
+                ]
+            },
+            {
+                cols: [
+                    "day",
+                    "week",
+                    "month",
+                    "spacer",
+                    "today"
+                ]
+            }
+        ]
+    };
+
+    const fullHeader = [
+        "day",
+        "week",
+        "month",
+        "date",
+        "prev",
+        "today",
+        "next"
+    ];
+
+    // add a switch to select an appropriate config for a current screen size
+
+    function resetConfig(){
+        let header;
+        if (window.innerWidth < 1000) {
+            header = compactHeader;
+        } else {
+            header = fullHeader;
+
+        }
+        scheduler.config.header = header;
+        return true;
+    }
+
+    // apply the config initially and each time scheduler repaints or resizes:
+
+    resetConfig();
+    scheduler.attachEvent("onBeforeViewChange", resetConfig);
+    scheduler.attachEvent("onSchedulerResize", resetConfig);
+    scheduler.config.separate_short_events = true;
+    scheduler.xy.min_event_height = {{ mineventheight }};//sets the height of the X-Axis
+
+    scheduler.config.responsive_lightbox = true; // responsive lightbox
+
+    //scheduler.addMarkedTimespan({ // blocks 4th July, 2012 (this is Wednesday).
+      //  days:  new Date(2020, 3, 18),
+        //zones: "fullday",
+        //type:  "dhx_time_block",
+        //css:   "red_section" // the name of applied CSS class
+    //});
+
+    //scheduler.config.server_utc = true;
+    if (localisation == "createconf") {
+        scheduler.config.icons_select = ['icon_details', 'icon_delete','icon_location'];
+    } else {
+        scheduler.config.icons_select = ['icon_details','icon_location'];
+        scheduler.attachEvent("onDblClick", function(){ return false; });
+    }
+    scheduler.locale.labels.icon_location = "Join the room";
+
+    scheduler._click.buttons.location = function(id){
+       //some_function(id);
+        window.open("{% url 'my_app:joinconf' confnum %}", '_blank').focus();
+    };
+
+    if (localisation == "createconf" || localisation == "mastconf"){
+        //scheduler.init('scheduler_here', new Date(), "week");
+        scheduler.init('scheduler_here', starting_date, "week");
+    } else {
+        //scheduler.init('scheduler_here', new Date(), "day");//Date(2020, 3, 20)
+        scheduler.init('scheduler_here', starting_date, "day");//Date(2020, 3, 20)
+    }
+
+    if (localisation != "createconf"){
+        //scheduler.config.readonly = true;
+        scheduler.config.readonly_form = true;
+        scheduler.config.drag_move = false;
+        scheduler.config.drag_resize = false;
+        scheduler.config.drag_create = false;
+        scheduler.config.dblclick_create = false;
+    }
+    //scheduler.load(("apischedule?conference=").concat(confnum));
+    //if (initially == 'ini') {
+      //  scheduler.parse([
+        //{ id:1001, start_date: "2020-03-17 14:00", end_date: "2020-03-17 16:00", text:"First Review Talk"}
+        //{ id:100000000000001, start_date: getDateTime(0,0), end_date: getDateTime(0,2), text:"First Review Talk", type:"REV", speaker:"Speaker1", abstract:"Example for Abstract 1",important:0, user:1, conference:1},
+        //{ id:100000000000002, start_date: getDateTime(0,2), end_date: getDateTime(0,4), text:"A Talk", type:"TALK", speaker:"Speaker2", abstract:"Example for Abstract 2",important:0, user:1, conference:1},
+        //{ id:100000000000003, start_date: getDateTime(1,1), end_date: getDateTime(1,5), text:"An invited Talk", type:"INVTALK", speaker:"Speaker3", abstract:"Example for Abstract 3",important:1, user:1, conference:1},
+        //{ id:100000000000004, start_date: getDateTime(0,4), end_date: getDateTime(0,7), text:"A discussion", type:"DISC", speaker:"Speaker4", abstract:"Example for Abstract 4",important:0, user:1, conference:1}
+        //]);
+    //} else {
+    //scheduler.config.update_render = true;
+
+
+
+    //scheduler.attachEvent("onChange", function(){
+      //  alert('hh');
+        //scheduler.setCurrentView();
+        //scheduler.resetLightbox();
+        //scheduler.refresh();
+        //scheduler.clearAll();
+        //scheduler.changeEventId(scheduler.getEvent(id).id, id);
+    //});
+    //scheduler.attachEvent('onEventAdded', function(id, event) {
+      //    scheduler.changeEventId(id, result.databaseId);
+    //});
+    //alert('fffe'+session+confnum);
+
+
+    if (interactive == "true"){
+            //alert('fff'+session+confnum);
+            //scheduler.clearAll()
+            url2 = "{% url 'my_app:apischedule' '00000000000000' '11111111111' %}"
+            url2 = url2.replace('00000000000000', confnum).replace('11111111111',session);
+            scheduler.load(url2);
+
+
+            var dp = new scheduler.DataProcessor(url2);
+
+    }else{
+            //alert(confnum);
+            scheduler.load(("{% url 'my_app:apischedule' confnum %}"));//.concat(confnum));
+            var dp = new scheduler.DataProcessor("{% url 'my_app:apischedule' confnum %}");
+
+    }
+    //}
+    //scheduler.attachEvent("onAfterLightbox", function (){
+            //any custom logic here
+      //      scheduler.load(("{% url 'my_app:apischedule' confnum %}"));//.concat(confnum));
+        //});
+
+
+    //var dp = new dataProcessor("{% url 'my_app:apischedule' confnum %}");
+
+    //dp.setTransactionMode({mode:"JSON", headers:{'Content-Type': 'application/json'}});
+    //dp.setTransactionMode("JSON", false);
+    dp.init(scheduler);
+    dp.setTransactionMode("JSON", false);
+    //dp.attachEvent("onFullSync", function(){ scheduler.load(("{% url 'my_app:apischedule' confnum %}")); });
+    //dp.attachEvent("onAfterUpdate",function(){
+      //  scheduler.clearAll();
+        //scheduler.load(("{% url 'my_app:apischedule' confnum %}"));
+    //});
+    //dp.setTransactionMode({mode:"JSON", headers:{'Content-Type': 'application/json'}});
+
+
+</script>
+
+
+
+

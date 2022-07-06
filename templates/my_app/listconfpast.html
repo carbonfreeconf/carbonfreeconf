@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load el_pagination_tags %}
+
+{% block title %} List of virtual conferences already organized {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Looking for conferences that happened online in your field? Or do you want to make your own in a few minutes? CarbonFreeConf is the place where you can do it." />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<div class="container">
+        <div class="row justify-content-center mt-2 mb-2">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form action="{% url 'my_app:searcharchivepastconf' %}" method="GET" class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="search" placeholder="Search for a conference (by title or content)">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-info" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+            <!--end of col-->
+        </div>
+        {% if search %}
+            <p class="mt-4"><strong class="text-danger">{{ object_list|length }} conference{{ object_list|length|pluralize:",s" }}</strong> found for your request "{{ qs }}"</p>
+            <p><a href="{% url "my_app:confpast" %}">Go back to the list of past conferences?</a></p>
+        {% else %}
+            <p class="mt-4"><strong class="text-danger">{{ object_list|length }} conference{{ object_list|length|pluralize:",s" }}</strong> were already organized</p>
+        {% endif %}
+
+    <div class="row">
+        <!-- Blog Entries Column -->
+
+        <div class="col-md-12 mt-3 left">
+
+            {% paginate 10 object_list %}
+            {% for conf in object_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ conf.title }}</h2>
+                    <p class="card-text text-muted h6">{{ conf.subject }} | {{ conf.start_date}} </p>
+                    <p class="card-text">{{conf.abstract|slice:":200" }}</p>
+                    <a href="{% url 'my_app:conf_detail_past' conf.id  %}" class="btn btn-primary"> More detail &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% show_pages %}
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

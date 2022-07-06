@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load static %}
+
+{% block title %} CarbonFreeConf legal notice {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="Legal notice to organize carbon-neutral conferences" />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/legalnotice/" />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<main class="guidelines">
+
+  <section>
+    <h1>Legal notice / Mentions légales</h1>
+    <p><i>In english.</i></p>
+    <p><b>Company name:</b> CarbonFreeConf</p>
+    <p><b>Company Address:</b> 3 bis rue de la Garenne, 17170, Courçon, France</p>
+    <p><b>Registration number to the RCS:</b> 895 105 955</p>
+    <p><b>Company email address:</b> admin@carbonfreeconf.com</p>
+    <p><b>Type of Company:</b> SASU (French company)</p>
+    <p><b>Share capital:</b> 300 €</p>
+    <p><b>Publication director:</b> Quentin Kral</p>
+    <p><b>Website hosting company:</b> Heroku.com,
+    Salesforce Tower, 415 Mission Street, 3rd Floor, San Francisco, CA 94105 Main: 1-800-NO-SOFTWARE, Fax: 415-901-7040</p>
+    <p><b>Activity:</b> Creation of virtual conferences</p>
+    <hr>
+    <p><i>In French.</i> </p>
+    <p><b>Dénomination sociale :</b> CarbonFreeConf</p>
+    <p><b>Adresse du siège social :</b> 3 bis rue de la Garenne, 17170, Courçon, France</p>
+    <p><b>Numéro d'immatriculation au registre du commerce et des sociétés :</b> 895 105 955</p>
+    <p><b>Adresse de courrier électronique :</b> admin@carbonfreeconf.com</p>
+    <p><b>Forme juridique de la société :</b> SASU</p>
+    <p><b>Montant du capital social :</b> 300 €</p>
+    <p><b>Nom du directeur de la publication :</b> Quentin Kral</p>
+    <p><b>Hébergeur du site :</b> Heroku.com,
+    Salesforce Tower, 415 Mission Street, 3rd Floor, San Francisco, CA 94105 Main: 1-800-NO-SOFTWARE, Fax: 415-901-7040</p>
+    <p><b>Activité :</b> Création de conférences virtuelles</p>
+    <div class="buttons-group">
+      <a href="{% url 'my_app:privacy' %}">
+        <button class="btn">Read About our Privacy Policy</button>
+      </a>
+      <a href="{% url 'my_app:terms' %}">
+        <button class="btn alt">Read About our Terms and Conditions</button>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

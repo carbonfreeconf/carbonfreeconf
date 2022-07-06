@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} The blog of CarbonFreeConf {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="Access all our tips and experience about running exciting carbon-free conferences" />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/blog-home/" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<div class="intro-news">
+  <div class="content">
+    {% blocktrans %}
+    <div class="pretitle">Our News</div>
+    <h1>Welcome to our <span>Blog</span>.</h1>
+    <p>This is the place where we share our tips and experience about running exciting carbon-free conferences. For instance, we give information about the energy cost when running a conference and how it is possible to make up for the greenhouse gases that are inevitably emitted in our atmosphere. You may also want to know more about how to make sure everything is perfect and make the most of the meeting you organize with the best outcomes in terms of research, communication, networking...</p>
+    {% endblocktrans %}
+    <div class="buttons-group">
+      <a class="btn" href="/{{LANGUAGE_CODE}}/contactform">{% blocktrans %}Let's Talk{% endblocktrans %}</a>
+      <a class="btn alt" onclick="scrollToContainerBis()">{% blocktrans %}Subscribe to Our Newsletter{% endblocktrans %}</a>
+    </div>
+  </div>
+ 
+  <div class="news-selector">
+    <span class="tabs-link active" onclick="openTab(event, 'newsOne')">{% blocktrans %}Blog Articles{% endblocktrans %}</span>
+    <span class="tabs-link" onclick="openTab(event, 'newsTwo')">{% blocktrans %}Press Releases{% endblocktrans %}</span>
+  </div>
+  
+</div>
+
+<main>
+
+  <section class="news">
+    <div class="tab" id="newsOne">
+      {% for obj in latest %}
+      <div class="container">
+        <div>
+          <ul>
+            {% for cat in obj.categories.all %}
+            <li>{{ cat }}</li>
+            {% endfor %}
+            <li>{{ obj.timestamp|date:"d M Y" }}</li>
+          </ul>
+          <h3>
+            <a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a>
+          </h3>
+          <p>{{ obj.overview|linebreaks|truncatechars:200 }}</p>
+          <a href="{{ obj.get_absolute_url }}">{% blocktrans %}Read more{% endblocktrans %}</a>
+        </div>
+        <figure>
+          <img src="{{ obj.thumbnail.url }}" loading="lazy" alt="{{ obj.title }}">
+        </figure>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="tab" id="newsTwo">
+      <div class="container">
+        <div>
+          {% blocktrans %}
+          <span>26 AUGUST 2020</span>
+          <h3>CarbonFreeConf is a startup that helps universities and organizers arrange carbon-free virtual conferences.</h3>
+          <p>Researchers and academics are unable to attend academic conferences anymore due to Covid-19. Travel restrictions are imposed all over the world resulting in a shift to virtual conferences. CarbonFreeConf is a startup that helps universities and organizers arrange not just virtual conferences but carbon-free virtual conferences.</p>
+          {% endblocktrans %}
+          <a target="_blank" rel="noopener" href="https://maccelerator.la/en/blog/news-2/pandemic-startup-guide-for-new-founders-startup-examples/">{% trans 'Read on maccelerator.la' %}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter" id="scrollTargetBis">
+    {% blocktrans %}
+    <h2>Our Newsletter</h2>
+    <p>Consider subscribing to our newsletter to keep up with our lastest news and upcoming research conferences. We respect your mail inbox and never send spams!</p>
+    {% endblocktrans %}
+    <form action="{% url 'blog:email-list-signup' %}" method="POST">
+      {% csrf_token %}
+      {{ form }}
+      <button type="submit" class="btn">{% blocktrans %}Subscribe{% endblocktrans %}</button>
+    </form>
+  </section>
+
+</main>
+
+{% endblock %}

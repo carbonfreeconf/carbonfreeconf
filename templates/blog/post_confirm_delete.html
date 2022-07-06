@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<main style="min-height:60vh">
+  <div class="wrapper">
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <form method="post">
+      {% csrf_token %}
+      <input type="submit" class="btn" value="Confirm">
+    </form>
+  </div>
+</main>
+
+{% endblock %}

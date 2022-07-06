@@ -1,0 +1,33 @@
+{% extends 'qa/base.html' %}
+{% load django_markdown %}
+
+{% block content %}
+
+<style>
+    #qform p label,
+    #qform p input{
+        display: block;
+        /*clear: left;*/
+    }
+</style>
+  {% if message %}
+  <strong>Enter a valid Question!</strong>
+  {% endif %}
+
+  <form method="post" id="qform" action="{% block action_url %}{% if idconf %}{% url 'qa_create_question' idconf %}{% else %}{% url 'qa_create_question' %}{% endif %}{% endblock action_url %}">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <input class="btn pull-right btn-success" type="submit" value="Submit Question" />
+  </form>
+
+    {% block deletebutton %}
+
+    {% endblock %}
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+  {% markdown_editor "#id_description" %}
+  {% markdown_media %}
+{% endblock extra_js %}

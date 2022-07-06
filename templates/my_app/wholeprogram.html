@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %} See the whole conference program {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Check out the whole conference program, session by session" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+
+{% block extrahead %}
+<link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.css" type="text/css">
+<script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js" type="text/javascript"></script>
+<script src="https://export.dhtmlx.com/scheduler/api.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    <style>
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  float:right;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input.default:checked + .slider {
+  background-color: #444;
+}
+input.primary:checked + .slider {
+  background-color: #2196F3;
+}
+input.success:checked + .slider {
+  background-color: #8bc34a;
+}
+input.info:checked + .slider {
+  background-color: #3de0f5;
+}
+input.warning:checked + .slider {
+  background-color: #FFC107;
+}
+input.danger:checked + .slider {
+  background-color: #f44336;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+    </style>
+<div class="container">
+
+        <p class="mt-2"><b>The whole program (interactive)</b></p>
+            <li class="list-group-item">
+                Plenaries: {{ confm.title }}
+                <label id="cb" class="switch ">
+                <input type="checkbox" checked id="{{ confm.id }}" class="success addtoschedule">
+                <span class="slider round"></span>
+                </label>
+            </li>
+
+            {% for confd in confds %}
+                {% if confd.website.showprogram %}
+
+            <li class="list-group-item">
+                {% if  not confd.daughterconfstarwars %} S{{ confd.masterconfdaughterposition }}: {{ confd.title }} {% else %}{{ confd.masterconfdaughtername }}: {{ confd.title }}{% endif %}
+                <label id="cb" class="switch ">
+                <input type="checkbox" id="{{ confd.id }}" class="success addtoschedule">
+                <span class="slider round"></span>
+                </label>
+            </li>
+                {% endif %}
+            {% endfor %}
+
+        <div id="content">{% include "my_app/schedule.html" with loca="mastconf" confnum=confm.id start_date=start_date interactive="true" session=confm.id len2="1" timestart=timestart timefinish=timefinish mineventheight=mineventheight heighthr=heighthr minieventtime=minieventtime opacity=opacity %}</div>
+
+        <p class="mt-4"><b>The whole program (session by session)</b></p>
+        <p><a href="{% url 'my_app:program' confm.id %}" target="_blank">Plenaries: {{ confm.title }}</a></p>
+
+
+        {% for confd in confds %}
+            {% if confd.website.showprogram %}
+
+            <p><a href="{% url 'my_app:program' confd.id %}" target="_blank">{% if  not confd.daughterconfstarwars %} S{{ confd.masterconfdaughterposition }}: {{ confd.title }} {% else %}{{ confd.masterconfdaughtername }}: {{ confd.title }}{% endif %}
+</a></p>
+            {% endif %}
+        {% endfor %}
+</div>
+
+
+<script>
+    $("body").on('change','.success.addtoschedule', function () {
+        var self = $(this);
+        //alert('t');
+        //if (self.is(":checked")) {
+            console.log("checkbox  id =" + self.attr("id") + " is checked ");
+            //$("#content").html('yo');
+            $.ajax({
+            url : '/changeschedulemulti/', // the endpoint
+            type : "POST", // http method
+            data : {    confnum : self.attr("id"),//thisObj.closest("form").find('.pconfnumplus').val(),//$('#confnumid').val(),
+                        csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+                    }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                //alert('yo2')
+                //$("div[id='content']").text('');
+                //$("#content").remove();
+                //var sched = ;
+                if (json.success == 1) {
+                    //alert('suc');
+                    //$("#content").append(sched)
+                    //$("#content").load()
+                    //$('#content').load('/sched', {'loca':"createconf", 'confnum':"7", 'start_date':"01/01/01",'csrfmiddlewaretoken': "{{ csrf_token }}",});
+                    var selected = [];
+                    $('#cb input:checked').each(function() {
+                        selected.push($(this).attr('id'));
+                        //alert($(this).attr('id'));
+                    });
+                    //alert(selected);
+                    //if (selected.length == 1 && self.is(":checked")) {
+                     //   alert('load');
+                       // $('#content').load('/sched/' + json.confnum + '/', {
+                         //   'len2': selected.length.toString(),
+                           // 'session2': selected.toString(),
+                            //'csrfmiddlewaretoken': "{{ csrf_token }}"
+                        //});
+                    //}else{
+                        //alert('pasload');
+                        url2 = "{% url 'my_app:apischedule' '00000000000000' '11111111111' %}"
+                        url2 = url2.replace('00000000000000', json.confnum).replace('11111111111',selected.toString());
+                        //alert(url2);
+
+                        //var t=selected.toString();
+                        //scheduler.init('scheduler_here', starting_date, "week");
+                        //scheduler.load(("apischedule/"+json.confnum));
+                        scheduler.clearAll()
+                        scheduler.load(url2);
+                        scheduler.setCurrentView();
+
+                    //}
+
+                }
+                console.log("changeschedulemulti"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+
+        //} else {
+          //  console.log("Id = " + self.attr("id") + " is Unchecked ");
+        //}
+    });
+</script>
+{% endblock %}

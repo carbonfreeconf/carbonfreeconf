@@ -1,0 +1,15 @@
+{% extends 'qa/base.html' %}
+{% load django_markdown %}
+
+{% block content %}
+<h2 class="pull-right">Points: {{ user.points }}</h1>
+<ul>
+  <li><b>Name :</b> {{ user.user.first_name }} {{ user.user.last_name }} </li>
+   <!--<li><b>e-mail :</b> {{ user.user.email }} </li>
+   <li><b>Date Joined :</b> {{ user.user.date_joined }} </li>-->
+   <li><b>Last Login :</b> {{ user.user.last_login }} </li>
+   <li><b>is Active now? :</b> {{ user.user.is_active }} </li>
+<ul>
+
+</div>
+{% endblock content %}

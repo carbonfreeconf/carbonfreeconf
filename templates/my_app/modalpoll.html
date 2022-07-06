@@ -1,0 +1,337 @@
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+<style>
+    /*.modal-dialog {
+      height: 90%; /* = 90% of the .modal-backdrop block = %90 of the screen */
+    /*}
+    .modal-content {
+      height: 100%; /* = 100% of the .modal-dialog block */
+    /*}*/
+
+</style>
+
+
+<div class="modal fade" id="myEditpoll">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+
+				<h4 class="modal-title"> <i class="fas fa-balance-scale"></i> {% trans 'Poll the participants of the meeting:'%} "{{ conftopass.title }}"</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+
+
+			<div class="modal-body">
+
+				<p><strong>{% trans 'Create your poll here and the moderators/organizers will publish it if relevant'%}</strong>  </p>
+            </div>
+                <div class="modal-body">
+
+                <form enctype="multipart/form-data" id=formpoll method="POST" action="">
+                {% csrf_token %}
+                    <input type="hidden" id="confnum" name="confnum" value="{{ conftopass.id }}" />
+
+                <div class="row">
+                    <div class="col-12">
+                    <p>{% trans 'Poll question:'%}</p>
+                        <textarea id="pquestion" name="pquestion" rows="5" cols="30"></textarea>
+                    </div>
+                    <div class="col-12">
+                    <p class="mt-3">{% trans 'First choice:'%}</p>
+                        <input type="text" id="choice1" name="choice1" required size="30">
+                    </div>
+                    <div class="col-12">
+                    <p class="mt-3">{% trans 'Second choice:'%}</p>
+                        <input type="text" id="choice2" name="choice2" required size="30">
+                    </div>
+
+                    <div id="test33"></div>
+
+                    <div class="col-12">
+                        <p class="mt-4 ml-2"><a href="#" id="addnewchoice">{% trans 'Add another choice?'%}</a></p>
+                    </div>
+                    <div class="col-12">
+                      <p class="ml-2 mt-4 mb-2"><input type="checkbox" class="checkbox1" id="ano" name="ano">
+                          <label for="ano" style="display: inline-block;">{% trans 'Anonymous?'%}</label></p>
+                    </div>
+
+
+                </div>
+                <table id="outerDiv" cellpadding="0" cellspacing="0" border="0">
+                        <tr>
+                            <td valign="middle" id="innerDiv">
+                                <span class="btn btn-info btn-file">
+                                    <i class="fa fa-image"></i> {% trans 'Image?'%} <input type="file" id="uploadPicture" name="uploadPicture" accept="image/*"/>
+                                </span>   <i data-toggle="tooltip" data-placement="bottom" title="{% trans 'You can decide to upload an image if you need it for your poll'%}" class="fas fa-info-circle"></i>  <label id="file-name"></label>
+                            </td>
+                            <td valign="middle" id="innerDi">
+                                        <div class="col-2" id="imsh"></div>
+                            </td>
+                        </tr>
+                        </table>
+
+                <button type="submit" class="btn btn-warning btn-upd mt-2"> {% trans 'Submit the poll'%} </button>
+                </form>
+                <i data-toggle="tooltip" data-placement="bottom" title="{% trans 'This will send the poll to moderators and organizers which can make it public when (and if) they decide the time is right.'%}" class="fas fa-info-circle ml-2 mt-2"></i>
+
+                <div id="test3"></div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-info" data-dismiss="modal">{% trans 'Cancel'%}</button>
+
+			</div>
+                <div class="modal-footer"></div>
+
+		</div>
+	</div>
+</div>
+
+
+
+ <script>
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+
+<script>
+    $(document).off('click','#addnewchoice').on('click', '#addnewchoice', function (event) {
+        //$('.bt-del').live('click', function (event) {
+        //$('.bt-del').click(function(event){
+        event.preventDefault();
+        //alert($(this).closest("form").attr('id'));
+        //$('.del').each(function(index, value) {
+        //alert($(this));
+        //  console.log($(this).attr('id'));
+        //});
+        newchoicepollb($(this));
+        return false;
+    });
+</script>
+
+
+<script>
+function newchoicepollb(thisObj) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //var num=thisObj.closest("form").find("input[name=forloop2]").val();
+
+    $.ajax({
+        url : '/newchoicepollmodal/', // the endpoint
+        type : "POST", // http method
+        dataType: 'json',
+        data : {    //talktype : thisObj.val(),//$('#confnumid').val(),
+                    //email: thisObj.closest("form").find("input[name=email2]").val(),
+                    formData: JSON.stringify($("#formpoll").serializeArray()),//JSON.stringify($("#formpoll").serializeArray()),
+                    //confnum: {{ conftopass.id }},
+                    //pquestion: $("#pquestion").val(),
+                    //talknumber: thisObj.closest("form").find("input[name=forloop2]").val(),
+                    //title: thisObj.closest("form").find("input[name=title]").val(),
+                    //abs: thisObj.closest("form").find("textarea[name=abstract]").val(),
+                    //abs: thisObj.find(".note-editable.card-block").val(),
+                    //bio: thisObj.closest("form").find("textarea[name=biography]").val(),
+                    //role: thisObj.closest("form").find("input[name=role2]").val(),
+                    csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+
+                }, // data sent with the post request
+
+        // handle a successful response
+        success : function(json) {
+            $("#test3").text('');
+
+            console.log(json); // log the returned json to the console
+            if (json.success) {//Poster
+                //alert('success');
+                $('#choice'+json.newfieldnum).text('');
+
+                $("#test33").before('<div class="col-12"> <p class="mt-3">'+json.newfieldword+' {% trans "choice:"%}</p> <input type="text" id="choice'+json.newfieldnum+'" name="choice'+json.newfieldnum+'" required size="30"> </div>');
+
+                //$("#test3").append('<div class="alert alert-success mt-3" role="alert"><p>The o the moderators! Now you can close this window.</p></div>');
+
+            }
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><strong>Abstract:</strong><textarea class="form-control" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+
+<script>
+    $(document).off('click', '.btn.btn-warning.btn-upd.mt-2').on('click', '.btn.btn-warning.btn-upd.mt-2', function (event) {
+        //$('.bt-del').live('click', function (event) {
+        //$('.bt-del').click(function(event){
+        event.preventDefault();
+        //alert($(this).closest("form").attr('id'));
+        //$('.del').each(function(index, value) {
+        //alert($(this));
+        //  console.log($(this).attr('id'));
+        //});
+        updatepollb($(this));
+        return false;
+    });
+</script>
+
+
+<script>
+function updatepollb(thisObj) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //var num=thisObj.closest("form").find("input[name=forloop2]").val();
+
+    /* Get input values from form */
+    //var data = new FormData();
+
+    var values = $("#formpoll").serializeArray();
+
+
+
+    /* Because serializeArray() ignores unset checkboxes and radio buttons: */
+    values = values.concat(
+            $('#formpoll input[type=checkbox]:not(:checked)').map(
+                    function() {
+                        return {"name": this.name, "value": false}
+                    }).get()
+    );
+
+   /* $('[type="file"]').change(function() {
+    var fileInput = $(this);
+    if (fileInput.length && fileInput[0].files && fileInput[0].files.length) {
+      var url = window.URL || window.webkitURL;
+      var image = new Image();*/
+
+    //File data
+    //var file_data = $('#uploadPicture')[0].files[0];//$('[type="file"]')[0].files;
+    //for (var i = 0; i < file_data.length; i++) {
+    //values = values.concat({"name": 'image', "value": file_data[0]});
+    //alert(file_data.length);
+    //}
+    //alert('val'+JSON.stringify(values));
+   // var fd = new FormData(document.getElementById("formpoll"));
+
+    //var formData = new FormData();
+    //formData.append('file', $('#uploadPicture')[0].files[0]);
+    //var formData = new FormData();
+    //formData.append('file1', file_data);
+    //const data2 = JSON.stringify(values);
+    //formData.append('data', data2);
+    /*$('.checkbox1').change(function(){ // checkbox1 change event
+    var checked_lists = [];
+    $(".checkbox1").each(function() {
+        checked_list.push(this.value);
+    });*/
+
+    var formData = new FormData(formpoll);
+    //formdata.append('checked_list',checked_list)
+    //formdata.append('csrfmiddlewaretoken',$('input["[name=csrfmiddlewaretoken]"]').val());
+    //var data = new FormData($('#formpoll').get(0));
+    //data.append('file', $('#uploadPicture')[0].files);
+    //var myform = document.getElementById("form_upload");
+    ///var fd = new FormData();
+    //var file = $('#uploadPicture')[0].files[0];
+    //fd.append('file_win', file);
+
+    /*var img_data = $('#id_image').get(0).files[0];
+formdata = new FormData();
+formdata.append("img_data", img_data);
+//console.log(formdata.get("img_data"));*/
+
+    $.ajax({
+        url : '/updatepollmodal/', // the endpoint
+        type : "POST", // http method
+        //dataType: 'json',
+        cache       : false,
+        processData: false,
+        contentType: false,
+        data : formData,/*{    //talktype : thisObj.val(),//$('#confnumid').val(),
+                    //email: thisObj.closest("form").find("input[name=email2]").val(),
+                    formData: formData,//JSON.stringify(values),//JSON.stringify($("#formpoll").serializeArray()),
+                    //confnum: {{ conftopass.id }},
+                    //pquestion: $("#pquestion").val(),
+                    //talknumber: thisObj.closest("form").find("input[name=forloop2]").val(),
+                    //title: thisObj.closest("form").find("input[name=title]").val(),
+                    //abs: thisObj.closest("form").find("textarea[name=abstract]").val(),
+                    //abs: thisObj.find(".note-editable.card-block").val(),
+                    //bio: thisObj.closest("form").find("textarea[name=biography]").val(),
+                    //role: thisObj.closest("form").find("input[name=role2]").val(),
+                    //csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+                    //csrfmiddlewaretoken: jQuery('[name=csrfmiddlewaretoken]').val()
+
+                }, // data sent with the post request*/
+
+        // handle a successful response
+        success : function(json) {
+            $("#test3").text('');
+
+            console.log(json); // log the returned json to the console
+            if (json.success) {//Poster
+                //alert('success');
+                $("#test3").append('<div class="alert alert-success mt-3" role="alert"><p>The poll has just been submitted to the moderators! Now you can close this window.</p></div>');
+                $(".btn.btn-warning.btn-upd.mt-2").attr("disabled", true);
+
+            }else {
+                if (json.missing) {//Poster
+                    //alert('A field ');
+                    $("#test3").append('<div class="alert alert-danger mt-3" role="alert"><p>Please fill in all fields before submitting the poll.</p></div>');
+
+                }
+            }
+            //$("#"+json.talknumber+".test2").append('<div class="abs" id="'+json.talknumber+'"><strong>Abstract:</strong><textarea class="form-control" name="abstract" cols="80" rows="4" placeholder="'+json.abs+'">'+json.abs+'</textarea></div>');
+
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+
+
+<script>
+    $().ready(function() {
+  $('[type="file"]').change(function() {
+    var fileInput = $(this);
+    if (fileInput.length && fileInput[0].files && fileInput[0].files.length) {
+      var url = window.URL || window.webkitURL;
+      var image = new Image();
+      image.onload = function() {
+        //alert('Valid Image');
+        $('#image').remove();
+        $('#imsh').append(this);
+        $(this).attr("id","image");
+        $(this).width(100);
+
+      };
+      image.onerror = function() {
+        alert('This is not a valid image');
+      };
+      image.src = url.createObjectURL(fileInput[0].files[0]);
+      //alert(image.src);
+
+    //$("#imsh").append('<img src="'+'r'+'" alt="Poll image" height="120" class="d-inline-block align-top">');
+
+    }
+  });
+});
+</script>

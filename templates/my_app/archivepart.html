@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load index %}
+{% load el_pagination_tags %}
+
+
+{% block title %} Archived conference research videos for participants only{% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Want to see a talk in a conference you went to? That's the right place for it!" />
+{% endblock %}
+
+<style>
+    .form-control-borderless {
+    border: none;
+}
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+</style>
+{% block content %}
+    <div class=container>
+
+    {% if search %}
+        <div class="row justify-content-center mt-2 mb-3">
+            <div class="col-12 col-md-10 col-lg-8 mb-3">
+                <form action="{% url 'my_app:searcharchive' %}" method="GET" class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="search" placeholder="Search archived videos (by title or content)">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-info" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+            <!--end of col-->
+        </div>
+        {% if queryset %}
+            <p class="mt-3"><strong class="text-danger">{{ urllz|length }} video{{ urllz|length|pluralize:",s" }}</strong> found for your request "{{ qs }}"</p>
+            <p><a href="{% url "my_app:archive" %}">Go back to the archived videos?</a></p>
+            <hr>
+        {% paginate 10 urllz %}
+        {% for url in urllz %}
+        {% with infoz|index:forloop.counter0 as infz %}
+            <div class="mt-2"><h4>Talk for the conference <a href="{% url 'my_app:conf_detail_past' infz.conference.id  %}" target='_blank'>"{{ infz.conference.title }}"</a> ({{ infz.conference.subject }}) that started on {{ recsz|index:forloop.counter0 }} and finished at {{ recez|index:forloop.counter0|date:"g:i a" }}</h4></div>
+            {% if titz %}{% if titz|index:forloop.counter0 %}<div><h5><b>Talk title:</b> {{ titz|index:forloop.counter0 }}</h5></div>{% endif %}{% endif %}
+            <div><b>Short abstract of the conference:</b> {{ infz.conference.abstract | ellipses:200 }}</div>
+            <div class="resp-container-vid">
+                <iframe class="resp-iframe-vid"
+                    src="{{ urllz|index:forloop.counter0 }}" frameborder="0" allow="autoplay; fullscreen"
+                    allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                </iframe>
+            </div>
+            {% if nbviews %}
+            <p class="mt-2"><small>Viewed {{ nbviews|index:forloop.counter0 }} time{{ nbviews|index:forloop.counter0|pluralize:",s" }}</small></p>
+            {% endif %}
+        {% endwith %}
+        {% endfor %}
+        {% show_pages %}
+        {% else %}
+            <div class="jumbotron mt-4">
+                <h2>No results found.</h2>
+                <p><a href="{% url "my_app:archive" %}">Go back to the archived videos?</a></p>
+            </div>
+        {% endif %}
+    {% else %}
+
+    {% if status != '4' %}
+        <div class="row justify-content-center mt-2 mb-2">
+            <div class="col-12 col-md-10 col-lg-8">
+                <form action="{% url 'my_app:searcharchive' %}" method="GET" class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="search" placeholder="Search archived videos (by title or content)">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto">
+                            <button class="btn btn-lg btn-info" type="submit">Search</button>
+                        </div>
+                        <!--end of col-->
+                    </div>
+                </form>
+            </div>
+            <!--end of col-->
+        </div>
+    {% endif %}
+    {% if status == '4' %}
+    <div class="jumbotron mt-4">
+        <h4>There are no conferences with videos yet! Create your conference and be the first...</h4>
+    </div>
+    {% endif %}
+                {% comment %}
+    {% if status3 %}
+            <hr>
+        <h2 class="lead mt-4">There {{ urlla|length|pluralize:"is,are" }} <strong class="text-danger">{{ urlla|length }}</strong> admin only vide{{ urlla|length|pluralize:"o,os" }} available.</h2>
+        {% paginate 10 urlla %}
+        {% for url in urlla %}
+        {% with infoa|index:forloop.counter0 as infa %}
+            <hr>
+            <div><h4>Talk for the conference <a href="{% url 'my_app:conf_detail_past' infa.conference.id  %}" target='_blank'>"{{ infa.conference.title }}"</a> ({{ infa.conference.subject }}) that started on {{ recsa|index:forloop.counter0 }} and finished at {{ recea|index:forloop.counter0|date:"g:i a" }}</h4></div>
+            {% if tita %}{% if tita|index:forloop.counter0 %}<div><h5><b>Talk title:</b> {{ tita|index:forloop.counter0 }}</h5></div>{% endif %}{% endif %}
+            <div><b>Short abstract of the conference:</b> {{ infa.conference.abstract | ellipses:200 }}</div>
+            <div class="resp-container-vid">
+                <iframe class="resp-iframe-vid"
+                    src="{{ urlla|index:forloop.counter0 }}" frameborder="0" allow="autoplay; fullscreen"
+                    allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                </iframe>
+            </div>
+            {% if nbviews %}
+            <p class="mt-2"><small>Viewed {{ nbviews|index:forloop.counter0 }} time{{ nbviews|index:forloop.counter0|pluralize:",s" }}</small></p>
+            {% endif %}
+        {% endwith %}
+        {% endfor %}
+        {% show_pages %}
+    {% endif %}
+    {% endcomment %}
+
+     {% if status2 == '6' %}
+
+        <hr>
+        <h2 class="lead mt-4">There {{ urllp|length|pluralize:"is,are" }} <strong class="text-danger">{{ urllp|length }}</strong> participants only vide{{ urllp|length|pluralize:"o,os" }} available (sorted by date).</h2>
+        {% paginate 10 urllp %}
+        {% for url in urllp %}
+        {% with infop|index:forloop.counter0 as infp %}
+            <hr>
+            <div><h4>Talk for the conference <a href="{% url 'my_app:conf_detail_past' infp.conference.id  %}" target='_blank'>"{{ infp.conference.title }}"</a> ({{ infp.conference.subject }}) that started on {{ recsp|index:forloop.counter0 }} and finished at {{ recep|index:forloop.counter0|date:"g:i a" }}</h4></div>
+            {% if titp %}{% if titp|index:forloop.counter0 %}<div><h5><b>Talk title:</b> {{ titp|index:forloop.counter0 }}</h5></div>{% endif %}{% endif %}
+            <div><b>Short abstract of the conference:</b> {{ infp.conference.abstract | ellipses:200 }}</div>
+            <div class="resp-container-vid">
+                <iframe class="resp-iframe-vid"
+                    src="{{ urllp|index:forloop.counter0 }}" frameborder="0" allow="autoplay; fullscreen"
+                    allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                </iframe>
+            </div>
+            {% if nbviews %}
+            <p class="mt-2"><small>Viewed {{ nbviews|index:forloop.counter0 }} time{{ nbviews|index:forloop.counter0|pluralize:",s" }}</small></p>
+            {% endif %}
+        {% endwith %}
+        {% endfor %}
+         {% show_pages %}
+
+    {% endif %}
+
+
+    {% if status == '0' %}
+    {% comment %}
+
+        <h2 class="lead mt-4">There {{ urll|length|pluralize:"is,are" }} <strong class="text-danger">{{ urll|length }}</strong> public vide{{ urll|length|pluralize:"o,os" }} available.</h2>
+        {% paginate 10 urll %}
+        {% for url in urll %}
+        {% with info|index:forloop.counter0 as inf %}
+            <hr>
+            <div><h4>Talk for the conference <a href="{% url 'my_app:conf_detail_past' inf.conference.id  %}" target='_blank'>"{{ inf.conference.title }}"</a> ({{ inf.conference.subject }}) that started on {{ recs|index:forloop.counter0 }} and finished at {{ rece|index:forloop.counter0|date:"g:i a" }}</h4></div>
+            {% if tit %}{% if tit|index:forloop.counter0 %}<div><h5><b>Talk title:</b> {{ tit|index:forloop.counter0 }}</h5></div>{% endif %}{% endif %}
+            <div><b>Short abstract of the conference:</b> {{ inf.conference.abstract | ellipses:200 }}</div>
+            <div class="resp-container-vid">
+                <iframe class="resp-iframe-vid"
+                    src="{{ urll|index:forloop.counter0 }}" frameborder="0" allow="autoplay; fullscreen"
+                    allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                </iframe>
+            </div>
+            {% if nbviews %}
+            <p class="mt-2"><small>Viewed {{ nbviews|index:forloop.counter0 }} time{{ nbviews|index:forloop.counter0|pluralize:",s" }}</small></p>
+            {% endif %}
+        <!--<div class="mb-3"><a href="{{ linkl|index:forloop.counter0 }}">Download this video as an mp4</a></div>-->
+        <!--<div><a href="{{ urll|index:forloop.counter0 }}">Download this video as an mp4</a></div>-->
+        {% endwith %}
+        {% endfor %}
+        {% show_pages %}
+                {% endcomment %}
+    {% endif %}
+
+    {% endif %}
+    </div>
+
+
+{% endblock %}
+

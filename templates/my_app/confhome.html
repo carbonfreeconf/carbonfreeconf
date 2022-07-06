@@ -1,0 +1,29 @@
+{% load index %}
+
+<div class="container">
+    {% if conf_list %}
+
+        <div class="row">
+            <!-- Blog Entries Column -->
+            {% for conf in conf_list %}
+                <div class="col-md-4 mt-3 left">
+                <!--<div class="col-lg 3 col-md-3 col-sm-12 col-xs-12 mt-4 mb-4">-->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h2 class="card-title">{{ conf.title }}</h2>
+                            <p class="card-text text-muted h6">{{ conf.subject }} | {{ conf.start_date}} </p>
+                            <p class="card-text" style="font-weight: normal;">{{conf.abstract|ellipses:150 }}</p>
+                            <a href="/{{LANGUAGE_CODE}}/conference/{{ conf.id  }}" class="btn btn-primary">More detail &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <p><a href="{% url 'my_app:conf' %}">See all the planned conferences</a></p>
+
+    {% else %}
+        <p style="font-weight: normal;">No more conferences planned</p>
+    {% endif %}
+
+</div>
+

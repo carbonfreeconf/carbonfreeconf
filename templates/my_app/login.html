@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header_class %}no-header{% endblock %}
+{% block footer_class %}no-footer{% endblock %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block content %}
+
+<div id="modal-div55"></div>
+
+<div class="login-wrapper">
+  <div class="container">
+    <h1><a href="/{{LANGUAGE_CODE}}/">CarbonFreeConf.</a></h1>
+    <p>{% blocktrans %}Welcome! {% endblocktrans %}</p>
+
+    <form class="form-signin" method="post" action="/{{LANGUAGE_CODE}}/user_login/">
+      {% csrf_token %}
+      {% blocktrans %}
+      <label for="username">Username or Email</label>
+      <input name="username" placeholder="Username or Email" required autofocus type="text">
+      <label for="password">Password</label>
+      <input name="password" placeholder="Password" required type="password">
+      {% endblocktrans %}
+      <!--<div class="checkbox mb-3">
+          <label>
+            <input name="remember_me" value="remember-me" type="checkbox"> Remember me
+          </label>
+      </div>-->
+      <input type="hidden" name="comingfrom" value="{{comingfrom}}"/>
+      <input type="hidden" name="linkfrom" value="{{linkfrom}}"/>
+      <button class="btn" type="submit">Log in</button>
+    </form>
+
+    
+    {% if failed %}
+    <div class="alert" role="alert"> {% blocktrans %}Invalid login details given {% endblocktrans %}</div>
+    {% endif %}
+
+
+    <p> {% blocktrans %}Don't have an account?  {% endblocktrans %}<a href="/{{LANGUAGE_CODE}}/register"> {% blocktrans %}Create Account {% endblocktrans %}</a></p>
+    <!-- <p> {% blocktrans %}Forgot password? {% endblocktrans %} <a onclick="document.getElementById('resetPassword').classList.add('open')"> {% blocktrans %}Reset Password {% endblocktrans %}</a></p> -->
+    <p> {% blocktrans %}Forgot password? {% endblocktrans %} <a href="#" data-toggle="modalpassfe" class="open-modal" data-url="{% url 'my_app:forgotpass' %}"> {% blocktrans %}Reset Password {% endblocktrans %}</a></p>
+
+
+    <!-- <div class="modal-wrapper" id="resetPassword">
+      <a class="modal-overlay" onclick="document.getElementById('resetPassword').classList.remove('open')"></a>
+      <div class="modal">
+        <a class="close" onclick="document.getElementById('resetPassword').classList.remove('open')"></a>
+        {% if web %}
+        <form enctype="multipart/form-data" id="forgotpassid" method="POST" action="{% url 'my_app:forgotpass' web %}">
+        {% else %}
+        <form enctype="multipart/form-data" id="forgotpassid" method="POST" action="{% url 'my_app:forgotpass' %}">
+        {% endif %}
+        {% csrf_token %}
+        {% blocktrans %}
+          <p><strong>Enter the email you used to subscribe:</strong></p>
+          <label for="email" class="sr-only">Email</label>
+          <input name="email" class="form-control log" placeholder="Email" required autofocus type="text">
+          <button type="submit" class="btn">Receive Instructions to Change My Password</button>
+          {% endblocktrans %}
+        </form>
+        <div id="test3"></div>
+      </div>
+    </div> -->
+
+    <p id="terms"><a href="{% url 'my_app:terms' %}"> {% blocktrans %}Terms and conditions {% endblocktrans %}</a> | <a href="{% url 'my_app:privacy' %}"> {% blocktrans %}Privacy policy {% endblocktrans %}</a></p>
+
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- <script>
+  let modal = document.getElementsByClassName("modal")[0];
+  let closeModal = document.getElementById("closeModal");
+  function openModal() {
+    modal.classList.add("opened");
+  }
+  closeModal.addEventListener("click", function() {
+    modal.classList.remove("opened");
+  })
+  window.addEventListener('click', function(e) {
+    if (!modal.contains(e.target)) {
+      this.classList.remove("opened");
+    }
+  })
+</script> -->
+<script>
+  var modalDiv55 = $("#modal-div55");
+   $(function () {
+    $(document).on('click', '[data-toggle="modalpassfe"]', function() {
+          //alert('open');
+          $.ajax({
+              url: $(this).attr("data-url"),
+              success: function (data) {
+                  modalDiv55.html(data);
+                  //alert('brah1'+data)
+                  $("#myEdit55").modal('show');
+                  //alert('brah2')
+              }
+          });
+    });
+  })
+</script>
+{% endblock %}
+

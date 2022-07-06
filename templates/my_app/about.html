@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} About the CarbonFreeConf team that organizes seminars and conferences {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="Meet the team that allowed virtual conferences to be carbon-neutral." />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/about/" />
+  <!--add text-->
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<div class="intro-about">
+  <div class="content">
+    {% blocktrans %}
+    <div class="pretitle">About Us</div>
+    <h1>The green online open-source conference platform for <span>scientists and researchers</span>.</h1>
+    <p>CarbonFreeConf allows you to create online conferences where all participants - presenters, organizers, attendees - are gathered in a virtual classroom. They can then communicate online via audio and video. Each participant can watch the online presentations, and participate interactively, with questions or remarks that can be up-voted by other participants.</p>
+    {% endblocktrans %}
+    <div class="buttons-group">
+      <a class="btn" onclick="scrollToContainer()">{% blocktrans %}See How it Works{% endblocktrans %}</a>
+      <a class="btn alt" href="{% url 'my_app:calculator' %}">{% blocktrans %}Carbon Emission Calculator{% endblocktrans %}</a>
+    </div>
+  </div>
+</div>
+
+<main id="scrollTarget">
+
+  <section class="about">
+    <div class="grid">
+      <div class="content">
+        {% blocktrans %}
+        <h2>Use an open source and collaborative code to run your meetings</h2>
+        <p>Our aim is to create a platform that is useful for researchers and where everyone can contribute to make it more efficient and more suited to the different types of problematics that can be encountered in different fields.</p>
+        <p>That is why we have decided to make it totally open source and accessible to everyone. One can even use their own servers to run our solution. The ultimate goal is to have a platform that is very easy to use for all researchers across the globe even in some specific fields where the way conferences are prepared or run is not usual.</p>
+        <p>Everybody can check the entirety of our code <a href="https://github.com/carbonfreeconf/carbonfreeconf" rel="noopener" target="_blank">here</a> and is free to make changes.</p>
+        {% endblocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/open-source">{% trans 'Know more about our open-source code' %}</a>
+      </div>
+      <figure>
+        <img src="{% static "images/about0.jpg" %}" alt="A nebula in space">
+      </figure>
+    </div>
+  </section>
+
+
+  <section class="about">
+    <div class="grid">
+      <figure>
+        <img src="{% static "images/about1.jpg" %}" alt="Two researchers working together in front of their laptop">
+      </figure>
+      <div class="content">
+        {% blocktrans %}
+        <h2>Present your research work in an inspiring and responsible way</h2>
+        <p>It is a novel way of bringing our research work to reality, while avoiding the costs of traveling as well as too much carbon emission. Just imagine how much CO<sub>2</sub> a single commercial flight releases into the atmosphere? And now 50 or a 100? Attending online conferences can save carbon emissions associated with travelling to meetings, workshops, and schools. Organising virtual conferences will still produce a slight amount of emissions but CarbonFreeConf offsets this emission using the services of companies specialized in pumping carbon from our atmospheres.</p>
+        <p>We also provide all the tools to make the experience unique and organize your conference as easily as possible by only clicking a few buttons that will create your conference or meeting website, which will be used by your attendees to register or connect to the conference on the big day!</p>
+        <p>As a conclusion, these online conferences are an efficient way to communicate our research work, save time and money, and most of all, to reduce our carbon footprints!</p>
+        {% endblocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">{% trans 'Launch your Green Meeting Now' %}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="container">
+      <figure>
+        <img src="{% static "images/about2.jpg" %}" alt="One researcher talking to another via videoconferencing on her laptop">
+      </figure>
+      <div class="content">
+        {% blocktrans %}
+        <h2>Offsetting carbon emissions in digital meetings</h2>
+        <p>We spent a lot of time reviewing the best ways to offset carbon emissions produced by our online conferences. Our policy on this is to use techniques that are effective at actually removing CO<sub>2</sub> from our atmospheres, in quantities, which can be measured accurately so that we know we are offsetting the right quantity.</p>
+        <p>So far we compensate using the (direct air capture) technology offered by <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a>. They basically build big vacuum cleaners that are sucking up some air from our atmospheres and storing the carbon dioxide that goes through them. They then pump it underground and within a few years the CO<sub>2</sub> reacts with rocks and turns into solid stones that are permanently put off our atmosphere. Skeptical? Climeworks air capture technique works efficiently and is indeed carbon negative as is described <a href="https://chemrxiv.org/articles/preprint/How_Carbon_Negative_Is_Direct_Air_Capture_Life_Cycle_Assessment_of_an_Industrial_Temperature-Vacuum_Swing_Adsorption_Process/12833747/1?file=24363143" rel="noopener" target="_blank">in an independent paper</a>. For the carbon storage underground, you can check this <a href="https://www.nature.com/articles/s43017-019-0011-8" rel="noopener" target="_blank">Nature paper</a> or the whole ERC project about it called <a href="https://www.carbfix.com/" rel="noopener" target="_blank">Carbfix</a>.</p>
+        <p>Another important part of the work is quantifying accurately how much emission will be produced for a given conference, be it a 10 people workshop for a day or a 1000 people conference for a week. For video streaming during the conference, we assume that 40 g of CO<sub>2</sub> are emitted per hour per person (international average) (<a href="https://www.carbonbrief.org/factcheck-what-is-the-carbon-footprint-of-streaming-video-on-netflix" rel="noopener" target="_blank">see source on CarbonBrief</a>). Another way to get this number is to take the average electricity consumption per Gb of transmitted data, which is ~0.04 kWh/Gb (which is the average of the range given by the <a href="https://www.iea.org/commentaries/the-carbon-footprint-of-streaming-video-fact-checking-the-headlines" rel="noopener" target="_blank">IEA</a> or see <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jiec.12630" rel="noopener" target="_blank">Aslan et al. 2017</a> for a similar value). And then convert it to (<a href="https://www.nature.com/articles/s41550-020-1207-z">Burtscher et al. 2020</a>) the quantity of CO<sub>2</sub> emitted using that it is 0.24 kg/kWh (see <a href="https://www.eea.europa.eu/data-and-maps/indicators/overview-of-the-electricity-production-2/assessment-4">ref</a>). For 4Mbps (similar to the Netflix average), it leads to 17 gCO2e. Accounting for the electricity consumption of devices, this number goes up by roughly a factor 2 (Burtscher et al. 2020), which is similar to the previous value. We then reduce this value by a factor 2 to account for the difference between the mean bitrate used by Netflix (4 Mbps) and that of our tool (~2 Mbps for the default medium resolution). We then multiply by the time the conference lasts and the number of participants and can work out the final carbon dioxide mass emitted by the virtual conference that needs to be offset.</p>
+        <p>For conference video storage, we offset their emission over 3 years based on the number of averaged views we could estimate but that will be refined when we have more statistics from our website. After 3 years, the organisers or their company will be contacted to check whether the videos should be put offline (as some more recent conferences on the same field or by the same participants may have already happened) or if they otherwise want to keep on offsetting their produced carbon emissions (if the video is still state-of-the-art).</p>
+        <p>Finally we convert this mass of CO<sub>2</sub> that needs to be offset in money. <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a> needs 1 euro to offset 1 kilo of CO<sub>2</sub> and bury it underground so that every hour of streaming for each participant costs 0.02 € to offset or roughly 0.16 € (or 0.16 kg of CO<sub>2</sub>) per day. Given this 0.16 € per day per person, you can easily find an estimate of how much your conference will cost to offset. For 100 participants for 3 days, it would be 0.16 € * 100 persons * 3 days = 48 € (to offset 48 kg). But note that if you want the conference to be recorded and hosted on our platform, there will be extra emissions to offset.</p>
+        <p>You will be given a certificate from <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a> that shows you the amount we paid to them and how much emission they offset thanks to you. We are open to diversifying the ways we compensate carbon emissions and if you have effective solutions to suggest, please <a href="mailto:sales@carbonfreeconf.com">contact us</a>.</p>
+        <p>Note that we developed a calculator (<a href="/{{LANGUAGE_CODE}}/carbon-calculator">see here</a>) for you to be able to quantify how much emission your conference will produce (that needs to be offset).</p>
+        {% endblocktrans %}
+        {% blocktrans %}
+
+        <p>Sources we used to quantify how much carbon should be offset for a given conference:
+          <a href="https://iopscience.iop.org/article/10.1088/1748-9326/9/5/054007" rel="noopener" target="_blank">Shehabi et al. 2014</a>,
+          <a href="https://ieeexplore.ieee.org/document/6957153" rel="noopener" target="_blank">Schien et al. 2014</a>,
+          <a href="https://www.mdpi.com/2078-1547/6/1/117" rel="noopener" target="_blank">Andrae et al. 2015</a>,
+          <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jiec.12630" rel="noopener" target="_blank">Aslan et al. 2017</a>,
+          <a href="https://link.springer.com/article/10.1007/s12053-016-9500-5?shared-article-renderer" rel="noopener" target="_blank">Park et al. 2017</a>,
+          <a href="https://www.carbonbrief.org/factcheck-what-is-the-carbon-footprint-of-streaming-video-on-netflix" rel="noopener" target="_blank">CarbonBrief</a>,
+          <a href="http://data.iea.org/payment/products/122-emissions-factors-2017-edition.aspx" rel="noopener" target="_blank">IEA</a>.
+      </p>
+      {% endblocktrans %}
+
+        <a class="btn" href="/{{LANGUAGE_CODE}}/carbon-calculator">{% blocktrans %}Simulate the Carbon Footprint of your Event{% endblocktrans %}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="grid">
+      <figure>
+        <img src="{% static "images/about3.jpg" %}" alt="Rows of empty chairs">
+      </figure>
+      <div class="content">
+        {% blocktrans %}
+        <h2>Online meeting platform for active researchers</h2>
+        <p>There is no download to access the conference room, your participants just go on our website and it's done.</p>
+        <ul class="list">
+          <li>You can organize the whole conference from A to Z by yourself or as a team in no time.</li>
+          <li>In the conference room, participants can draw, use a white board, chat, send questions to presenters, send new results on twitter. There are Q&A, polls, the possibility to add handouts, share screen, videos, connect from mobile phones without download...</li>
+          <li>From the information you give us, a complete website with all the required pages is created for your conference.</li>
+          <li>Participants register to your webinar on your conference website, they add their abstract and you can decide to validate the talk/poster/attendance or not.</li>
+          <li>You have an admin interface to add your participants, send emails to them, make your conference program that will be visible on your website.</li>
+          <li>When the conference is over, the participants can write their proceedings (if needed) on our website where we store them and give access to them.</li>
+          <li>You can record the conference that would then be stored on our side and accessible via our website and/or youtube if wanted, which would be a gold mine for researchers in your field and an opportunity for presenters to share their work to a larger audience than usual.</li>
+          <li>You can also upload the slides and/or posters of your attendees and these can be public or private to the rest of the world as chosen by the participants</li>
+          <li>Your attendees can pre-record their talk if needed (e.g. they cannot attend on a specific day).</li>
+          <li>You can ask for a participation fee to your participants (when the conference is not free already) to cover the expenses or even make profits. You can decide to be altruistic and use this extra money to offset more carbon emissions directly with us, or that it is paid to you (but if you do you could advertize to your participants where that extra money would go, e.g. offsetting emissions at your institute or a conference prize, ...). For instance, asking for a small amount of 30 € to each of the 100 potential participants already covers the expenses for the organization (about 280 € for five days) and CO<sub>2</sub> offset (about 110 € for five days) and leaves a profit of about 2300 €.</li>
+          <li>And the MOST IMPORTANT, we offset the CO<sub>2</sub> emissions (see our <a href="/{{LANGUAGE_CODE}}/carbon-calculator">carbon emission calculator</a>) provoked by this virtual conference using trusted companies.</li>
+        </ul>
+        {% endblocktrans %}
+        <a class="btn" href="/{{LANGUAGE_CODE}}/pricing">{% trans 'See the pricing options' %}</a>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+{% endblock %}

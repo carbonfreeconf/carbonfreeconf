@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} {% trans 'Our Team at CarbonFreeConf' %} {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="{% trans 'Meet the team that created this new webinar solution for researchers.'%}" />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<main>
+
+  <section class="team">
+    {% blocktrans %}
+    <h1>Meet the <span>Team</span>.</h1>
+    <p>CarbonFreeConf was originally developed by a researcher in Astrophysics (Quentin Kral) who thinks that many conferences could be organized virtually rather than having to fly a whole community every time we need to discuss our novelties.</p>
+    <p>The team is also composed of freelance developers and persons to help you out for any queries you may have.</p>
+    {% endblocktrans %}
+  </section>
+
+  <section class="press-cta">
+    <h2>{% trans 'CarbonFreeConf in the News'%}</h2>
+    <p>{% trans 'Want to see who is talking about CarbonFreeConf? Visit our News & Press page to stay up to date on CarbonFreeConf recent company announcements and press coverage.'%}</p>
+    <a href="{% url 'blog:bloghome' %}">
+      <button class="btn">{% trans 'View Press Page'%}</button>
+    </a>
+  </section>
+
+</main>
+
+{% endblock %}

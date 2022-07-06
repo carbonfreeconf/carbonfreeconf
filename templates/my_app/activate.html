@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} CarbonFreeConf account activation {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="Come get a free meeting room." />
+{% endblock %}
+{% block content %}
+
+{% block header_class %}{% endblock %}
+
+    <main>
+      <div class="wrapper">
+        {% if good == 1 %}
+        <div class="container">
+        <div class="jumbotron mt-4">
+          <h1 class="display-4"><i class="fab fa-get-pocket" style="color: green"></i> Activation succeeded</h1>
+          <p class="lead">Thank you, your account is now activated.</p>
+          <hr class="my-4">
+            <p>Now chill for a second and think about all the things you could make happen using <i>CarbonFreeConf</i>. Do you want to organize a meeting, workshop, seminar, or a well-organized summer school? Then use our tools to make it happen easy-peasy in no time.</p>
+          <div style="text-align: center">
+                <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:contactform' %}" role="button">Contact us</a>
+                <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:createconf' %}" role="button">Start organizing a conference</a>
+            </div>
+        </div>
+        </div>
+        {% elif good == 0 %}
+        <div class="container">
+        <div class="jumbotron mt-4">
+          <h1 class="display-4"><i class="fas fa-user-secret" style="color: red"></i> Activation failed</h1>
+          <p class="lead">The activation email you used is wrong.</p>
+          <hr class="my-4">
+            <p>You can click on the button below to get a new activation link sent to your email address or simply register again and contact us otherwise.</p>
+          <div style="text-align: center">
+              <form name="create_station" method="post" action="{% url 'my_app:activateacc' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="username" value="{{ username }}" />
+                <input class="btn btn-primary btn-lg mt-4" type="submit" value="Send new activation link" />
+            </form>
+            </div>
+        </div>
+        </div>
+        {% elif good == 2 %}
+        <div class="container">
+        <div class="jumbotron mt-4">
+          <h1 class="display-4"><i class="fab fa-get-pocket" style="color: green"></i> Account already activated</h1>
+          <p class="lead">Thank you but your account was already activated.</p>
+          <hr class="my-4">
+            <p>Do you want to chill for a second and think about all the things you could make happen using <i>CarbonFreeConf</i>? Do you want to organize a meeting, workshop, seminar, or a well-organized summer school? Then use our tools to make it happen easy-peasy in no time.</p>
+          <div style="text-align: center">
+                <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:contactform' %}" role="button">Contact us</a>
+                <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:createconf' %}" role="button">Start organizing a conference</a>
+            </div>
+        </div>
+        </div>
+        {% else %}
+          <div class="container">
+        <div class="jumbotron mt-4">
+          <h1 class="display-4"><i class="fas fa-user-secret" style="color: crimson"></i> Activate your account</h1>
+          <p class="lead">You need to activate your account to continue using CarbonFreeConf. To do so, just click on the activation link you received when you subscribed.</p>
+          <hr class="my-4">
+            <p>If you lost it, you can click on the button below to get a new activation link sent to your email address or contact us otherwise.</p>
+          <div style="text-align: center">
+              <form name="create_station" method="post" action="{% url 'my_app:activateacc' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="username" value="{{ username }}" />
+                <input class="btn btn-primary btn-lg mt-4" type="submit" value="Send new activation link" />
+            </form>
+            </div>
+        </div>
+        </div>
+        {% endif %}
+      
+      </div>
+    </main>
+
+{% endblock %}

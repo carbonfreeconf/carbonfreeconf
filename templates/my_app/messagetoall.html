@@ -1,0 +1,15 @@
+{% if messmast %}
+<div class=container>
+  <div class="alert alert-info mt-2">
+    <h3>Message from the master conference organizers to all participants</h3><p>{{ messmast }}</p>
+  </div>
+</div>
+{% endif %}
+
+{% if display == 1 %}
+<div class=container>
+  <div class="alert alert-info mt-2">
+    <h3>Message from organizers to all participants</h3><p>{{ mess }}</p>
+  </div>
+</div>
+{% endif %}

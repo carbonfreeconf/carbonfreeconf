@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load static %}
+{% load i18n %}
+{% load index %}
+
+{% block title %} Create your research conference {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="Create a Carbon-Free virtual meeting in a few clicks" />
+{% endblock %}
+
+{% block extrahead %}
+{{ createconf_form.media }}
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<main>
+
+  <section>
+    <h1>My Conference</h1>
+  </section>
+
+</main>
+
+{% endblock %}

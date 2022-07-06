@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %} CarbonFreeConf forgotten password page {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Come create a free webinar room." />
+{% endblock %}
+{% block content %}
+
+    {% if good == 1 %}
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4"><i class="fab fa-get-pocket" style="color: green"></i> Change your password</h1>
+      <p class="lead">Enter your new password down below (twice)</p>
+                <form enctype="multipart/form-data" id="changepassid" method="POST" action="{% url 'my_app:forgotpassacc' %}">
+                {% csrf_token %}
+                    <input type="hidden" name="changepass" value="changepass" />
+                    <input type="hidden" name="username" value="{{ username }}" />
+
+                    <label>Password 1</label>
+                    <input type="password" name="pass1" />
+                    <label>Password 2</label>
+                    <input type="password" name="pass2" />
+
+                <button type="submit" class="btn btn-danger mt-2"> Change my password </button><i data-toggle="popover" data-placement="bottom" title="Change password" data-content="This will change your password definitively." class="fas fa-info-circle ml-2 mt-5 pt-3"></i>
+                </form>
+        {% if messages %}
+                        {% for message in messages %}
+                            {%if "secu" in message.tags %}
+                                <div class="alert alert-danger mt-2" role="alert">
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endif %}
+                            {%if "good" in message.tags %}
+                                <div class="alert alert-success mt-2" role="alert">
+                                    <p>{{ message }}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+      <hr class="my-4">
+        <p>Now chill for a second and think about all the things you could make happen using <i>CarbonFreeConf</i>. Do you want to organize a meeting, workshop, seminar, or a well-organized summer school? Then use our tools to make it happen easy-peasy in no time.</p>
+      <div style="text-align: center">
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:contactform' %}" role="button">Contact us</a>
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:createconf' %}" role="button">Start organizing a conference</a>
+        </div>
+    </div>
+</div>
+    {% elif good == 0 %}
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4"><i class="fas fa-user-secret" style="color: red"></i> Password change failed</h1>
+      <p class="lead">The link you used is wrong.</p>
+      <hr class="my-4">
+        <p>You can click on the button below to get a new reset link sent to your email address or contact us otherwise if your still encounter issues.</p>
+      <div style="text-align: center">
+          <form name="create_station" method="post" action="{% url 'my_app:forgotpassacc' %}">
+              {% csrf_token %}
+              <input type="hidden" name="reset" value="reset" />
+              <input type="hidden" name="username" value="{{ username }}" />
+            <input class="btn btn-primary btn-lg mt-4" type="submit" value="Send new reset link" />
+        </form>
+        </div>
+    </div>
+</div>
+        {% else %}
+        <h5 class="mt-3">Something, somewhere, went wrong! Please try again...</h5>
+    {% endif %}
+
+<script>
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+    </script>
+{% endblock %}
+

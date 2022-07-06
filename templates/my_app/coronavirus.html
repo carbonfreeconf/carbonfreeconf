@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load crispy_forms_tags %}
+
+
+{% block title %} Run Free Coronavirus Conferences {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Organize your conference about Covid-19 for free with our virtual conference platform." />
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">Free Coronavirus conferences</h1>
+        <p>To make our part, during the pandemic, <strong>we offer our services for free for conferences about Covid-19</strong>. Note that this applies for conferences under
+        100 participants that would happen before the end of December 2021. As we should not forget about climate issues, offsetting emissions is still required. Please <a href="mailto:admin@carbonfreeconf.com">contact us</a>
+        for any coronavirus conferences, even if you don't fill all the criteria as we may be able to help.</p>
+        <div style="text-align: center">
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:contactform' %}" role="button">Contact us</a>
+            <a class="btn btn-primary btn-lg mt-4" href="{% url 'my_app:createconf' %}" role="button">Start creating your conference</a>
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

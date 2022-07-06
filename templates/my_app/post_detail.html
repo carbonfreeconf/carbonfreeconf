@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ object.title }} {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Latest news about virtual conference rooms: {{ object.title }}" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+        <p> <strong><h1>{{ object.title }}</h1></strong> </p>
+        <p class=" text-muted">{{ object.author }} | {{ object.created_on }}</p>
+        <p class="card-text ">{{ object.content | safe }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load el_pagination_tags %}
+
+{% block title %} Your participation to scientific webinars {% endblock title %}
+{% block extra_head_tags %}
+    <meta name="description" content="Check out the talks organized with our webinar platform." />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<main class="participations">
+
+  <div class="wrapper">
+    {% if talks %}
+    <p>You have created {{ talks | length }} participation{{ talks|length|pluralize:",s" }} so far</p>
+    {% paginate talks %}
+    <div class="container">
+      {% for talk in talks %}
+      <div>
+        <p class="info"><strong>{{ talk.user }}</strong> | Submitted on {{ talk.created }} | <strong>{{ talk.get_type_display }}</strong></p>
+        {% if talk.type == 5 %}
+        <p>Attendance only</p>
+        {% endif %}
+        {% if talk.type < 5 or talk.type == 6%}
+          <p><strong>Participation title:</strong> {{ talk.title }}</p>
+          {% if talk.type < 4 or talk.type == 6%}
+          <p><strong>Abstract:</strong> {{ talk.abstract }}</p>
+          <p><strong>Biography:</strong> {{ talk.biography }}</p>
+          {% endif %}
+        {% endif %}
+        <div>
+          <p>{% ifequal talk.status 0 %} Participation submitted (waiting for acceptance) {% endifequal %} {% ifequal talk.status 1 %} <strong>Participation accepted</strong> {% endifequal %} for the conference entitled "{{ talk.conference.title }}"</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% show_pages %}
+    {% else %}
+    <p>You have no participation created so far</p>
+    {% endif %}
+  </div>
+
+</main>
+
+{% endblock %}

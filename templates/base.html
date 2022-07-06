@@ -1,0 +1,838 @@
+{% load static %}
+{% load humanize %}
+{% load index %}
+{% load render_json_ld from json_ld %}
+{% load cookie_consent_tags %}
+{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <title>
+    {% block title %}
+    {% trans "CarbonFreeConf - Open-source platform to create your conference" %}
+    {% endblock %}
+  </title>
+  {% block extra_head_tags %}
+    <meta name="description" content="Here, you can organize a Carbon-Free virtual Conference in a few clicks" />
+    <link rel="canonical" href="https://www.carbonfreeconf.com/" />
+  {% endblock %}
+
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="origin-trial" content="AmSLIkB9M0WXm2P4mEvnmPfFLjJtZ65hlD9m8w8NjiiI6la2wjnKxmHUGkIPM+KAeGgj3HWLCSbk/p9BvrMcrQ4AAAB1eyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiQ3Jvc3NPcmlnaW5FbWJlZGRlclBvbGljeUNyZWRlbnRpYWxsZXNzT3JpZ2luVHJpYWwiLCJleHBpcnkiOjE2MzU4OTc1OTl9"><!--credentialess localhost-->
+  <meta http-equiv="origin-trial" content="Am01xjFqpxOImHK8gajNHIO/9EFQDJWrQLU0EmlKWHBW5XXDYazLgMkyNzsqI2lZczgyVtWELZo0ItcK8RAEFAIAAABgeyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiVW5yZXN0cmljdGVkU2hhcmVkQXJyYXlCdWZmZXIiLCJleHBpcnkiOjE2NTg4Nzk5OTl9"><!--localhost shared buffer-->
+  <meta http-equiv="origin-trial" content="Aq0DoEi0Iqzt7nzyWfMAEznNZY/Fe+bcoj/KwOv8k3e9W86gt1OR8+PJaOpw6+54U4jU9ywUqnSTVIQHxdWUAA0AAABSeyJvcmlnaW4iOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAiLCJmZWF0dXJlIjoiV2ViQXNzZW1ibHlTaW1kIiwiZXhwaXJ5IjoxNjQ5ODA3OTk5fQ=="><!--SIMD localhost-->
+
+  <!--<script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
+  <script type="module" src="https://unpkg.com/x-frame-bypass"></script>-->
+  
+  <script type="{% js_type_for_cookie_consent request "analytics" %}" data-varname="analytics">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-165944102-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!--
+  <script type="{% js_type_for_cookie_consent request "analytics" %}" data-varname="analytics" async src="https://www.googletagmanager.com/gtag/js?id=G-RXZJH76KCR"></script>
+  <script type="{% js_type_for_cookie_consent request "analytics" %}" data-varname="analytics">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RXZJH76KCR');
+  </script>-->
+
+  <!-- Balisage JSON-LD généré par l'outil d'aide au balisage de données structurées de Google -->
+  <!--
+  <script type="application/ld+json">
+  {
+    "@context" : "http://schema.org",
+    "@type" : "Event",
+    "name" : "Workshop: Modeling the propagation of Covid-19",
+    "startDate" : "2020-07-22",
+    "endDate" : "2020-07-25",
+    "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+    "eventStatus": "https://schema.org/EventScheduled",
+    "location" : {
+      "@type" : "VirtualLocation",
+      "url": "https://www.carbonfreeconf.com/conference/11/"
+    },
+    "image" : "https://bucketeer-83011bf8-623d-4ad2-8e34-40829bae363d.s3.amazonaws.com/static/images/carbonfreeconf_logo_title.svg",
+    "description" : "The confirmed speakers for this workshop come from a variety of disciplines and backgrounds",
+    "organizer": {
+      "@type": "Organization",
+      "name": "Lucas",
+      "url": "https://www.carbonfreeconf.com/"
+    }
+  }
+  </script>-->
+  <script type="application/ld+json">
+  {
+    "@context" : "http://schema.org",
+    "@type" : "SoftwareApplication",
+    "name" : "CarbonFreeConf",
+    "image" : "https://bucketeer-83011bf8-623d-4ad2-8e34-40829bae363d.s3.amazonaws.com/static/images/carbonfreeconf_logo_title.svg",
+    "url" : "https://www.carbonfreeconf.com/",
+    "datePublished" : "2022-05-01",
+    "downloadUrl" : "https://www.carbonfreeconf.com/create-conference",
+    "screenshot" : "https://www.carbonfreeconf.com/",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.6",
+      "ratingCount": "886"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0"
+    }
+  }
+  </script>
+  {% render_json_ld sd %}
+
+  <!-- chill -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+
+  <!-- chill -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" media="print" onload="this.media='all'">
+
+  <!-- Main CSS file -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <!-- chill -->
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" media="print" onload="this.media='all'"> -->
+
+  <!-- <link rel="stylesheet" type="text/css" href="{% static 'tellme/vendor/feedback/feedback.css' %}"> -->
+  <link rel="stylesheet" href="{% static "css/fontastic.css" %}" media="print" onload="this.media='all'">
+
+
+  <!-- Google fonts - Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+  <!--<link rel="stylesheet" href="{% static "vendor/@fancyapps/fancybox/jquery.fancybox.min.css" %}" media="print" onload="this.media='all'">-->
+  <!--<link rel="stylesheet" href="{% static "css/style.default.css" %}" id="theme-stylesheet">-->
+  <link rel="stylesheet" href="{% static "css/custom.css" %}" media="print" onload="this.media='all'" >
+
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>-->
+
+
+  <!--<link rel="stylesheet" href="css/mdb.min.css">-->
+  <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">-->
+
+
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" media="print" onload="this.media='all'">
+
+  <link rel="icon" href="{% static "images/favicon.ico" %}">
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <!-- chill -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+
+
+  <!--<script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>-->
+
+
+  <!-- chill -->
+  <!--<script>
+  $(document).ready(function(){
+      $('a[data-toggle="tab"]').on('show.bs.tab', function(e) {
+          localStorage.setItem('activeTab', $(e.target).attr('href'));
+      });
+      var activeTab = localStorage.getItem('activeTab');
+      if(activeTab){
+          $('#myTab a[href="' + activeTab + '"]').tab('show');
+      }
+  });
+  </script>-->
+
+  {% block extrahead %}{% endblock %}
+
+</head>
+
+<body>
+
+  <header class="header {% block header_class %}transparent-nav{% endblock %}">
+    <div class="upper-header">
+      <div>
+        <nav class="nav-links">
+          <div class="about-nav">
+
+            <span>CarbonFree<span>Conf.</span></span>
+            <p>We offset carbon emissions produced by conferences, so you can share your work while keeping the planet healthy.</p>
+            <img src="{% static "images/nav.jpg" %}" loading="lazy" alt="A row of conference seats">
+
+          </div>
+          {% url 'my_app:about' as url %}
+          <a {% if request.path == url %}class="active"{% endif %} href="/{{LANGUAGE_CODE}}/about">{% blocktrans %}About{% endblocktrans %}</a>
+          {% url 'my_app:demo' as url %}
+          <a {% if request.path == url %}class="active"{% endif %} href="/{{LANGUAGE_CODE}}/demo">{% blocktrans %}Request a demo{% endblocktrans %}</a>
+          {% url 'blog:bloghome' as url %}
+          <a {% if request.path == url %}class="active"{% endif %} href="/{{LANGUAGE_CODE}}/blog-home">{% blocktrans %}Blog & News{% endblocktrans %}</a>
+          {% url 'my_app:pricing' as url %}
+          <a {% if request.path == url %}class="active"{% endif %} href="/{{LANGUAGE_CODE}}/pricing">{% blocktrans %}Pricing{% endblocktrans %}</a>
+          {% url 'my_app:contactform' as url %}
+          <a {% if request.path == url %}class="active"{% endif %} href="/{{LANGUAGE_CODE}}/contactform">{% blocktrans %}Contact{% endblocktrans %}</a>
+          {% url 'my_app:archive' as url %}
+          <a {% if request.path == url %}class="active"{% endif %} href="/{{LANGUAGE_CODE}}/archive">{% blocktrans %}Archived videos{% endblocktrans %}</a>
+        </nav>
+        <div>
+          <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {% trans "Language" %}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              {% get_current_language as LANGUAGE_CODE %}
+              {% get_available_languages as LANGUAGES %}
+              {% get_language_info_list for LANGUAGES as languages %}
+
+              {% for lang in languages %}
+              {% if '/fr/' in request.get_full_path or '/en/' in request.get_full_path %}
+                  <a class="dropdown-item" href="/{{ lang.code }}/{{request.get_full_path|slice:'4:'}}">
+                    {{ lang.name_local|title }}
+                  </a>
+                  {% else %}
+                  <a class="dropdown-item" href="/{{ lang.code }}/{{request.get_full_path|slice:'1:'}}">
+                    {{ lang.name_local|title }}
+                  </a>
+                  {% endif %}
+              {% endfor %}
+          </div>
+          <div class="socials">
+            <a target="_blank" rel="noopener" href="https://www.facebook.com/Carbonfreeconf-103522534738844/" title="Facebook link"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+            <a target="_blank" rel="noopener" href="https://twitter.com/carbonfreeconf"  title="Twitter link"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+            <a target="_blank" rel="noopener" href="https://www.linkedin.com/company/carbonfreeconf/"  title="Linkedin link"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg></a>
+          </div>
+          <!--  -->
+          <svg class="magnifying-glass" onclick="document.getElementById('search').classList.add('open')" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path d="M23.809 21.646l-6.205-6.205c1.167-1.605 1.857-3.579 1.857-5.711 0-5.365-4.365-9.73-9.731-9.73-5.365 0-9.73 4.365-9.73 9.73 0 5.366 4.365 9.73 9.73 9.73 2.034 0 3.923-.627 5.487-1.698l6.238 6.238 2.354-2.354zm-20.955-11.916c0-3.792 3.085-6.877 6.877-6.877s6.877 3.085 6.877 6.877-3.085 6.877-6.877 6.877c-3.793 0-6.877-3.085-6.877-6.877z"/></svg>
+          <div class="modal-wrapper" id="search">
+            <span class="modal-overlay" onclick="document.getElementById('search').classList.remove('open')"></span>
+            <div class="modal">
+              <span class="close" onclick="document.getElementById('search').classList.remove('open')"></span>
+              <form action="{% url 'my_app2:new_search' %}" method="POST">
+                {% csrf_token %}
+                <input class="form-control" autofocus id="searchbox" name="search" placeholder="Type words" aria-label="Search" type="text"/>
+                <button class="btn" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
+          <!--  -->
+          <button class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="lower-header">
+      <div>
+        <a href="/{{LANGUAGE_CODE}}/" class="logo">
+          CarbonFree<span>Conf.</span>
+        
+        </a>
+        <nav>
+          <a href="/{{LANGUAGE_CODE}}/join-conference">{% blocktrans %}Join a Conference{% endblocktrans %}</a>
+          <a href="/{{LANGUAGE_CODE}}/host-conference">{% trans 'Host a Conference' %}</a>
+          
+          {% if user.is_authenticated %}
+          <a class="btn" id="signIn">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22a9.983 9.983 0 0 1-7.749-3.69c.259-.588.783-.995 1.867-1.246 2.244-.518 4.459-.981 3.393-2.945C6.356 8.299 8.612 5 12 5c3.322 0 5.634 3.177 2.489 9.119-1.035 1.952 1.1 2.416 3.393 2.945 1.082.25 1.61.655 1.871 1.241A9.982 9.982 0 0 1 12 22z"/></svg>
+            {{ user.username }}
+            <svg width="9" height="9" viewBox="0 0 24 24"><path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"/></svg>
+          </a>
+          {% elif user.is_superuser %}
+          <a class="btn" href="{% url 'admin:index' %}">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22a9.983 9.983 0 0 1-7.749-3.69c.259-.588.783-.995 1.867-1.246 2.244-.518 4.459-.981 3.393-2.945C6.356 8.299 8.612 5 12 5c3.322 0 5.634 3.177 2.489 9.119-1.035 1.952 1.1 2.416 3.393 2.945 1.082.25 1.61.655 1.871 1.241A9.982 9.982 0 0 1 12 22z"/></svg>
+            Admin
+          </a>
+          {% else %}
+          <a class="btn" href="/{{LANGUAGE_CODE}}/user_login">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22a9.983 9.983 0 0 1-7.749-3.69c.259-.588.783-.995 1.867-1.246 2.244-.518 4.459-.981 3.393-2.945C6.356 8.299 8.612 5 12 5c3.322 0 5.634 3.177 2.489 9.119-1.035 1.952 1.1 2.416 3.393 2.945 1.082.25 1.61.655 1.871 1.241A9.982 9.982 0 0 1 12 22z"/></svg>
+            {% trans 'Sign in' %}
+          </a>
+          {% endif %}
+          <span id="dropdown">
+            <span>
+              <a href="/{{LANGUAGE_CODE}}/profile">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12 2c2.757 0 5 2.243 5 5.001 0 2.756-2.243 5-5 5s-5-2.244-5-5c0-2.758 2.243-5.001 5-5.001zm0-2c-3.866 0-7 3.134-7 7.001 0 3.865 3.134 7 7 7s7-3.135 7-7c0-3.867-3.134-7.001-7-7.001zm6.369 13.353c-.497.498-1.057.931-1.658 1.302 2.872 1.874 4.378 5.083 4.972 7.346h-19.387c.572-2.29 2.058-5.503 4.973-7.358-.603-.374-1.162-.811-1.658-1.312-4.258 3.072-5.611 8.506-5.611 10.669h24c0-2.142-1.44-7.557-5.631-10.647z"/></svg>
+                {% trans 'Profile'%}
+              </a>
+              <a href="/{{LANGUAGE_CODE}}/participations">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M12.408 13.032c1.158-.062 2.854-.388 4.18-1.128.962-1.478 1.598-2.684 2.224-4-.86.064-1.852-.009-2.736-.257 1.068-.183 2.408-.565 3.422-1.216 1.255-1.784 2.185-4.659 2.502-6.429-2.874-.048-5.566.89-7.386 2.064-.614.7-1.146 2.389-1.272 3.283-.277-.646-.479-1.68-.242-2.542-1.458.767-2.733 1.643-4.177 2.86-.72 1.528-.834 3.29-.768 4.276-.391-.553-.915-1.63-.842-2.809-2.59 2.504-4.377 5.784-2.682 9.324 1.879-1.941 4.039-3.783 5.354-4.639-3.036 3.474-5.866 8.047-7.985 12.181l2.504-.786c1.084-1.979 2.059-3.684 2.933-4.905 3.229.423 6.096-2.168 8.028-4.795-.77.19-2.246-.058-3.057-.482z"/></svg>
+                {% trans 'Participations'%}
+              </a>
+              <a href="/{{LANGUAGE_CODE}}/proceedings">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M13.473 7.196c-.425-.439-.401-1.127.035-1.552l4.461-4.326c.218-.211.498-.318.775-.318.282 0 .563.11.776.331l-6.047 5.865zm-7.334 11.021c-.092.089-.139.208-.139.327 0 .25.204.456.456.456.114 0 .229-.042.317-.128l.749-.729-.633-.654-.75.728zm6.33-8.425l-2.564 2.485c-1.378 1.336-2.081 2.63-2.73 4.437l1.132 1.169c1.825-.593 3.14-1.255 4.518-2.591l2.563-2.486-2.919-3.014zm7.477-7.659l-6.604 6.405 3.326 3.434 6.604-6.403c.485-.469.728-1.093.728-1.718 0-2.088-2.53-3.196-4.054-1.718zm-1.946 11.333v7.534h-16v-12h8.013l2.058-2h-12.071v16h20v-11.473l-2 1.939z"/></svg>
+                {% trans 'Proceedings'%}
+              </a>
+              <a href="https://chat.carbonfreeconf.com/home?resumeToken={{ resumetoken }}" target="_blank">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M7 11c-.828 0-1.5-.671-1.5-1.5s.672-1.5 1.5-1.5c.829 0 1.5.671 1.5 1.5s-.671 1.5-1.5 1.5zm5 0c-.828 0-1.5-.671-1.5-1.5s.672-1.5 1.5-1.5c.829 0 1.5.671 1.5 1.5s-.671 1.5-1.5 1.5zm5 0c-.828 0-1.5-.671-1.5-1.5s.672-1.5 1.5-1.5c.829 0 1.5.671 1.5 1.5s-.671 1.5-1.5 1.5zm5-8v13h-11.643l-4.357 3.105v-3.105h-4v-13h20zm2-2h-24v16.981h4v5.019l7-5.019h13v-16.981z"/></svg>
+                {% trans 'Chat Room'%}
+              </a>
+            </span>
+            <span>
+              <a href="/{{LANGUAGE_CODE}}/join-conference">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M6.188 8.719a6.446 6.446 0 0 1 1.444-1.087c2.887-1.591 6.589-.745 8.445 2.069l-2.246 2.245a3.385 3.385 0 0 0-3.834-1.949 3.33 3.33 0 0 0-1.633.898L4.06 15.201a3.355 3.355 0 0 0 0 4.74 3.355 3.355 0 0 0 4.74 0l1.327-1.327a8.533 8.533 0 0 0 3.779.575l-2.929 2.929a6.43 6.43 0 1 1-9.093-9.093l4.304-4.306zm6.836-6.836-2.929 2.929a8.534 8.534 0 0 1 3.779.574L15.2 4.06a3.355 3.355 0 0 1 4.74 0 3.355 3.355 0 0 1 0 4.74l-4.305 4.305a3.358 3.358 0 0 1-4.74 0 3.567 3.567 0 0 1-.727-1.051l-2.246 2.245c.236.358.481.667.796.982a6.404 6.404 0 0 0 3.036 1.704 6.441 6.441 0 0 0 4.613-.617 6.446 6.446 0 0 0 1.444-1.087l4.304-4.305a6.429 6.429 0 1 0-9.091-9.093z"/></svg>
+                {% blocktrans %}Join a Conference{% endblocktrans %}
+              </a>
+              <!-- <a href="{% url 'my_app:hostconf' %}"> -->
+              <!-- <a href="/{{LANGUAGE_CODE}}/create-conference"> -->
+              <a href="/{{LANGUAGE_CODE}}/host-conference">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill-rule="evenodd" clip-rule="evenodd"><path d="M7 2c1.695 1.942 2.371 3 4 3h13v17H0V2h7zm4 5C8.661 7 7.463 5.612 6.083 4H2v16h20V7H11zm2 6h3v2h-3v3h-2v-3H8v-2h3v-3h2v3z"/></svg>
+                {% blocktrans %}Host a Conference{% endblocktrans %}
+              </a>
+              {% if conf_list_user|length > 0 %}
+              {% comment %}<a href="{% url 'my_app:myconference' %}">{% endcomment %}
+              <a href="/{{LANGUAGE_CODE}}/create-conference">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M18 0c-3.17 0-6 2.115-6 5.004 0 1.025.369 2.033 1.025 2.812.023.914-.515 2.232-.996 3.188 1.3-.234 3.146-.756 3.984-1.271C20.637 10.857 24 8.033 24 5.004 24 2.098 21.152 0 18 0zm-2.502 5.754c-.41 0-.75-.34-.75-.75 0-.416.34-.75.75-.75.416 0 .75.334.75.75 0 .41-.334.75-.75.75zm2.502 0a.752.752 0 0 1-.75-.75c0-.416.334-.75.75-.75s.75.334.75.75c0 .41-.334.75-.75.75zm2.502 0a.752.752 0 0 1-.75-.75c0-.416.334-.75.75-.75.41 0 .75.334.75.75 0 .41-.34.75-.75.75zM0 12.125A7.126 7.126 0 0 1 7.125 5a7.09 7.09 0 0 1 2.918.63c.08.802.312 1.576.68 2.288a5.514 5.514 0 0 0-3.598-1.335c-3.056 0-5.542 2.485-5.542 5.542s2.485 5.542 5.542 5.542c2.782 0 5.084-2.062 5.476-4.736a21.66 21.66 0 0 0 1.627-.384c-.219 3.737-3.312 6.703-7.104 6.703A7.126 7.126 0 0 1 0 12.125zm11.328 7.492L14.25 24H0l2.922-4.383c.449.282.928.519 1.431.708l-1.394 2.092h8.332l-1.394-2.092a7.939 7.939 0 0 0 1.431-.708zm-7.37-7.492c0 1.75 1.417 3.167 3.167 3.167s3.167-1.417 3.167-3.167-1.417-3.167-3.167-3.167-3.167 1.417-3.167 3.167zm4.75 0c0 .873-.711 1.583-1.583 1.583s-1.583-.711-1.583-1.583.711-1.583 1.583-1.583 1.583.71 1.583 1.583z"/></svg>
+                {% trans 'My Conference'%}{{ conf_list_user|length|pluralize:",s" }}
+              </a>
+              {% endif %}
+              {% if conf_list_user|length > 0 %}
+              <a href="/{{LANGUAGE_CODE}}/my-archive">
+                <svg width="18" height="24" viewBox="0 0 19 24">
+                  <path d="M19.521,7.267c-0.144-0.204-0.38-0.328-0.631-0.328h-3.582l-0.272-1.826c-0.055-0.379-0.379-0.656-0.76-0.656
+                  H9.802l-0.39-0.891c-0.123-0.279-0.399-0.46-0.704-0.46H1.11c-0.222,0-0.434,0.096-0.58,0.264C0.385,3.537,0.319,3.76,0.349,3.981
+                  l1.673,12.243c0,0,0,0,0,0.002v0.004c0.015,0.113,0.06,0.213,0.119,0.303c0.006,0.009,0.006,0.023,0.012,0.033
+                  c0.012,0.016,0.033,0.024,0.046,0.04c0.054,0.065,0.114,0.118,0.185,0.161c0.027,0.018,0.051,0.035,0.078,0.048
+                  c0.099,0.045,0.206,0.078,0.32,0.078h0.002l0,0h13.03c0.323,0,0.611-0.201,0.722-0.505l3.076-8.416
+                  C19.698,7.735,19.663,7.474,19.521,7.267z M8.203,4.644l0.391,0.889c0.123,0.279,0.399,0.461,0.704,0.461h4.315l0.141,0.944H5.859
+                  c-0.323,0-0.611,0.201-0.723,0.505l-2.011,5.505L1.992,4.644H8.203z M15.276,15.356H3.882l2.515-6.879H17.79L15.276,15.356z"></path>
+                </svg>
+                {% trans 'My archives'%}
+              </a>
+              {% endif %}
+            </span>
+            <span>
+              <a href="{% url 'my_app2:user_logout' %}">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M16 9V5l8 7-8 7v-4H8V9h8zm-2 10v-.083A7.93 7.93 0 0 1 10 20c-4.411 0-8-3.589-8-8s3.589-8 8-8a7.93 7.93 0 0 1 4 1.083V2.838A9.957 9.957 0 0 0 10 2C4.478 2 0 6.477 0 12s4.478 10 10 10a9.957 9.957 0 0 0 4-.838V19z"/></svg>
+                {% trans 'Sign out'%}
+              </a>
+            </span>
+          </span>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="overlay"></div>
+
+  {% block content %}
+  <div class="hero">
+    <div class="content">
+      <div class="pretitle">{% trans "Let's keep it green"%}</div>
+      {% blocktrans %}<h1>Open-source conference platform for neutral carbon <span>event</span>.</h1>{% endblocktrans %}
+      {% blocktrans %}
+      <p>Your all-in-one solution for video conferences, with a twist. Our service platform calculates and purchases carbon offsets to neutralize the environmental impact of your conference.</p>
+      {% endblocktrans %}
+      <div class="buttons-group">
+        <a class="btn" href="{% url "my_app2:user_login" %}">{% trans "Create your Free Account" %}</a>
+        <a class="btn alt" href="{% url "my_app2:contactform" %}">{% trans "Got Questions? Let's Talk"%}</a>
+      </div>
+    </div>
+    <div class="scroll-down" onclick="window.scroll({top:(80 * window.innerHeight/100) - 75, behavior:'smooth'})">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </div>
+  </div>
+
+  <main class="home">
+
+    <section class="presentation">
+      {% blocktrans %}
+      <h2>Set-up your <span>personalized conference</span> in a few clicks</h2>
+      {% endblocktrans %}
+
+      <div class="grid">
+        <figure>
+          <img src="{% static "images/presentation.jpg" %}" loading="lazy" alt="A person working on a laptop">
+          <img class="dots" src="{% static "images/dots.svg" %}" loading="lazy" alt="Little dots at the image corner">
+        </figure>
+        <div class="content">
+          {% blocktrans %}
+          <div>
+            <h3 number="1">Fill in basic informations</h3>
+            <p>Name your conference, add a short description, select a few options that best suit you, and voilà, you're pretty much all set.</p>
+          </div>
+          <div>
+            <h3 number="2">We generate your conference website</h3>
+            <p>Once you're ready to go, we provide you with a complete website with everything the participants need to know: what's it all about, schedules, access to the meeting, prices, and many more.</p>
+          </div>
+          <div>
+            <h3 number="3">Follow up with your participants</h3>
+            <p>You can schedule your program with co-organizers and the program committee, contact your participants, send them invites to give talks and reviews, customize your conference room, set-up a powerful chat room...</p>
+          </div>
+          {% endblocktrans %}
+          <div class="buttons-group">
+            <a class="btn" href="/{{LANGUAGE_CODE}}/host-conference">{% trans "Create your Conference for Free" %}</a>
+            <a class="btn alt" href="{% url 'my_app:pricing' %}">{% trans "Check out Our Pricing Page" %}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      {% blocktrans %}
+      <h2>The best features for <span>green</span> and worldwide meetings</h2>
+      {% endblocktrans %}
+      <div class="grid">
+        <div>
+          <img src="{% static "images/feature1.svg" %}" loading="lazy" width="80px" alt="A new idea">
+          <div>
+            {% blocktrans %}
+            <h3>Easily create and customize your online conference</h3>
+            <p>Your workshop can be created within a few minutes with an automatically generated website, so you can focus on what matters the most, the conferences!</p>
+            {% endblocktrans %}
+          </div>
+        </div>
+        <div>
+          <img src="{% static "images/feature2.svg" %}" loading="lazy" width="80px" alt="A beautiful mountain">
+          <div>
+            {% blocktrans %}
+            <h3>Go carbon free for your virtual conference</h3>
+            <p>We are the first company making virtual conferences totally carbon-neutral by offsetting their emissions.</p>
+            {% endblocktrans %}
+            <a href="{% url "my_app2:calculator" %}">{% trans 'See our Carbon Emission Calculator' %}</a>
+          </div>
+        </div>
+        <div>
+          <img src="{% static "images/feature3.svg" %}" loading="lazy" width="80px" alt="Two hands holding two phones">
+          {% blocktrans %}
+          <div>
+            <h3>Keep track of your online event</h3>
+            <p>The whole event you're creating can be recorded and uploaded to our platform, or even YouTube.</p>
+          </div>
+          {% endblocktrans %}
+        </div>
+      </div>
+    </section>
+
+    <section class="experience">
+      <img class="dots" src="{% static "images/dots.svg" %}" loading="lazy" alt="Little dots as a decoration">
+      {% blocktrans %}
+      <h2>Bringing to you the <span>optimal</span> video conference experience</h2>
+      {% endblocktrans %}
+      <div class="grid">
+        {% blocktrans %}
+        <div>
+          <div>
+            <h3>All the tools necessary to manage and create your conference from your desk</h3>
+            <p>We provide easy emailing to participants, a program scheduler. We handle abstract submissions, participant fees, talks recordings, and more.</p>
+          </div>
+          <div>
+            <h3>No download to access the conference</h3>
+            <p>Your participants can join your conference directly on our website without any complicated unnecessary software download.</p>
+          </div>
+          <div>
+            <h3>The code is open source</h3>
+            <p>Everyone can take the CarbonFreeConf code to organize its own conference and/or collaborate directly on github and push new developments to constantly improve the way we share research online.</p>
+          </div>
+          <div>
+            <h3>Ergonomic conference rooms</h3>
+            <p>Your participants can connect from computers, tablets, phones and have access to a series of handy features, such as a whiteboard, share screen, ask questions, tweet, chat...</p>
+          </div>
+        </div>
+        {% endblocktrans %}
+        <div>
+          {% blocktrans %}
+          <div>
+            <h3>Proceedings to enhance your online conference</h3>
+            <p>If your participants need to write a proceeding after the conference, we handle everything. They can type it in on our platform and we will then store it and give access to it via our website.</p>
+          </div>
+          <div>
+            <h3>Invite participants, academics and speakers easily</h3>
+            <p>You can decide that the conference is free for some participants (e.g. review or discussion talks, young participants with no funding, ...). This is all doable in one click.</p>
+          </div>
+          {% endblocktrans %}
+          <div>
+            {% blocktrans %}
+            <h3>Organize large conferences also for free</h3>
+            <p>You can decide to make your participants pay fees to participate to your conference. In this case, we will collect the money for you and transfer it to you when the conference is over (or you can be altruistic and decide that the extra money goes towards more offsetting).</p>
+            {% endblocktrans %}
+            <a href="{% url 'my_app:pricing' %}">{% blocktrans %}Take a Look at our Pricing Page{% endblocktrans %}</a>
+          </div>
+        </div>
+      </div>
+      <a class="btn" href="{% url 'my_app:demo' %}">{% blocktrans %}Request a Visioconference Demo{% endblocktrans %}</a>
+    </section>
+
+    <section class="words">
+      <div class="grid">
+        <figure>
+          <img src="{% static "images/founder.jpg" %}" loading="lazy" alt="Ecological vision by the founder">
+        </figure>
+        {% blocktrans %}
+        <div class="content">
+          <h2>An <span>ecological vision</span> intended for internation conferences</h2>
+          <p>Dear colleagues,
+          I am an academic myself, working in Astrophysics. I developed CarbonFreeConf because I came to the realization that it was important to reduce our carbon footprint as researchers and still be able to share our research results. Traveling to the other side of the world for each conference and flying hundreds of people there might not be the wisest solution.</p>
+          <p>That is why I now propose a new and easy solution to create carbon-free virtual conferences that fits in quite well with the current Covid-19 situation because we cannot see each other in person at the moment. The idea is to try to make our virtual gatherings more efficient than in-person meetings thanks to the power of technology. The code is <a href="/{{LANGUAGE_CODE}}/open-source">open source</a> and collaborative to keep on improving the way we share research online. Even more than that, we can reduce our carbon footprint by orders of magnitude when gathering virtually while still reaching the same goals, i.e., learn about new results in our field, share our new findings, meet new people, network, ...</p>
+        </div>
+        {% endblocktrans %}
+      </div>
+    </section>
+
+    <section class="latest">
+      <div class="flex">
+        {% blocktrans %}
+        <h2>Latest from the <span>blog</span></h2>
+        {% endblocktrans %}
+        <a href="{% url 'blog2:bloghome' %}">
+        <!-- <a href="{% url 'my_app:news' %}"> -->
+          {% trans 'More Articles' %}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="grid">
+        {% for obj in latest %}
+        <a href="/{{LANGUAGE_CODE}}{{ obj.get_absolute_url }}">
+          <img src="{{ obj.thumbnail.url }}" loading="lazy" alt="{{ obj.title }}">
+          <div>
+            <h3>{{ obj.title }}</h3>
+            {{ obj.overview|linebreaks|truncatechars:200 }}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="upcoming">
+      <div class="flex">
+        {% blocktrans %}
+        <h2><span>Upcoming</span> conferences</h2>
+        {% endblocktrans %}
+        <a href="{% url 'my_app2:conf' %}">
+          {% blocktrans %}
+          See All Planned Conferences
+          {% endblocktrans %}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="grid">
+        {% for conf in conf_list %}
+        <div>
+          <div>
+            <h3>{{ conf.title|ellipses:120 }}</h3>
+            <span>{{ conf.start_date|get_due_date_string }}</span>
+            <p>{{ conf.subject }}</p>
+          </div>
+          <a href="/{{LANGUAGE_CODE}}/conference/{{ conf.id }}">{% blocktrans %}More details{% endblocktrans %}</a>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+  </main>
+
+  {% endblock %}
+
+  <footer class="{% block footer_class %}{% endblock %}">
+    <img class="dots" src="{% static "images/dots.svg" %}" loading="lazy" alt="Little dots">
+    <div class="upper-footer">
+      <div class="left">
+        <div class="logo">
+          <img src="{% static "images/logo.svg" %}" loading="lazy" alt="Logo">
+        </div>
+        {% blocktrans %}
+        <div class="slogan">Let's build a green future together</div>
+        <p>CarbonFreeConf is a platform to organize online research workshops. It is aimed at being carbon free by offsetting emissions that are produced by the conferences.</p>
+        {% endblocktrans %}
+      </div>
+      <ul class="nav">
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/about">{% blocktrans %}About{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/blog-home">{% blocktrans %}Blog{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/open-source">{% blocktrans %}Open-source details{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/faq">{% blocktrans %}FAQ{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/contactform">{% blocktrans %}Contact{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/pricing">{% blocktrans %}Pricing{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/tutorial">{% blocktrans %}Tutorial{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/archive">{% blocktrans %}Previous Conferences{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/carbon-calculator">{% blocktrans %}Carbon emission calculator{% endblocktrans %}</a>
+        </li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/team">{% blocktrans %}The team{% endblocktrans %}</a>
+        </li>
+      </ul>
+      <ul class="contact-infos">
+        <li>{% blocktrans %}Contact us{% endblocktrans %}</li>
+        <li>
+          <a href="/{{LANGUAGE_CODE}}/contactform">{% blocktrans %}via our contact form{% endblocktrans %}</a>
+        </li>
+        <li>{% blocktrans %}Any sales questions?{% endblocktrans %}</li>
+        <li>
+          <a href="mailto:sales@carbonfreeconf.com">{% blocktrans %}sales@carbonfreeconf.com{% endblocktrans %}</a>
+        </li>
+        <li>{% blocktrans %}Need help with your conference?{% endblocktrans %}</li>
+        <li>
+          <a href="mailto:support@carbonfreeconf.com">support@carbonfreeconf.com</a>
+        </li>
+      </ul>
+      <div class="right">
+        <ul>
+          <li>
+            <a href="/{{LANGUAGE_CODE}}/terms">{% blocktrans %}Terms and conditions{% endblocktrans %}</a>
+          </li>
+          <li>
+            <a href="/{{LANGUAGE_CODE}}/privacy">{% blocktrans %}Privacy policy{% endblocktrans %}</a>
+          </li>
+          <li>
+            <a href="/{{LANGUAGE_CODE}}/legalnotice">{% blocktrans %}Legal notice{% endblocktrans %}</a>
+          </li>
+          <li>
+            <a href="/{{LANGUAGE_CODE}}/code-of-conduct">{% blocktrans %}Code of conduct{% endblocktrans %}</a>
+          </li>
+        </ul>
+        <div class="socials">
+          <a target="_blank" rel="noopener" href="https://www.facebook.com/Carbonfreeconf-103522534738844/" title="Facebook link"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/></svg></a>
+          <a target="_blank" rel="noopener" href="https://twitter.com/carbonfreeconf" title="Twitter link"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+          <a target="_blank" rel="noopener" href="https://www.linkedin.com/company/carbonfreeconf/" title="Linkedin link"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="lower-footer">
+      <div onclick="window.scroll({top:0, left:0, behavior:'smooth'});">
+        <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm0 7.58l5.995 5.988-1.416 1.414-4.579-4.574-4.59 4.574-1.416-1.414 6.006-5.988z"></path></svg>
+      </div>
+      <div>{% blocktrans %}©2022 CarbonFreeConf™. All Rights Reserved.{% endblocktrans %}</div>
+    </div>
+  </footer>
+
+
+
+<!-- <a class="dropdown-item" href="{% url 'my_app:myarchive' %}">Handle my archived videos</a>
+<a class="dropdown-item" href="{% url 'my_app:archive' %}">Archived videos</a>
+<a class="dropdown-item" href="{% url 'my_app:archiveproc' %}">Archived proceedings</a> -->
+
+
+{% block downbody %}
+
+
+{% endblock %}
+
+
+<!-- Tooltip Library | https://atomiks.github.io/tippyjs/ -->
+<!-- Development -->
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+<!-- Production -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+
+
+<script>
+$("#searchbox").autocomplete({
+  source: function (request, response) {
+    $.ajax({
+      url: "/new_suggestion",
+      type: "GET",
+      data: request,
+      success: function (data) {
+        response(data);
+      }
+    });
+  },
+});
+</script>
+
+<!--
+<script>
+
+  // Clone defaults
+  var imgOpts = $.extend(true, {}, $.fancybox.defaults, {
+      caption : function( instance, item ) {
+          return $(this).next('figcaption').html();
+      }
+  });
+
+  // Shortcut to apply options to image gallery
+  function applyImgOpts() {
+      $('[data-fancybox="images"]').fancybox(imgOpts);
+  }
+
+  $("#imgOpts select").change(function () {
+      var opt = $(this).attr("id");
+      var val = $(this).val();
+
+      imgOpts[opt] = val === "" ? false : val;
+
+      // Make "fade" transiton faster than others
+      if (opt === 'transitionEffect') {
+          imgOpts['transitionDuration'] = opt === 'fade' ? 330 : 550;
+      }
+
+      applyImgOpts();
+  });
+
+  $("#imgOpts input[type=radio][name=lang]").on("change", function () {
+      imgOpts.lang = $(this).val();
+
+      applyImgOpts();
+  });
+
+  $("#imgOpts .toggle").change(function () {
+      if (this.id === 'thumbs') {
+          imgOpts.thumbs.autoStart = this.checked ? true : false;
+      } else {
+          imgOpts[this.id] = this.checked ? true : false;
+      }
+
+      applyImgOpts();
+  });
+
+  $("#imgOpts .buttons").change(function () {
+      var buttonArr = $('input:checkbox:checked.buttons').map(function () {
+          return this.value;
+      }).get();
+
+      buttonArr.push('close');
+
+      imgOpts.buttons = buttonArr;
+
+      applyImgOpts();
+  });
+
+  applyImgOpts();
+
+</script>
+-->
+
+<script src="{% static "js/cookiebar.js" %}"></script>
+
+{% if request|cookie_consent_enabled %}
+  {% not_accepted_or_declined_cookie_groups request as cookie_groups %}
+
+  {% if cookie_groups %}
+    {% url "cookie_consent_cookie_group_list" as url_cookies %}
+    {% cookie_consent_accept_url cookie_groups as url_accept %}
+    {% cookie_consent_decline_url cookie_groups as url_decline %}
+    <script>
+      var cookie_groups = [];
+      {% for cookie_group in cookie_groups %}
+        cookie_groups.push("{{ cookie_group.varname }}");
+      {% endfor %}
+
+      function ready(fn) {
+        if (document.readyState != 'loading') {
+          fn();
+        } else if (document.addEventListener) {
+          document.addEventListener('DOMContentLoaded', fn);
+        } else {
+          document.attachEvent('onreadystatechange', function() {
+          if (document.readyState != 'loading')
+            fn();
+          });
+        }
+      }
+
+      ready(function() {
+        showCookieBar({
+          content: "{% filter escapejs %}{% with cookie_groups=cookie_groups|join:", " %}<div class="cookie-bar"> &nbsp; This site uses {{ cookie_groups }} for better performance and user experience. Do you agree to use cookies? &nbsp; <a href="{{ url_accept }}" class="cc-cookie-accept">Accept</a> &nbsp; &nbsp;<a href="{{ url_decline }}" class="cc-cookie-decline">Decline </a> &nbsp; <a href="{{ url_cookies }}" style="color:blue;">(Cookies info)</a></div>{% endwith %}{% endfilter %}",
+          cookie_groups: cookie_groups,
+          cookie_decline: "{% get_decline_cookie_groups_cookie_string request cookie_groups %}",
+          beforeDeclined: function() {
+            document.cookie = "{% get_decline_cookie_groups_cookie_string request cookie_groups %}";
+          }
+        });
+      });
+    </script>
+  {% endif %}
+{% endif %}
+
+<script src="{% static "vendor/jquery.cookie/jquery.cookie.js" %}"> </script>
+
+
+    <script src="{% static "js/front.js" %}"></script>
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>-->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+      $(document).ready(function() {
+          $.ajax({
+              method: 'POST',
+              url: '{% url "my_app:set_timezone" %}',//'set_timezone',
+              data: {csrfmiddlewaretoken: "{{ csrf_token }}",'timez': tz},
+              success: function (data) {
+                   //this gets called when server returns an OK response
+                   //alert("it worked!");
+              },
+              error: function (data) {
+                   //alert("it didnt work");
+              }
+          });
+      });
+  </script>
+
+
+
+<!--<script>
+    $('.toast').toast('show');
+</script>-->
+
+
+<!--<script type="text/javascript" src="js/mdb.min.js"></script>-->
+<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>-->
+
+
+
+
+
+    <!--<script src="https://js.braintreegateway.com/web/dropin/1.22.1/js/dropin.min.js" defer></script>-->
+    <!--<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>-->
+    <!--<script src="https://js.braintreegateway.com/web/dropin/1.27.0/js/dropin.min.js"></script>-->
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js"></script>-->
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+        <!--<script src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js" defer></script>-->
+
+        <!-- To automatically render math in text elements, include the auto-render extension: -->
+       <!-- <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body);"></script>-->
+
+
+<!-- Start of Rocket.Chat Livechat Script -->
+<!--
+<script type="text/javascript">
+(function(w, d, s, u) {
+	w.RocketChat = function(c) { w.RocketChat._.push(c) }; w.RocketChat._ = []; w.RocketChat.url = u;
+	var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+	j.async = true; j.src = 'https://chat.carbonfreeconf.com/livechat/rocketchat-livechat.min.js?_=201903270000';
+	h.parentNode.insertBefore(j, h);
+})(window, document, 'script', 'https://chat.carbonfreeconf.com/livechat');
+</script>-->
+<!-- End of Rocket.Chat Livechat Script -->
+
+{% block scripts %}{% endblock %}
+
+</body>
+
+</html>

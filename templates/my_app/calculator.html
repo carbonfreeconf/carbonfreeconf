@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} Carbon emission calculator for virtual conferences {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="How to calculate the carbon emissions produced during a virtual meeting? Come work it out here with our free calculator." />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<main class="calculator">
+
+  {% blocktrans %}
+  <section>
+    <h1>Carbon emission calculator</h1>
+    <p>If you want to make your own virtual conference, you can first calculate how much carbon emission will be produced and compare to the emissions from an oversea return flight.</p>
+  </section>
+  {% endblocktrans %}
+  <section class="calculator-form">
+    <form action=".">
+      <label for="duration">{% blocktrans %}Duration of the conference in days: {% endblocktrans %}</label>
+      <input type="text" id="duration" name="duration">
+
+      <div class="flex">
+        <label for="para">{% blocktrans %}Number of sessions running in parallel:{% endblocktrans %}</label>
+        <svg id="tooltipCalculator" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-.001 5.75c.69 0 1.251.56 1.251 1.25s-.561 1.25-1.251 1.25-1.249-.56-1.249-1.25.559-1.25 1.249-1.25zm2.001 12.25h-4v-1c.484-.179 1-.201 1-.735v-4.467c0-.534-.516-.618-1-.797v-1h3v6.265c0 .535.517.558 1 .735v.999z"/></svg>
+      </div>
+      <input type="text" id="para" name="para" value="1">
+
+      <label for="size">{% blocktrans %}Total number of participants: {% endblocktrans %}</label>
+      <input type="text" id="size" name="size">
+
+      <div class="collapsed">
+        <label for="rec" class="checkbox bootstrapbs">
+          <input type="checkbox" id="rec" name="rec">
+          <svg viewBox="0 0 21 21"><path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path></svg>
+          {% blocktrans %}Recording of the conference?{% endblocktrans %}
+        </label>
+      </div>
+
+      <div class="collapse2">
+        <p>{% blocktrans %}Who can access the recording?{% endblocktrans %}</p>
+
+        <label class="radio bootstrapbs" for="all">
+          <span>
+            <input type="radio" name="who" id="all" value="Everyone" checked />
+            <span class="checkmark"></span>
+          </span>
+          {% blocktrans %}Everyone{% endblocktrans %}
+        </label>
+        <label class="radio bootstrapbs" for="only">
+          <span>
+            <input type="radio" name="who" id="only" value="Only conference participants" />
+            <span class="checkmark"></span>
+          </span>
+          {% blocktrans %}Only conference participants{% endblocktrans %}
+        </label>
+      </div>
+      <div class="collapse2">
+        <label for="you" class="checkbox bootstrapbs">
+          <input type="checkbox" id="you" name="you" />
+          <svg viewBox="0 0 21 21"><path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path></svg>
+          {% blocktrans %}Put the recording on youtube? {% endblocktrans %}
+        </label>
+      </div>
+
+      <label for="proc" class="checkbox bootstrapbs">
+        <input type="checkbox" id="proc" name="proc" />
+        <svg viewBox="0 0 21 21"><path d="M5,10.75 L8.5,14.25 L19.4,2.3 C18.8333333,1.43333333 18.0333333,1 17,1 L4,1 C2.35,1 1,2.35 1,4 L1,17 C1,18.65 2.35,20 4,20 L17,20 C18.65,20 20,18.65 20,17 L20,7.99769186"></path></svg>
+        {% blocktrans %}Participants must write a proceeding after the conference?{% endblocktrans %}
+      </label>
+      {% blocktrans %}
+      <input type="submit" class="btn btn-submit" value="Calculate">
+      {% endblocktrans %}
+    </form>
+  
+    <div id="test2"></div>
+  </section>
+<br>
+</main>
+
+<script>
+  $(function () {
+    if ($('#rec').is(':checked')){
+      //alert('chec');
+      $(".collapse2").show();
+    }else{
+      $(".collapse2").hide();
+    }
+  });
+</script>
+
+<script>
+$("#rec").change(function () {
+  //check if its checked. If checked move inside and check for others value
+  if (this.checked) {
+    //add a text box next to it
+    $(".collapse2").show();
+  } else {
+    //remove if unchecked
+    $(".collapse2").hide();
+    //$("#id_masterconf").prop('checked', false);
+    //$("#id_daughterconf").prop('checked', false);
+    //$("#id_masterconfpass").val('');
+  }
+});
+</script>
+
+<script>
+$(document).on('click', '.btn.btn-submit', function (event) {
+  event.preventDefault();
+  //alert($(this).closest("form").attr('id'));
+
+  calc($(this));
+  return false;
+});
+</script>
+
+<script>
+function calc(thisObj) {
+  console.log("calc is working!"); // sanity check
+  //console.log(thisObj.closest("form").find('').val());
+  //alert(thisObj.closest("form").find('.pfnplus').val());
+  $.ajax({
+    url : '/carbon-calculator/', // the endpoint
+    type : "POST", // http method
+    data : {  duration : $('#duration').val(),//$('#confnumid').val(),
+              para : $('#para').val(),
+              size : $('#size').val(),
+              who : $('#who').val(),
+              all : $('#all').is(':checked'),
+              only : $('#only').is(':checked'),
+              rec : $('#rec').is(':checked'),
+              you : $('#you').is(':checked'),
+              proc : $('#proc').is(':checked'),
+              csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+            }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+      //alert('yo2')
+      $("div[id='test2']").text('');
+      //$("div[id='test22']").text('');
+
+      console.log(json); // log the returned json to the console
+      //var child = document.getElementById(json.idarg);
+      //document.body.removeChild(child);
+        if (json.offsetcost) {
+          $("#test2").append('<p class="mt-4"><strong>Total CO<sub>2</sub> emissions: '+ json.offsetcost +' kg</strong>. '+json.flight+'</p>');
+          $("#test2").append('<p class="mt-2">CO<sub>2</sub> emitted per person: '+ json.perperson +' kg.</p>');
+        }
+        if (json.nada){
+          $("#test2").append('<p class="mt-2"><strong>Enter the duration AND the number of participants.</strong></p>');
+        }
+        if (json.format==1){
+          $("#test2").append('<p class="mt-2"><strong>You must enter numbers for the duration AND the number of participants.</strong></p>');
+        }
+        if (json.format==2){
+          $("#test2").append('<p class="mt-2"><strong>You must enter numbers greater than 0 for the duration AND the number of participants.</strong></p>');
+        }
+
+      //}
+
+      console.log("success calc"); // another sanity check
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+      $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+          " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+  });
+};
+</script>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+tippy('#tooltipCalculator', {
+  content: "If you have only one room, this number should be 1. If this is greater than one we just major the total carbon emissions by 1.5. Note that when you organize a multi-session conference, the carbon emissions will in reality be calculated for each room you make including the number of participants that each can receive. Therefore, the number provided here is just an order of magnitude.",
+});
+</script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% load crispy_forms_tags %}
+
+
+<div class="modal fade" id="myEdit4">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="icon-box mr-2">
+					<i class="fas fa-unlock-alt"></i>
+				</div>
+				<h4 class="modal-title ml-2">Change your password</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+
+
+
+			<div class="modal-body">
+				<p><strong>Enter your current password and then the new password twice to validate:</strong>  </p>
+                <form enctype="multipart/form-data" id="changepassid" method="POST" action="{% url 'my_app:changepass' %}">
+                {% csrf_token %}
+
+                        {{ changepass }}
+
+
+                <button type="submit" class="btn btn-danger mt-2"> Change my password </button>
+                </form>
+                <div id="test3"></div>
+            </div>
+
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+    $(function () {
+  $('[data-toggle="popover"]').popover()
+})
+
+</script>
+
+<script>
+function updatepassb(thisObj) {
+    //console.log("whoa!"); // sanity check
+    //alert(thisObj.parent("modal-body").next().closest("form").find('.email2').val());
+    //alert(thisObj.closest("div[class='modal-body']").next().closest("form").find('.email2').val());.attr('id')
+    //alert(thisObj.closest("form").find("input[name=title]").val());
+    //alert(thisObj.closest("form").find("textarea[name=abstract]").val());
+    //alert('brah');
+    $.ajax({
+        url : '/changepass', // the endpoint
+        type : "POST", // http method
+        data : $('#changepassid').serialize(),
+        // handle a successful response
+        success : function(json) {
+            //alert(json.cool);
+
+            $("#test3").text('');
+
+            //console.log(json); // log the returned json to the console
+            if (json.cool=="pascool") {//Poster
+                $("#test3").append('<div class="alert alert-danger mt-3" role="alert"><p>One of the passwords is wrong...</p></div>');
+            }
+            if (json.cool=="cool") {//Poster
+                location.href = "/profile"
+            }
+            },
+
+
+            //console.log("succ plus"); // another sanity check
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    })
+    };
+</script>
+
+<script>
+    $(document).on('click', '.btn.btn-danger.mt-2', function (event) {
+        //$('.bt-del').live('click', function (event) {
+        //$('.bt-del').click(function(event){
+        event.preventDefault();
+        //alert($(this).closest("form").attr('id'));
+        //$('.del').each(function(index, value) {
+        //alert($(this));
+        //  console.log($(this).attr('id'));
+        //});
+        updatepassb($(this));
+        return false;
+    });
+</script>

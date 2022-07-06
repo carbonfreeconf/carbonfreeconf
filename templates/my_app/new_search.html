@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} Search our conference database  {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="You are searching for a video talk in your research field? You may want to look it up on CarbonFreeConf that hosts many conferences and allow access the recordings." />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+        <div class=container>
+
+    <hgroup class="mb20">
+		<h1 class="mt-2">Search Results</h1>
+
+        {% if lenr2 %}
+
+		<h2 class="lead"><strong class="text-danger">{{ lenr2 }}</strong> result{{ lenr2|pluralize:",s" }} {{ lenr2|pluralize:"was,were" }} found in Conferences for <strong class="text-danger">{{search}}</strong></h2>
+	</hgroup>
+
+    <section class="col-xs-12 col-sm-6 col-md-12">
+        {% for hit in res2 %}
+		<article class="search-result row">
+			<div class="col-xs-12 col-sm-12 col-md-2">
+				<a href="{% url 'my_app:conf_detail' hit.meta.id  %}" title="image" class="thumbnail"><img src={% static "images/training.svg" %} width="150" height="150" alt="No images" /></a>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-3">
+				<ul class="meta-search">
+					<li><i class="glyphicon glyphicon-calendar"></i> <span>Dates: {{ hit.start_date }} / {{ hit.end_date }}</span></li>
+					<li><i class="glyphicon glyphicon-time"></i> <span>Field: {{ hit.subject }}</span></li>
+					<li><i class="glyphicon glyphicon-tags"></i> <span>Organizer: {{ hit.user }}</span></li>
+                    <li><i class="glyphicon glyphicon-tags"></i> <span>Privacy: {{ hit.privacy }}</span></li>
+					<li><i class="glyphicon glyphicon-tags"></i> <span>Recording: {% if hit.recording %} Yes {% else %} No {% endif %}</span></li>
+
+				</ul>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+				<h3><a href="{% url 'my_app:conf_detail' hit.meta.id  %}" title="{{ hit.title | safe }}">{% if hit.meta.highlight.title %}  {{ hit.meta.highlight.title|index:0 | safe }} {% else %} {{ hit.title | safe }} {% endif %}</a></h3>
+				<p> {% if hit.meta.highlight.abstract %}  {{ hit.meta.highlight.abstract|index:0 | safe }} {% else %} {{ hit.abstract | safe }} {% endif %}  </p>
+			</div>
+			<span class="clearfix borda"></span>
+		</article>
+        {% endfor %}
+	</section>
+
+    {% endif %}
+    {% if lenr1 %}
+
+    <h2 class="lead"><strong class="text-danger">{{ lenr1 }}</strong> result{{ lenr2|pluralize:",s" }} {{ lenr2|pluralize:"was,were" }} found in News for <strong class="text-danger">{{search}}</strong></h2>
+	</hgroup>
+
+    <section class="col-xs-12 col-sm-6 col-md-12">
+        {% for hit in res1 %}
+		<article class="search-result row">
+			<div class="col-xs-12 col-sm-12 col-md-2">
+				<a href="{% url 'my_app:post_detail' hit.slug  %}" title="image" class="thumbnail"><img src={% static "images/training.svg" %} width="150" height="150" alt="No images" /></a>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-3">
+				<ul class="meta-search">
+					<li><i class="glyphicon glyphicon-calendar"></i> <span>Created on: {{ hit.created_on | datechange}} </span></li>
+					<li><i class="glyphicon glyphicon-time"></i> <span>Author: {{ hit.author }}</span></li>
+				</ul>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+				<h3><a href="{% url 'my_app:post_detail' hit.slug  %}" title="{{ hit.title | safe }}">{% if hit.meta.highlight.title %}  {{ hit.meta.highlight.title|index:0 | safe }} {% else %} {{ hit.title | safe }} {% endif %}</a></h3>
+				<p> {% if hit.meta.highlight.content %}  {{ hit.meta.highlight.content|index:0 | safe }} {% else %} {{ hit.content | safe }} {% endif %}  </p>
+			</div>
+			<span class="clearfix borda"></span>
+		</article>
+        {% endfor %}
+	</section>
+    {% endif %}
+    {% if not lenr1 %}
+            {% if not lenr2 %}
+        <h5>We didn't find any results.</h5>
+                <a href="#" onclick="history.back();">Back</a>
+
+    {% endif %}
+    {% endif %}
+        </div>
+{% endblock content %}

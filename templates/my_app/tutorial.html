@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans 'Tutorial to host a virtual conference'%}{% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="{% trans 'How to make an online conference with your peers? Learn about it all with CarbonFreeConf, the place to create your workshops with hundreds of persons in less than an hour.'%}" />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/tutorial/" />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+<main class="tutorial">
+
+  <article>
+    <div class="pretitle">{% trans 'With Tips & Tricks'%}</div>
+    <h1>{% trans 'Tutorial to create a virtual conference'%}</h1>
+    <p>{% trans 'By following our guide, which will take about 10min to read, you can readily set-up a large conference by yourself in a very short time.'%}</p>
+    <section>
+      <p>{% trans '1) If not done yet, you first need to'%} <a href="/{{ LANGUAGE_CODE }}/register">{% trans 'register here'%}</a>.</p>
+    </section>
+    <section>
+      <p>{% trans "2) Then click on 'Host a conference' or "%}<a href='/{{ LANGUAGE_CODE }}/host-conference'>{% trans "click here</a>"%}.</p>
+      <p>{% trans " It will ask for the basic settings of your conference such as"%} <strong>{% trans "title, abstract, dates, how many participants you expect, whether you want your participants to write a proceeding after the conference and the field of your research"%}</strong>. {% trans "Everything can be changed afterwards so do not worry if you do not yet know all of the parameters perfectly. Note that once you pay though, the number of participants and dates cannot be adjusted anymore (unless you contact us). You can"%} <strong>{% trans "choose to ask your attendees to pay a fee to participate to your conference"%}</strong>. {% trans "It is a fee per person (not per talk) and you can set it to whatever value you like. This can be adjusted over time (e.g. if there is an early bird fee until a certain date, after that you can increase the price). "%}
+        {% trans "All the money collected will be either used to offset more carbon emissions or be sent to your bank account (or that of your institute). CarbonFreeConf just keeps 10% to account for the fees we have when collecting the money via credit or debit cards and because of the exchange rate fees our bank charges us. Once everything is correct, just click the 'Register the conference' button."%}</p>
+    </section>
+    <section>
+      {% blocktrans %}
+      <p>3) You then arrive in your conference admin panel (including 5 tabs) where you can set-up more things. A good process would be to follow these logical steps (but you don't have to if your logic differs from ours):</p>
+      <dl>
+        <dt>- First tab first (conference details):</dt>
+        <dd>Set-up the right timezone (if different from the local timezone where you happen to be located). This is the timezone you want to schedule your program in (e.g. most participants will be from Spain and you are in Japan then it may be wise to choose a spanish timezone to set-up your program and make it start at the right times). This is important to get that right because it will fix the starting and ending times of your conference based on your program.</dd>
+        <dd>If you know already if you want the conference to be recorded, check that box. You should also upload a logo that will be displayed on your conference website and in the conference room on the big day. You can also add a background image that would only be used in the conference room and replace the <strong>participant backgrounds</strong> for those with a red, blue or green screen behind them. Don't forget to click 'Save conference details' before heading to the next tab.</dd>
+        <dt>- Second tab (participants):</dt>
+        <dd>Now you can start adding the participants you want to invite to your virtual conference. Two ways are possible (and both can be used together): either you add them one by one or you provide an <strong>Excel file</strong> that has a list already prepared. If the former, fill in the three required fields (first name, last name and email) and click 'Add this person' as many times as the number of invited participants. If the latter, click the 'Upload an excel file with participants' button and when added click the 'load participants from the uploaded excel file'. It will add all the participants from the excel file that do not yet appear (with the same email) in your list.</dd>
+        <dd>Once added, participants will appear as not registered (except for the conference creator, probably you). They will have to register before you can do anything more. For them to register, you will first create your conference website (see last step) and then send them an email by clicking the <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/></svg> button (you can also send a group email to all unregistered participants by clicking the 'send group emails' button). Once they have registered (using your conference website), they will appear as Registered in the participants panel. You can then click on 'Registered' to see if they applied for a <strong>talk, poster or attendance only</strong> and can modify/validate the talk and change the user's role (e.g. if you want them to be <strong>moderator</strong> in the conference room on the big day, or members of the <strong>program committee</strong>, and/or <strong>superusers</strong> so that they have admin powers and can access the admin panel and conference test room to chat with you on our platform). That's also where you decide if the participation is a normal talk or a review, discussion, invited talk, ... People that you haven't invited can also register on your conference website but they will appear in the 'Other participants that registered' section in the participants tab and it's up to you to validate their participation or not.</dd>
+        <dt>- Third tab (program):</dt>
+        <dd>Now you can start filling in the program. <strong>It is important that you add at least one participation at the time you want the conference to start and one when you want it to end</strong> as the program fixes when the online conference will start being accessible to you and your participants as well as when it finishes.</dd>
+        <dd>When your participants have registered and you accepted their talks in the participant panel, you can also <strong>click the blue <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/></svg> button next to a participant to add its talk directly into the program scheduler</strong> (this tab).</dd>
+        <dd><strong>You can drag and drop on the program scheduler to add a new participation</strong> where you'd like and you can modify them by clicking on the detail symbol that appears when you click once on a given participation.</dd>
+        <dt>- Fourth tab (your conference website):</dt>
+        <dd>It is now time to create your conference website. Go to the 'your conference website' tab and fill in the text that will appear on <strong>your conference website homepage</strong> as well as the rationale of the conference that will be displayed on the website. <strong>You can personalize the text (highlight, larger font, add links, images, videos, ...)</strong> using the tools provided in each box. Once this is done, click the 'Create Conference Website' button. You can then click the 'checkout the conference website' button to see what it looks like.</dd>
+        <dt>- Fifth tab (conference test room):</dt>
+        <dd> This tab gives you access to an example of conference room, where you can test all different possibilities before the big day. You can also <strong>gather here with other organizers</strong> to chat about the conference and set it up together.</dd>
+        <dt>- Sixth and last tab (chat room):</dt>
+        <dd>This tab gives you access to the different rooms (one for organizers and one for everybody) created for you in the chat area. If you want to create more private groups, you can do so in this tab. Just choose the title for the new group, set a description and topic, and choose who should be included in this group among your participants. It is better to wait until all participants have subscribed so that you don't have to add them manually to the new group later on in the chat room settings.</dd>
+      </dl>
+    </section>
+    <section>
+      <p>4) Now you are all set, you should start adding the persons that co-organize the conference with you. Once they register you can give them the <strong>superuser status</strong> (by clicking the 'Registered' button in the participants panel) so that they can access the admin panel with you, add participants, modify the program and access the test room to check the functionalities and meet with the organization panel.</p>
+    </section>
+    <section>
+      <p>5) When ready, click the 'Submit conference' button at the bottom of the screen so that you conference starts appearing on our website. You will need to <strong>click this button each time you make big changes to the conference</strong> (e.g. change schedule start and/or end times, conference parameters, ...).</p>
+    </section>
+    <section>
+      <p>6) You can now have a look at the conference room. <strong>You are provided with a test room up until the big day</strong> and you can meet there as often as you'd like with the other organizers. You and co-organizers are set as moderators so that you can play with the different parameters available in the conference room (moderators can see a black box in the conference room that other participants do not see). <strong>For instance you can allow people to chat, tweet results, change roles</strong> (e.g. if an attendee wants to present something quickly you can give them the right).</p>
+    </section>
+    <section>
+      <p>7) If you checked the box to have your participants write proceedings after the conference, you can go check what the <strong>proceeding interface looks like</strong>. Go to the top menu and click on your login (top right) and then 'My proceedings'. You can start filling in your proceeding and leave it as a draft so that nobody can see. You can use <strong>latex formula and add bibliography</strong> using bib latex as described on the 'My proceedings' page.</p>
+    </section>
+    <section>
+      <p>8) You can pay whenever you want but <strong>before the conference starts</strong> as otherwise the conference would automatically be cancelled. Don't forget that once you paid the number of participants cannot be changed anymore nor the starting and ending dates (unless you contact us) because it would change the carbon offset you already paid for.</p>
+    </section>
+    <section>
+      <p>9) We also invite you to have a look in the archives to check existing <a href="/archive">recorded conferences</a>, and/or <a href="/archive-proceedings">proceedings</a>.</p>
+    </section>
+    <section>
+      <p>10) Organizers and the committee are provided with a private room to chat about the conference if a video call is not necessary. Note that there is <strong>another room created for your conference for all the participants</strong> and they can start using it as soon as you accept their participations in the admin panel. You can also create some additional rooms (we create a coffee break room by default for you) with a selected subset of participants if you go to the chat room tab.</p>
+    </section>
+    <section>
+      <p>11) If you allowed poster presentations, there will also be a room attributed to each poster that will be accessible when going to the poster area and clicking on an individual poster. <strong>Video calls or chat can be used to talk to the poster presenter and the latter can even record their voice</strong> (if they wish to do so) to explain what their poster is about for when they are not around. The voice recording will be accessible via the poster's private room to each participant.</p>
+    </section>
+    <section>
+      <p>12) Your conference will start being accessible every day one hour before the official time set up on the schedule. It is accessible to presenters, moderators and superusers. This is for you to set-up the conference room and also for presenters to test the virtual interface and see if everything works properly.</p>
+    </section>
+  </article>
+
+  <article>
+    <h2>Tips, tricks, advices for creating a virtual conference</h2>
+    <section>
+      <p>1) You have permanent access to test rooms to <strong>organize your conference-related meetings</strong>. You can come and meet with your co-organizers in this test room and start getting familiar with the multiple possibilities opened to you when you actually manage the conference on the big day. You can also meet with the program committee (decision panel) members in these test rooms to, e.g., pick the right list of attendees, decide on who you give a talk to, ... <strong>Other participants (that are not superusers or part of the organizers/decision panel) are not allowed in test rooms and everything that is said can thus be kept secret.</strong></p>
+    </section>
+    <section>
+      <p>2) If you organize a conference with more than 20 participants, that may be handy to fill in your participant list in an <strong>Excel file</strong> which can then be inputted in your administration panel rather than adding participants one by one.</p>
+    </section>
+    <section>
+      <p>3) You can send emails to your participants and/or organization committee from the admin panel. <strong>There are many options to select the right people you want to send emails to</strong> (e.g. unregistered participants, members of the decision panel, persons with invited talks or posters, ...). Note that you can select several of these lists together and persons happening to be in multiple lists will only receive one email. <strong>You can also add a link to your conference website into your email and/or a link to the conference room</strong> for the big day by clicking on 'Copy link to...' below the message box when writing the email. You can also send individual emails by clicking on the <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path d="M12 .02c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.99 6.98l-6.99 5.666-6.991-5.666h13.981zm.01 10h-14v-8.505l7 5.673 7-5.672v8.504z"/></svg> symbol next to a participant's name.</p>
+    </section>
+    <section>
+      <p>4) Do not hesitate to use the <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 13h-5v5h-2v-5h-5v-2h5v-5h2v5h5v2z"/></svg> button once you have accepted a talk to add it to your program. <strong>It will then copy all information (such as abstract, title, speaker's name, ...) directly into the program scheduler and it will be visible on your conference website</strong>. You will just have to position this new talk at the right time you want.</p>
+    </section>
+    <section>
+      <p>5) Ahead of the conference and as soon as your participants have their participations accepted, they can add slides or posters on your conference website (they have to go to 'my participations') that will be uploaded on our side and can be retrieved by you or other participants (or made public).</p>
+    </section>
+    <section>
+      <p>6) You can decide to ask for a small participation fee to all of your participants (if the conference is not free on our side) so that the overall cost is shared across many people. Your organization/institute can even make profits. You can then decide to use this extra money to offset more carbon emissions than produced by your virtual meeting or that it is paid to you (which we do not encourage unless it is for a good cause, e.g. offsetting carbon emissions at your intitute, paying for a poster/research prize at the end of your conference, ...). For instance asking for a small amount of 20 € to each of the 100 potential participants already covers the expenses for the conference and CO<sub>2</sub> offset (about 260 € for three days) and leaves a <strong>profit of about 1,500 €</strong>.</p>
+    </section>
+    <section>
+      <p>7) Three private rooms (one for organizers, one for all participants and one for coffee breaks) will be automatically created</strong> in the chat area. If you want, you can create more private rooms and invite the specific participants that can access each of them (through the chat room tab). Wait until all participants have subscribed as otherwise they will not be visible in the chat tab.</p>
+    </section>
+    <section>
+      <p>8) If posters are allowed, you should tell poster presenters that they can use the private rooms dedicated to their posters in the chat area to produce a voice recording that can be listened by other participants. This recording should explain quickly what the poster is about and the main results and it will always be accessible throughout the conference. You may also want to have <strong>some time dedicated to poster in your schedule</strong> where presenters would be present and participants could call them or chat with them about their posters.</p>
+    </section>
+    <section>
+      <p>9) Each day the backstage of the conference becomes accessible one hour before the official launch time. You should tell <strong>presenters from the first session to come early and test their presentations</strong> before it goes live. You could plan for 30min breaks between each session that chairs/moderators can use for giving the opportunity to presenters from the coming session to test the virtual interface and see if they can access their presentations without any issue.</p>
+    </section>
+    <section>
+      <p>10) If you record the presentations, you can either push the record button once in the virtual room or record talks one by one by stopping the recording when necessary. If the latter, the talks will then be uploaded one by one on our side and you will be able to give a different title to each of them (e.g. for each different speakers).</p>
+    </section>
+    {% endblocktrans %}
+  </article>
+
+</main>
+
+{% endblock %}

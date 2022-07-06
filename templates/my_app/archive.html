@@ -1,0 +1,491 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load index %}
+{% load el_pagination_tags %}
+{% load i18n %}
+
+{% block title %} {% trans 'Archived conference research videos' %} {% endblock title %}
+{% block extra_head_tags %}
+    <meta name="description" content="{% trans 'Want to see a talk in your research field? CarbonFreeConf hosts research workshops and store recordings of them, which are freely accessible.' %}" />
+    <link rel="canonical" href="https://www.carbonfreeconf.com/archive/" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+
+<style>
+    .form-control-borderless {
+    border: none;
+}
+
+.form-control-borderless:hover, .form-control-borderless:active, .form-control-borderless:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+</style>
+{% block content %}
+
+<div class="comingsoon" style="display: none;">
+  <div>
+    <a href="/{{LANGUAGE_CODE}}/" class="back">Back Home</a>
+    <h1>Coming <span>Soon</span>.</h1>
+  </div>
+</div>
+
+    <div class="container">
+
+    {% if search %}
+    
+    <form action="{% url 'my_app:searcharchive' %}" method="GET">
+        <div class="row justify-content-center mt-2 mb-3">
+            <div class="col-12 col-md-10 col-lg-8 mb-3">
+                <div class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto mr-1 mt-1">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" type="search" placeholder="{% trans 'Search archived videos (by title or content)' %}">
+                        </div>
+                        <!--end of col-->
+                        <div class="col-auto" style="margin-top: -15px;">
+                            <button class="btn btn-lg btn-info ml-1" type="submit">{% trans 'Search' %}</button>
+                        </div>
+                        <!--end of col-->
+
+                    </div>
+            </div>
+            </div>
+            <!--end of col-->
+        </div>
+    </form>
+ 
+
+        {% if queryset %}
+            <p class="mt-3"><strong class="text-danger">{{ urllz|length }} video{{ urllz|length|pluralize:",s" }}</strong> {% trans 'found for your request' %} "{{ qs }}" {% trans '(sorted by date)' %}</p>
+            <p><a href="{% url "my_app:archive" %}">{% trans 'Go back to the archived videos?' %}</a></p>
+            <hr>
+        {% paginate 10 urllz %}
+        {% for url in urllz %}
+            {% show_current_number as page_number %}
+            {% with page_number|add:-1 as pagenummin1 %}
+            {% if page_number > 1 %}
+                {% widthratio pagenummin1 1 10 as pageloop %}
+            {% else %}
+                {% widthratio page_number 0 10 as pageloop %}
+            {% endif %}
+            {% with forloop.counter0|add:pageloop as pagenum %}
+        {% with infoz|index:pagenum as infz %}
+            <div class="mt-2"><h5>{% trans 'Talk for the conference' %} <a href="{% url 'my_app:conf_detail_past' infz.conference.id  %}" target='_blank'>"{{ infz.conference.title }}"</a> ({{ infz.conference.subject }}) {% trans 'that started on' %} {{ recsz|index:pagenum }} {% trans 'and finished at' %} {{ recez|index:pagenum|date:"g:i a" }}</h5></div>
+            {% if titz %}{% if titz|index:pagenum %}<div><h5><b>{% trans 'Talk title:' %}</b> {{ titz|index:pagenum }}</h5></div>{% endif %}{% endif %}
+            <div><b>{% trans 'Short abstract of the conference:' %}</b> {{ infz.conference.abstract | ellipses:200 }}</div>
+            <p><small><a href="{% url 'my_app:video' redvimurl2|index:pagenum  %}">{% trans 'Go to individual video page' %}</a></small></p>
+
+            <div class="resp-container-vid">
+                <iframe class="resp-iframe-vid"
+                    src="{{ urllz2|index:pagenum }}" frameborder="0" allow="autoplay; fullscreen"
+                    allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                </iframe>
+            </div>
+            {% if nbviews %}
+            <p class="mt-2"><small>{% trans 'Viewed' %} {{ nbviews|index:pagenum }} {% trans 'time' %}{{ nbviews|index:pagenum|pluralize:",s" }}</small></p>
+            {% endif %}
+        {% endwith %}
+        {% endwith %}
+        {% endwith %}
+
+        {% endfor %}
+        {% show_pages %}
+        {% else %}
+            <div class="jumbotron mt-4">
+                <h2>{% trans 'No results found.' %}</h2>
+                <p><a href="{% url "my_app:archive" %}">{% trans 'Go back to the archived videos?' %}</a></p>
+            </div>
+        {% endif %}
+    {% else %}
+
+    {% if status != '4' %}
+    <form action="{% url 'my_app:searcharchive' %}" method="GET" style="display: flex;flex-flow: column;height: 100%;width: 100%;">
+        
+        <div class="row justify-content-center mt-2 mb-2">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="card card-sm">
+                    <div class="card-body row no-gutters align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-search h4 text-body"></i>
+                        </div>
+                        <!--end of col-->
+                        <div class="col">
+                            <input class="form-control form-control-lg form-control-borderless" name="q" id="q2" type="search" placeholder="{% trans 'Search archived videos (by title)' %}">
+                        </div>
+                        <!--end of col-->
+                        <!--<div class="col-auto" style="margin-top: -15px;">
+                            <button class="btn btn-lg btn-info" type="submit">{% trans 'Search' %}</button>
+                        </div>-->
+                        <!--end of col-->
+                    </div>
+            </div>
+            <!--end of col-->
+        </div>
+        </div>
+    </form>
+
+    {% endif %}
+    {% if status == '4' %}
+    <div class="jumbotron mt-4">
+        <h4>{% trans 'There are no conferences with videos yet! Create your conference and be the first...' %}</h4>
+    </div>
+    {% endif %}
+       
+     {% if status2 == '6' %}
+         <h2 class="lead mt-4"><strong class="text-danger">{{ urllp|length }}</strong> video{{ urllp|length|pluralize:",s" }} {% trans '(for participants only) available for the conferences you participated in that you can check' %} <a href="{% url 'my_app:archivepart' %}">{% trans 'here' %}</a>.</h2>
+
+    {% endif %}
+
+
+    {% if status == '0' %}
+
+        <input type="hidden" id="actione" value="0" />
+
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status" style="margin-top: 10px;margin-bottom: 10px;display: none;" id="spinner-vid2">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+        <div id="menu-vid"></div>
+        <div id="menu-vid-fin"></div>
+
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border text-success" role="status" style="margin-top: 10px;margin-bottom: 10px;" id="spinner-vid">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+
+       
+
+        {% comment %}
+        <h2 class="lead mt-4"><strong class="text-danger">{{ urll|length }}</strong> {% trans 'video' %}{{ urll|length|pluralize:",s" }} {% trans '(sorted by date)' %}.</h2>
+        {% paginate 10 urll %}
+        {% for url in urll %}
+            {% show_current_number as page_number %}
+            {% with page_number|add:-1 as pagenummin1 %}
+            {% if page_number > 1 %}
+                {% widthratio pagenummin1 1 10 as pageloop %}
+            {% else %}
+                {% widthratio page_number 0 10 as pageloop %}
+            {% endif %}
+            {% with forloop.counter0|add:pageloop as pagenum %}
+        {% with info|index:pagenum as inf %}
+            <hr>
+            <div><h5>{% trans 'Talk for the conference' %} <a href="{% url 'my_app:conf_detail_past' inf.conference.id  %}" target='_blank'>"{{ inf.conference.title }}"</a> ({{ inf.conference.subject }}) {% trans 'that started on' %} {{ recs|index:pagenum }} {% trans 'and finished at' %} {{ rece|index:pagenum|date:"g:i a" }}</h5></div>
+            {% if tit %}{% if tit|index:pagenum %}<div><h5><b>{% trans 'Talk title:' %}</b> {{ tit|index:pagenum }}</h5></div>{% endif %}{% endif %}
+
+            <p><small><a href="{% url 'my_app:video' redvimurl2|index:pagenum  %}">{% trans 'Go to individual video page' %}</a></small></p>
+
+            <div class="resp-container-vid">
+                <iframe class="resp-iframe-vid"
+                    src="{{ urlll|index:pagenum }}" frameborder="0" allow="autoplay; fullscreen"
+                    allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                </iframe>
+            </div>
+            {% if nbviews %}
+
+            <p class="mt-2"><small>{% trans 'Viewed' %} {{ nbviews|index:pagenum }} {% trans 'time' %}{{ nbviews|index:pagenum|pluralize:",s" }}</small></p>            {% endif %}
+        {% endwith %}
+            {% endwith %}
+            {% endwith %}
+        {% endfor %}
+        {% show_pages %}
+        {% endcomment %}
+
+    {% endif %}
+
+    {% endif %}
+    </div>
+
+    {% endblock %}
+
+    {% block scripts %}
+
+    {% verbatim %}
+    <script type="text/x-handlebars-template" id="result-template-vid">
+
+        <div class="row d-flex " id="abstomod">
+        {{#each archiveurl}}
+        <div class="col-md-6 col-sm-12 col-lg-4 col-xl-4 mb-4 mt-2">
+            <div class="card  h-100 bg-light shadow" style="border: 5px solid black;">
+                <div class="card-body d-flex-row">
+                    <div class="thumblink"><a href="../video/{{lookup ../redvimurl2 @index}}"><img src="{{lookup ../thumbnail @index}}" class="thumbima" id="im{{@index}}" alt="Thumbnail of video"></a>
+                    <a href="../video/{{lookup ../redvimurl2 @index}}"><img src="{{lookup ../thumbnailplay @index}}" class="thumbimap" id="imp{{@index}}" alt="Playing Thumbnail of video" style="display: none;"></a>
+
+                    <!--<iframe id="vid{{@index}}" class="thumbvid" style="display: none;"
+                        src="{{this}}?autoplay=1&loop=1" width="250" height="250" frameborder="0" allow="autoplay; fullscreen"
+                        webkitallowfullscreen="true" mozallowfullscreen="true">
+                    </iframe>-->
+                    </div>
+                    <blockquote class="blockquote mb-4 pb-2">
+                        <p class="mb-0 font-weight-bold" style="text-align: center;"><i><span style="color: white;">-</span>
+                        {{#with (lookup ../titles @index) as |tit|}}
+                        {{#ifCond tit '!=' ""}}<span style="margin-left: -12px;">{{tit}}</span>{{/ifCond}}
+                        {{/with}} 
+                        </i></p>
+                        <div class="blockquote-footer">"{{lookup ../conftit @index}}" ({{lookup ../confsub @index}})</div>
+                    </blockquote>
+                    <!--<div class='shorttext'><p class="card-text mb-5">ko</p></div>-->
+
+                   <!--<div class="resp-container-vid mb-3">
+
+                        <iframe 
+                            src="{{this}}" frameborder="0" allow="autoplay; fullscreen"
+                            webkitallowfullscreen="true" mozallowfullscreen="true">
+                        </iframe>
+                    </div>-->
+                    
+                    
+                    <div class="w-100 pb-1"></div>
+                    <div class="meta-item ml-auto">
+                        <p style="text-align:center;"><small>{{lookup ../start @index}}</small></p>
+                    </div>
+                        
+                    </div>
+                </div>
+        </div> 
+        {{/each}}
+        </div>
+        </div>
+    </script>
+    {% endverbatim %}
+
+    {% verbatim %}
+    <script type="text/x-handlebars-template" id="result-template-vid2">
+
+        {{#each archiveurl}}
+
+            <div class="mt-3">{% endverbatim %}{% trans 'Here is a video for the session'%} {% verbatim %}"{{lookup ../conftit @index}}" ({{lookup ../confsub @index}}){% endverbatim %} {% trans 'that started on'%} {% verbatim %}{{lookup ../start @index}}{% endverbatim %} {% trans 'and finished at'%} {% verbatim %}{{lookup ../end @index}}{% endverbatim %} {% verbatim %}</div>
+
+        {{#with (lookup ../titles @index) as |tit|}}
+        <p><i><strong>{% endverbatim %}{% trans 'Title: '%}{% verbatim %}</strong>{{#ifCond tit '!=' ""}}{{tit}}{{/ifCond}}{{#ifCond tit '==' ""}}{% endverbatim %}{% trans 'No title (you can enter the title in the Handle my archived videos menu)'%}{% verbatim %}{{/ifCond}}</i></p>
+        {{/with}} 
+        <p><small><a href='../video/{{lookup ../redvimurl2 @index}}'>{% endverbatim %}{% trans 'Go to individual video page'%}{% verbatim %}</a></small></p>
+
+        <div class="resp-container-vid mb-3">
+
+            <iframe class="resp-iframe-vid"
+                src="{{this}}" frameborder="0" allow="autoplay; fullscreen"
+                webkitallowfullscreen="true" mozallowfullscreen="true">
+            </iframe>
+        </div>
+        {{#with (lookup ../nbview @index) as |nbv|}}
+        {{#ifCond nbv '!=' ""}}
+        <p class="mt-2"><small> {% endverbatim %}{% trans 'Viewed' %}{% verbatim %} {{ nbv }} {% endverbatim %}{% trans 'time' %}{% verbatim %}s</small></p>            
+        {{/ifCond}}
+        {{/with}} 
+
+        {{/each}}
+        
+    </script>
+    {% endverbatim %}
+    
+
+    <script>
+        Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
+    
+        switch (operator) {
+            case '==':
+                return (v1 == v2) ? options.fn(this) : options.inverse(this);
+            case '===':
+                return (v1 === v2) ? options.fn(this) : options.inverse(this);
+            case '!=':
+                return (v1 != v2) ? options.fn(this) : options.inverse(this);
+            case '!==':
+                return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+            case '<':
+                return (v1 < v2) ? options.fn(this) : options.inverse(this);
+            case '<=':
+                return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+            case '>':
+                return (v1 > v2) ? options.fn(this) : options.inverse(this);
+            case '>=':
+                return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+            case '&&':
+                return (v1 && v2) ? options.fn(this) : options.inverse(this);
+            case '||':
+                return (v1 || v2) ? options.fn(this) : options.inverse(this);
+    
+            default:
+                return options.inverse(this);
+        }
+        });
+    
+        Handlebars.registerHelper('checkIf', function (v1,o1,v2,mainOperator,v3,o2,v4,options) {
+          var operators = {
+              '!==': function(a, b){ return a!=b},
+               '&&&': function(a, b){ return a&&b},
+               '|||': function(a, b){ return a||b},
+            }
+          var a1 = operators[o1](v1,v2);
+          var a2 = operators[o2](v3,v4);
+          var isTrue = operators[mainOperator](a1, a2);
+          return isTrue ? options.fn(this) : options.inverse(this);
+      });
+    
+</script>
+
+<script>
+    /*
+    $(window).scroll(function() {
+        if($(window).scrollTop() == $(document).height() - $(window).height()) {
+            // ajax call get data from server and append to the div
+            loadvideob();
+        }
+    });*/
+
+    $('#q2').on('input',function(e){
+        //alert('Changed!'+$('#q2').val());
+        $('#spinner-vid').css('display','block');
+        $('#spinner-vid2').css('display','block');
+
+        loadvideoarchb(2);
+    });
+
+
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        loadvideoarchb(1);
+    });
+
+    var wait=0;
+
+    $(window).on('scroll', function() {
+        var reachedBottom = $(window).scrollTop() + $(window).height() > $(document).height() * 0.7;
+
+        if (reachedBottom && wait==0) {
+            $('#spinner-vid').css('display','block');
+            loadvideoarchb(0);
+            wait=1;
+        }
+    });
+</script>
+    
+
+
+    
+    <script>
+        function loadvideoarchb(first) {
+            console.log("video is working!"); // sanity check
+            //alert(first);
+            $.ajax({
+                url : '/apivideoarchive/', // the endpoint
+                type : "POST", // http method
+                data : {
+                            lang: "{{LANGUAGE_CODE}}",
+                            firste:first,
+                            qval:$('#q2').val(),
+                            num:$('#actione').val(),
+                            status: {{ status }},//$('#confnumid').val(),
+                            redvimurl2:"{{ redvimurl2 }}",
+                            //sessiontit: "{{ sessiontit }}",
+                            start: "{{ recs }}",
+                            end: "{{ rece }}",
+                            nbviews: "{{ nbviews }}",
+                            titles: "{{ tit }}",
+                            archiveurl: "{{ urll }}",//$('#confnumid').val(),
+                            idconf:"{{ idconf }}",
+                            csrfmiddlewaretoken : '{{ csrf_token }}',//$('input[name=csrfmiddlewaretoken]').closest("form"),
+    
+                        }, // data sent with the post request
+    
+                // handle a successful response
+                success : function(json) {
+                    //alert('yo2');
+                    //$("#menu").load("/schedulepage");     
+                    var source = $("#result-template-vid").html();
+                    //console.log(source);
+                    var template = Handlebars.compile(source);
+                    //console.log(template);
+    
+                    // The 'template' function returns the rendered HTML
+                    //var diva = template({results: json});
+                    var context = json;
+                    //console.log(context);
+                    $("#menu-vid-fin").text('')
+                    //diva.appendTo("body");
+                    //document.getElementById('test').innerHTML = diva;
+                    if (json.result == 0) {
+                        if (json.firste == 2){
+                            //alert('ok');
+                            $( ".col-md-6.col-sm-12.col-lg-4.col-xl-4.mb-4.mt-2" ).remove();
+                            //$("#menu-vid").css('display','none');
+                            wait=1;
+
+                        }
+                        $('#actione').val(json.action);
+                        var html = template(context);
+                        $("#menu-vid").append(html);
+                        //$("#spinner-vid").hide();
+                        $('#spinner-vid').css('display','none');
+                        $('#spinner-vid2').css('display','none');
+
+                        if(json.finished==0){
+                            wait=0;
+                        }else{
+                            if (json.firste != 2 && json.firste != 1){
+                                //alert(json.firste);
+                                $("#menu-vid-fin").append("<h5 style='text-align:center;'>{% trans 'No more videos found...' %}</h5>");
+                            }else{
+                                if (json.archiveurl.length === 0){
+                                    $("#menu-vid-fin").append("<h5 style='text-align:center;'>{% trans 'No video found' %}</h5>");
+                                }
+                            }
+                        }
+    
+                    }     
+    
+                },
+    
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {
+                    $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                        " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+        };
+        </script>
+
+<script>
+
+
+$(document).on({
+    mouseenter: function () {
+        //alert('ok');
+
+        //$(this).hide();
+        //$('img', this).prop('src', 'images/myImage2.png');
+        //$(this).find('.thumbima').css('display', 'none');
+        $(this).find('.thumbimap').css('display', 'block');
+        $(this).find('.thumbima').css('display', 'none');
+    },
+   
+}, ".thumblink"); //pass the element as an argument to .on
+
+$(document).on({
+    
+    mouseleave: function () {
+        $(this).find('.thumbimap').css('display', 'none');
+        $(this).find('.thumbima').css('display', 'block');
+        //alert('ok2');
+        //$(this).find('.thumbima').css('z-index', '1');
+        //$(this).find('.thumbvid').css('display', 'none');
+        //$(this).show();
+    }
+}, ".card-body.d-flex-row");
+
+</script>
+{% endblock %}
+

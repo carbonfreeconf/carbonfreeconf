@@ -1,0 +1,117 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="shortcut icon" href="{%  static 'images/trainingred.svg' %}">
+
+    <!-- Custom styles for this template -->
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.css" type="text/css">
+    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js" type="text/javascript"></script>
+
+
+
+
+    <title>Exit page</title>
+  </head>
+  <body>
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">The trial of the virtual room is now over!</h1>
+      <p class="lead"> See you in the upcoming live conference...</p>
+      <hr class="my-4">
+        <p>If you wish, you can go to the <a target="_parent" href="{% url 'my_app:home' %}">CarbonFreeConf website</a> to check for <a target="_parent" href="{% url 'my_app:archive' %}">archived videos</a>
+            and/or <a target="_parent" href="{% url 'my_app:archiveproc' %}">proceedings</a> in your field.</p>
+              <a class="btn btn-primary btn-lg" target="_parent" href="{% url 'my_app:home' %}" role="button">Go back to home page</a>
+    </div>
+</div>
+
+<script>
+$(window).on("load", function(event) {
+    //call ajax qui va remettre a false le isinconf
+    //event.preventDefault();
+    //alert('bef');
+
+  // the timer is only to let the message box disappear after the user
+  // decides to stay on this page
+  // set this to 1ms .. since timers are stopped for this modal
+
+
+    //return confirm("Do you really want to close?");
+    //$("#exampleModal").modal('show');
+
+    if(/Firefox[\/\s](\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 4) {
+        console.log('firefox delete');
+        //alert('firefox');
+         var datam={async:false};
+         isinconfb(datam);
+         return undefined;
+      }
+      else {
+        console.log('NON-firefox delete');
+        //alert('others');
+         var datam={async:true};
+         isinconfb(datam);
+        return undefined;
+      }
+    //alert('bef');
+
+    //isinconfb();
+    //return undefined;
+    //return confirm("Do you really want to close?");
+})
+</script>
+
+<script>
+function isinconfb(datam) {
+console.log("isinconf is working!");// sanity check
+//console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+    //alert('bef');
+$.ajax({
+    url : "/isinconfb",//"{% url 'my_app:addpeople' %}", // the endpoint
+    type : "POST", // http method
+    //if(/Firefox[\/\s](\d+)/.test(navigator.userAgent) && new Number(RegExp.$1) >= 4)
+    //{
+    async: datam.async,
+    //}
+    data : {    //title : $('#id_title').val(),
+                //loopnum : $('.divpeop').last().attr('id'),
+                //confnum : {{ confnum }},//$('#confnumid').val(),
+                csrfmiddlewaretoken:'{{ csrf_token }}',
+            }, // data sent with the post request
+
+    // handle a successful response
+    success : function(json) {
+
+        console.log(json); // log the returned json to the console
+        //var source = $("#result-template").html();
+        //alert(json.title)
+        //$(document.body).append(html);
+
+        //alert('success');
+        console.log("success"); // another sanity check
+    },
+
+    // handle a non-successful response
+    error : function(xhr,errmsg,err) {
+        $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+            " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+    }
+});
+};
+</script>
+
+<!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

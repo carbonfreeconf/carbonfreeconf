@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} Individual conference program {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Check out the conference program for a given session" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.css" type="text/css">
+<script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js" type="text/javascript"></script>
+<script src="https://export.dhtmlx.com/scheduler/api.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+    <div class="jumbotron mt-3">
+
+    <div><p><b>The program for the conference: {{ confprog.title }}</b></p></div>
+        {% include "my_app/schedule.html" with loca="mastconf" confnum=confprog.id start_date=start_date timestart=timestart timefinish=timefinish mineventheight=mineventheight heighthr=heighthr minieventtime=minieventtime opacity=opacity %}
+    </div>
+</div>
+
+
+{% endblock %}

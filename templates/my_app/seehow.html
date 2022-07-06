@@ -1,0 +1,771 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} About the CarbonFreeConf team that organizes seminars and conferences {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Meet the team that allowed virtual conferences to be carbon-neutral." />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block extrahead %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" media="print" onload="this.media='all'">
+<!--<script src="{% static "vendor/@fancyapps/fancybox/jquery.fancybox.min.js" %}"></script>-->
+{% endblock %}
+
+{% block content %}
+
+    <style>
+    .carousel-item{
+    height: 500px;
+    }
+
+    .carousel-item img{
+        height: 500px;
+    }
+
+    .carousel-caption3 {
+    position: absolute;
+    /*border: 1px solid black;*/
+    bottom: 40px;
+    /*left: 0;*/
+    color: black;
+    text-align: center;
+    /*padding: 10px;*/
+    right: 30%;
+    /*bottom: 20px;*/
+    left: 30%;
+    /*z-index: 10;*/
+    /*padding-top: 20px;*/
+    /*padding-bottom: 20px;*/
+}
+    </style>
+
+<div class="container">
+    <div class="jumbotron mt-4">
+      <h1 class="display-4">See how it works</h1>
+      <p class="lead">Here we show a few of the highlights of the tools created by CarbonFreeConf to design your virtual conference in a few clicks.</p>
+      <hr class="my-4">
+      <p>You can test all of that by yourself with the free version anyway (click on Start organizing a conference) or you can read this page and check what is available for you at a glance.</p>
+      
+    </div>
+    <div style="text-align: center" class="buttons-group">
+      <a class="btn mt-4 mb-4" href="{% url 'my_app:contactform' %}">Contact us</a>
+      <a class="btn mt-4 mb-4" href="{% url 'my_app:hostconf' %}" role="button">Start organizing a conference</a>
+  </div>
+</div>
+
+    <div class="container">
+  <div id="video-carousel-example2" class="carousel slide carousel-fade" data-ride="carousel">
+                      <!--Indicators-->
+                      <!--<ol class="carousel-indicators">
+                        <li data-target="#video-carousel-example2" data-slide-to="0" class="active"></li>
+                        <li data-target="#video-carousel-example2" data-slide-to="1"></li>
+                        <li data-target="#video-carousel-example2" data-slide-to="2"></li>
+                      </ol>-->
+                      <!--/.Indicators-->
+                      <!--Slides-->
+
+                      <div class="carousel-inner" role="listbox">
+                        <!-- First slide -->
+                        <div class="carousel-item active">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                  <a href="#b0" id="my-link0"><img src="{% static "images/create.png" %}" loading="lazy" width="50%" alt="How to make my webinar?"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">Create your conference</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Make your own conference in one click</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                        <!-- /.First slide -->
+                        <!-- Second slide -->
+                        <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b1" id="my-link1"><img src="{% static "images/addpart.png" %}" loading="lazy" width="50%" alt="How to add participants?"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">How to manage your participants?</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Accept and handle the participant talks, send a group email, ...</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b2" id="my-link2"><img src="{% static "images/program.png" %}" loading="lazy" width="50%" alt="How to make your program in a few clicks?"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">How to make your program?</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Add one talk, a poster or lunch session in a few clicks</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+
+
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b3" id="my-link3"><img src="{% static "images/website.png" %}" loading="lazy" width="50%" alt="How to make your conference website?"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">Make your conference website in one click</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>A conference website is automatically created including dates, presenter abstracts, registration page, payment section, ... </small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b4" id="my-link4"><img src="{% static "images/poster.png" %}" loading="lazy" width="50%" alt="Checkout the poster presentations"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">See what posters look like</h5>
+                              <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>You can see the poster, upvote it and ask questions in a dedicated chat room</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b5" id="my-link5"><img src="{% static "images/chatroom.png" %}" loading="lazy" width="50%" alt="Checkout the chat rooms"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">See what chat rooms look like</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>You can create private groups, contact persons individually and much more...</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b6" id="my-link6"><img src="{% static "images/webinarroom.png" %}" loading="lazy" width="50%" alt="Checkout the webinar room"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                                <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">See what your webinar room will look like</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Participants can chat, share screen, add documents, write on a white board, ...</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b10" id="my-link10"><img src="{% static "images/qanda.png" %}" loading="lazy" width="50%" alt="Check out the live Q&A section"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                                <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">Check out the live Q&A section</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Participants can ask live questions to the speaker, upvote them, ...</small></p>
+                            </div>
+                          </div>
+
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b11" id="my-link11"><img src="{% static "images/polls.png" %}" loading="lazy" width="50%" alt="Super interactive live polls"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                                <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">Super interactive live polls</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Participants, moderators, ... can poll other conference attendees and be polled. They see the results as a bar chart when the poll is complete.</small></p>
+                            </div>
+                          </div>
+
+                          <!--Caption-->
+                        </div>
+
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                 <a href="#b9" id="my-link9"><img src="{% static "images/latesttweets.png" %}" loading="lazy" width="50%" alt="Checkout the webinar room"></a>
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                              <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">See the latest tweets about your meeting</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Participants can tweet during the conference and check the latest tweets from others live!</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b7" id="my-link7"><img src="{% static "images/subscribe.png" %}" loading="lazy" width="50%" alt="Subscription form for participants"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                                <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">Participants can subscribe on your website</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>Participants can ask for a poster, talk, or just attend the conference via a simple form on your website</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                          <div class="carousel-item">
+                          <!--Mask color-->
+                          <div class="view" style="text-align: center">
+
+                                   <a href="#b8" id="my-link8"><img src="{% static "images/pay.png" %}" loading="lazy" width="50%" alt="Checkout page for participants"></a>
+
+
+
+                              <div class="mask rgba-black-strong"></div><!--strong mask-->
+                          </div>
+
+                          <!--Caption-->
+                          <div class="carousel-caption3">
+                            <div class="animated fadeInDown">
+                               <h5 class="h5-responsive" style="color: white; background-color: rgba(0,0,0,0.5);">Participants pay the fees on your website</h5>
+                                <p style="color: white; background-color: rgba(0,0,0,0.5);"><small>If the conference is not free, participants can pay directly on your conference website</small></p>
+                            </div>
+                          </div>
+                          <!--Caption-->
+                        </div>
+                      </div>
+                      <!--/.Slides-->
+                      <!--Controls-->
+                      <a class="carousel-control-prev" href="#video-carousel-example2" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                      <a class="carousel-control-next" href="#video-carousel-example2" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                      <!--/.Controls-->
+                    </div>
+</div>
+    <section class="accordion-section clearfix mt-5" aria-label="Question Accordions">
+  <div class="container">
+
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+		<div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading0">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b0" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse0" aria-expanded="true" aria-controls="collapse0">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Create your conference in 2-min
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse0" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading0">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+                        <a href="{% static "images/create.png" %}" data-fancybox="images" data-caption="<strong>Create your conference</strong><br>Make your own conference in one click"><img src="{% static "images/create.png" %}" loading="lazy" width="100%" alt="How to make my webinar?"></a>
+
+                        <!--<img src="{% static "images/create.png" %}" width="100%" alt="How to make my webinar?">-->
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is the page to create your conference.</strong> As you see, all it takes is answering a few questions (that can be updated later though if needed).</p>
+                        <p>After you fill in the essential, like the conference title, abstract and dates, you are asked about the number of people that will join online and whether participants will have to pay to register.</p>
+                        <p>The last part of the form is used if your conference has multi-sessions in parallel. In this case you can either create the master conference that will host all the parallel sessions or just add a session to an already created master conference.</p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+
+          <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading1">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b1" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="true" aria-controls="collapse1">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Handle your participants and communicate with them
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading1">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+                        <a href="{% static "images/addpartlarge.png" %}" data-fancybox="images" data-caption="<strong>How to add/see participants?</strong><br>See participants and/or invite them to join the conference."><img src="{% static "images/addpart.png" %}" loading="lazy" width="100%" alt="How to add participants?"></a>
+                        <a href="{% static "images/seepartlarge.png" %}" data-fancybox="images" data-caption="<strong>How to manage your participants?</strong><br>Accept and handle the participant talks, wave the fees for some of them."><img src="{% static "images/seepart.png" %}" loading="lazy" width="100%" alt="How to accept participant talks?"></a>
+                        <a href="{% static "images/emailgrouplarge.png" %}" data-fancybox="images" data-caption="<strong>How to send emails to your participants?</strong><br>Send individual or group emails to targeted participants to remind them of their upcoming talk, or to submit their abstract, or pay, ..."><img src="{% static "images/emailgroup.png" %}" loading="lazy" width="100%" alt="How to send a group email?"></a>
+                        <!--<img src="{% static "images/addpartlarge.png" %}" width="60%" alt="How to add participants?"></a>-->
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is the page to manage your participants.</strong> You can add new participants and contact them directly via the platform. You can also see participants who registered using the conference website but that you had not invited directly.</p>
+
+                        <p>You can add the talks of your participants to the program scheduler by clicking the plus button so that you only have to set-up the time of the talk and all other info are already filled in. You can also email users one by one or as a group (e.g. those that have accepted talks, those that haven't paid yet, ...).</p>
+
+                        <p>When participants register, you can then see if they want to give a talk, display a poster or just attend to the webinar. You should read all the details about their participations and accept/reject/modify their proposals. You can also decide
+                            to make someone part of the organizers or be a moderator during the webinar or even to make the conference free of charge for a given user. </p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+
+        <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading2">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b2" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="true" aria-controls="collapse2">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Make your conference program in a few clicks
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading2">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/program.png" %}" width="100%" alt="Make your conference program">-->
+                        <a href="{% static "images/programlarge.png" %}" data-fancybox="images" data-caption="<strong>How to make your program?</strong><br>Add one talk, a poster or lunch session in a few clicks"><img src="{% static "images/program.png" %}" loading="lazy" width="100%" alt="How to make your program in a few clicks?"></a>
+
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is the page to make your conference program.</strong> You can handle the whole conference program from here, add talks, breaks, discussion sessions, ...</p>
+                        <p>To ease the process, abstracts entered by participants and accepted by organizers can be added to the program in one click and then placed at the right time by organizers.</p>
+                        <p>Each event can be parametrized individually and once the program is ready it can be displayed as is on your conference website. Note that there are a day, week and month views that can be useful for different purposes.</p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+        <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading3">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b3" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="true" aria-controls="collapse3">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Make your conference website in one click
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading3">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/websitelarge.png" %}" width="100%" alt="Make your website in one click">-->
+                        <a href="{% static "images/websitelarge.png" %}" data-fancybox="images" data-caption="<strong>Make your conference website in one click</strong><br>Give a description of your conference to participants and then a conference website is automatically created including dates, presenter abstracts, registration page, payment section, ..."><img src="{% static "images/website.png" %}" loading="lazy" width="100%" alt="How to make your conference website?"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is the page to make your conference website.</strong> You give a rationale of your conference as well as some guidelines and the conference website is then automatically created.</p>
+                                <p>The website will include all the conference details it will gather from the admin panel such as the dates, program, presenter abstracts, ... It will also include a registration page so that
+                                    participants can submit an abstract or a poster. If the conference is not free, there is a payment section that is automatically created.</p>
+
+                        <p>The website colors can be personalized as well as the text font and size. Images can also be added to make it unique. </p>
+
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+          <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading4">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b4" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="true" aria-controls="collapse4">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Check what posters look like and how interactions with presenters work
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading4">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/posterlarge.png" %}" width="100%" alt="Poster presentations">-->
+                        <a href="{% static "images/posterlarge.png" %}" data-fancybox="images" data-caption="<strong>See what posters look like</strong><br>You can see the poster, upvote it and ask questions in a dedicated chat room"><img src="{% static "images/poster.png" %}" loading="lazy" width="100%" alt="Checkout the poster presentations"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is the page showing an example of a poster stand.</strong> The poster is displayed as well as a section dedicated to questions and discussions.</p>
+                        <p>There is a chat room dedicated to questions and discussions with the poster presenter. In this room the presenter can post a vocal or video message in complement to the poster if wanted.</p>
+                        <p>Posters can also be upvoted by participants.</p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+          <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading5">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b5" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse5" aria-expanded="true" aria-controls="collapse5">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Check what the chat rooms look like
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading5">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/chatroomlarge.png" %}" width="100%" alt="Chat with your peers">-->
+                        <a href="{% static "images/chatroomlarge.png" %}" data-fancybox="images" data-caption="<strong>See what chat rooms look like</strong><br>You can create private groups, contact persons individually and much more..."><img src="{% static "images/chatroom.png" %}" loading="lazy" width="100%" alt="Checkout the chat rooms"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is the chat accessible to every participant.</strong> This is the place where conference participants gather before, after or during the conference.</p>
+                        <p>There are different rooms accessible to everyone (e.g. bar, help desk, general conference room) and some private groups (e.g. for organizers). Different types of content can be used (e.g. text, vocal, video) and if needed, participants can also call each other in video.</p>
+                        <p>The organizers can create some new private groups and select who can access them.</p>
+                        <p>This is the heart of the conference where deep discussion about presentations can happen.</p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+              <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading6">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b6" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse6" aria-expanded="true" aria-controls="collapse6">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Check what the webinar room will look like
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading6">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/webinarroomlarge.png" %}" width="100%" alt="Chat with your peers">-->
+                        <a href="{% static "images/webinarroomlarge.png" %}" data-fancybox="images" data-caption="<strong>See what your webinar room will look like</strong><br>Participants can chat, share screen, record, ..."><img src="{% static "images/webinarroom.png" %}" loading="lazy" width="100%" alt="Checkout the webinar room"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is an example of a webinar room for your conferences.</strong> This is the place where the live conference happens.</p>
+                              <p>Participants have multiple options to interact. They can chat, share screen, record, talk, ...</p>
+                        <p>Organizers can pick moderators that have more control over other users such as turn other user mics off or eject users that would not abide by the code of conduct after a warning.</p>
+                        <p>The Q&A section should be used by participants instead of the conference chat to ask questions to the speaker. There are multiple other tabs that can be consulted to, e.g., have a quick look at the program, see the poster room, go to the chat room, ...</p>
+
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+              <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading10">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b10" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse10" aria-expanded="true" aria-controls="collapse10">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Check out the live Q&A section
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse10" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading10">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/webinarroomlarge.png" %}" width="100%" alt="Chat with your peers">-->
+                        <a href="{% static "images/qandalarge.png" %}" data-fancybox="images" data-caption="<strong>Check out the live Q&A section</strong><br>Participants can ask live questions to the speaker, upvote them, ..."><img src="{% static "images/qanda.png" %}" loading="lazy" width="100%" alt="Checkout the live Q&A section"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is an example of the live Q&A section while the conference is running.</strong> This is the place where participants can interact with the speaker live.</p>
+                              <p>Participants ask questions here. Questions can be upvoted once by each attendee. The moderators and organizers can highlight questions (e.g. while it is being asked) or remove questions (e.g. when it has been answered). All questions can also be removed at once (e.g. a different speaker arrives). </p>
+                        <p>The Q&A section is a must have for the interactivity of the meeting. Participants can decide to ask the question anonymously or not.</p>
+
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+              <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading11">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b11" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse11" aria-expanded="true" aria-controls="collapse11">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> See our super interactive live polls
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse11" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading11">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/webinarroomlarge.png" %}" width="100%" alt="Chat with your peers">-->
+                        <a href="{% static "images/pollslarge.png" %}" data-fancybox="images" data-caption="<strong>Super interactive live polls</strong><br>Participants can poll and be polled by other conference attendees or even by the speaker. They see the results as a bar chart when the poll is complete."><img src="{% static "images/polls.png" %}" loading="lazy" width="100%" alt="Super interactive live polls"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is an example of live polls while the conference is running.</strong> This is the place where the speaker can interact with participants live by preparing a few polls for the audience.</p>
+                              <p>The speaker or participants in general can write polls here. The moderators then decide, which polls go live and when they stop them to eventually show the poll results (as a bar chart). The moderators and organizers can highlight certain polls (if necessary) or remove them (e.g. when a new speaker comes). All polls can also be removed at once (which can be useful in a rush). </p>
+                        <p>The polling section is a must have for the interactivity of the meeting. It is the best way for the speaker to interact with his wide audience. Participants can decide to write polls anonymously or not.</p>
+
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+
+              <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading9">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b9" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse9" aria-expanded="true" aria-controls="collapse9">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Follow the latest tweets with the conference hashtag
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse9" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading9">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/webinarroom.png" %}" width="100%" alt="Chat with your peers">-->
+
+                        <a href="{% static "images/latesttweetslarge.png" %}" data-fancybox="images" data-caption="<strong>See the latest tweets about your meeting</strong><br>Participants can tweet during the conference and check the latest tweets from others live!"><img src="{% static "images/latesttweets.png" %}" loading="lazy" width="100%" alt="Checkout the webinar room"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is an example of the page your participants see when they are connected to the live feed during the virtual conference.</strong> All participants can share new findings on twitter very easily.</p>
+                        <p>Participants have a dedicated panel to see the latest tweets about the conference, either from them or from other colleagues following the meeting.</p>
+                        <p>This is an important part as it enables research to be shared across long distances to people that are not in the room (be them researchers or the public at large).</p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+                  <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading7">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b7" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="true" aria-controls="collapse7">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Page where participants can subscribe to your conference
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading7">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/webinarroom.png" %}" width="100%" alt="Chat with your peers">-->
+                        <a href="{% static "images/subscribelarge.png" %}" data-fancybox="images" data-caption="<strong>See what your webinar room will look like</strong><br>Participants can chat, share screen, add documents, write on a white board, ..."><img src="{% static "images/subscribe.png" %}" loading="lazy" width="100%" alt="Checkout the webinar room"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is an example of the page for your participants to register for, e.g., a talk, a poster.</strong> This is the heart of the conference website where your participants come and register their talk or poster.</p>
+                              <p>They can also choose to just attend the conference and it is up to the organizers to accept or not this possibility.</p>
+                        <p>Participants can also write about themselves in a biography section to give some background to the organizers in order to better assess whether to accept the talk or not.</p>
+                        <p>Participants can register for several talks and posters if they want.</p>
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+          <div class="panel panel-default">
+		  <div class="panel-heading p-3 mb-3" role="tab" id="heading8">
+			<h3 class="panel-title">
+			  <a class="collapsed" role="button" name="b8" title="" data-toggle="collapse" data-parent="#accordion" href="#collapse8" aria-expanded="true" aria-controls="collapse8">
+				<i class="fas fa-star ml-2" style="color:#FF9933"></i> Page to pay the fees for participants
+			  </a>
+			</h3>
+		  </div>
+		  <div id="collapse8" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading8">
+			<div class="panel-body px-3 mb-4">
+                <div class="row">
+                    <div class="col-6">
+
+                        <!--<img src="{% static "images/webinarroom.png" %}" width="100%" alt="Chat with your peers">-->
+                        <a href="{% static "images/paylarge.png" %}" data-fancybox="images" data-caption="<strong>See what your webinar room will look like</strong><br>Participants can chat, share screen, add documents, write on a white board, ..."><img src="{% static "images/pay.png" %}" loading="lazy" width="100%" alt="Checkout the webinar room"></a>
+
+                    </div>
+                    <div class="col-6 my-auto" align="justify">
+                        <p><strong>This is an example of the payment page for your participants.</strong> This is the place where the conference participants can pay the conference fees if it is not free.</p>
+                        <p>There are different payment methods such as credit cards and paypal and the fees can be paid in euros, british pounds or US dollars.</p>
+
+                    </div>
+                </div>
+			</div>
+		  </div>
+		</div>
+
+  </div>
+  </div>
+</section>
+
+    <script>
+    $('#my-link0').click(function(e) {
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse0').collapse('show');
+});
+    </script>
+
+        <script>
+    $('#my-link1').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse1').collapse('show');
+});
+    </script>
+    <script>
+    $('#my-link2').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse2').collapse('show');
+});
+    </script>
+    <script>
+    $('#my-link3').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse3').collapse('show');
+});
+    </script>
+    <script>
+    $('#my-link4').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse4').collapse('show');
+});
+    </script>
+    <script>
+    $('#my-link5').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse5').collapse('show');
+});
+    </script>
+     <script>
+    $('#my-link6').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse6').collapse('show');
+});
+    </script>
+      <script>
+    $('#my-link7').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse7').collapse('show');
+});
+    </script>
+      <script>
+    $('#my-link8').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse8').collapse('show');
+});
+    </script>
+    <script>
+    $('#my-link9').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse9').collapse('show');
+});
+    </script>
+    <script>
+    $('#my-link10').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse10').collapse('show');
+});
+    </script>
+
+     <script>
+    $('#my-link11').click(function(e) {
+    //$('#collapse1').collapse('hide');
+    $('.panel-collapse.collapse').collapse('hide');
+        //alert('r');
+    $('#collapse11').collapse('show');
+});
+    </script>
+
+{% endblock %}

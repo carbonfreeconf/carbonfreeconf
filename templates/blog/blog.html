@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static "css/style.default.css" %}" id="theme-stylesheet">
+
+     {% include 'blog/header.html' %}
+
+    <div class="container">
+      <div class="row">
+        <!-- Latest Posts -->
+        <main class="posts-listing col-lg-8"> 
+          <div class="container">
+            <div class="row">
+              <!-- post -->
+              {% for post in queryset %}
+              <div class="post col-xl-6">
+                <div class="post-thumbnail" style="align-items:center;display: flex;
+  justify-content: center;"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="img-fluid" style="height:300px"></a></div>
+                <div class="post-details">
+                  <div class="post-meta d-flex justify-content-between">
+                    {% comment %} <div class="date meta-last">20 May | 2016</div> {% endcomment %}
+                    <div class="category">
+                    {% for cat in post.categories.all %}
+                    <a href="/blog-search/?q={{ cat }}">{{ cat }}</a>
+                    {% endfor %}
+                    </div>
+                  </div><a href="{{ post.get_absolute_url }}">
+                    <h3 class="h4">{{ post.title }}</h3></a>
+                  <p class="text-muted">{{ post.overview }}</p>
+                  <div class="post-footer d-flex align-items-center">
+                    <div class="author d-flex align-items-center flex-wrap">
+                        {% if post.author.userprofileinfo.profile_pic %}
+                      <div class="avatar"><img src="{{ post.author.userprofileinfo.profile_pic.url }}" alt="{{ post.author.username }}" class="img-fluid"></div>
+                        {% endif %}
+                      <div class="title"><span>{{ post.author.username }}</span></div>
+                    </div>
+                      <div class="date"><small><i class="icon-clock"></i>{{ post.timestamp|timesince }} ago</small></div>
+                    <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment_count }}</div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <!-- Pagination -->
+          {% if queryset.length > 4 %}
+            <nav aria-label="Page navigation example">
+              <ul class="pagination pagination-template d-flex justify-content-center">
+                {% if queryset.has_previous %}                
+                <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+                {% endif %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.number }}" class="page-link active">{{ queryset.number }}</a></li>
+                {% if queryset.has_next %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+                {% endif %}
+              </ul>
+            </nav>
+        {% endif %}
+            {% if is_paginated %}
+            
+            <nav aria-label="Page navigation example">
+              <ul class="pagination pagination-template d-flex justify-content-center">
+                {% if page_obj.has_previous %}                
+                <li class="page-item"><a href="?{{ page_request_var }}={{ page_obj.previous_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+                {% endif %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ page_obj.number }}" class="page-link active">{{ page_obj.number }}</a></li>
+                {% if page_obj.has_next %}
+                <li class="page-item"><a href="?{{ page_request_var }}={{ page_obj.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+                {% endif %}
+              </ul>
+            </nav>
+            
+            {% endif %}
+          </div>
+        </main>
+        {% include 'blog/sidebar.html' with most_recent=most_recent category_count=category_count %}
+      </div>
+    </div>
+
+{% endblock content %}

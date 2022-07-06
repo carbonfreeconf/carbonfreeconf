@@ -1,0 +1,1504 @@
+{% extends 'base.html' %}
+{% load tz %}
+{% get_current_timezone as TIME_ZONE %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load static %}
+{% load i18n %}
+{% load index %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block title %} Create your research conference {% endblock %}
+{% block extra_head_tags %}
+  <meta name="description" content="Create a Carbon-Free virtual meeting in a few clicks" />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/host-conference/" />
+{% endblock %}
+
+{% block extrahead %}
+{{ createconf_form.media }}
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<!-- <main>
+  <div class="intro-create">
+    <div class="content">
+      <div class="pretitle">Let's go</div>
+      <h1>{% trans "Create your <span>conference</span>!" %}</h1>
+      <p>You can create a conference for free now by filling in this form to check how it all works. You can cancel and delete it any time at no cost. If you want the conference to happen you have to pay before it starts, otherwise you will not be charged and the conference will not run. If you just want to use are tools to create a website and manage your participants without running the meeting with us, you can do so for free. <b>All the choices you make here can be changed later so that you can still chat with co-organizers and update things as it goes!</b></p>
+      <a href="{% url 'my_app:exampleModalcrea' %}">In doubt? Read the guide!</a>
+    </div>
+  </div>
+  <section class="create">
+    <div class="modify">
+      {% if conf_list_user|length > 0 %}
+      <form name=changeconfForm action="{% url 'my_app:createconf' %}" method="POST">
+        <label for="conf-select">Modify another of your conferences instead?</label>
+        {% csrf_token %}
+        <select name="conf" class="browser-default custom-select mb-4" id="conf-select" onChange="changeconfForm.submit();">
+          <option value="">--Please choose another conference to update it--</option>
+          {% for conf in conf_list_user %}
+            <option value="{{ conf.title }}">{% if conf.masterconf or conf.daughterconf %}{% if conf.daughterconfstarwars %}{% if conf.masterconfdaughtername %}{{ conf.masterconfdaughtername }}{% else %}Plenaries{% endif %}{% else %} S{{ conf.masterconfdaughterposition }} {% endif %} - {% endif %}{{ conf.title|ellipses:50 }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      {% endif %}
+    </div>
+    <form name="createconf_form" enctype="multipart/form-data" method="POST" action="{% url 'my_app:createconf' %}">
+      {% csrf_token %}
+      {{ createconf_form.title|as_crispy_field }}
+      <div id="testalr"></div>
+      {{ createconf_form.abstract|as_crispy_field }}
+      <svg id="tooltipSessions" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-.001 5.75c.69 0 1.251.56 1.251 1.25s-.561 1.25-1.251 1.25-1.249-.56-1.249-1.25.559-1.25 1.249-1.25zm2.001 12.25h-4v-1c.484-.179 1-.201 1-.735v-4.467c0-.534-.516-.618-1-.797v-1h3v6.265c0 .535.517.558 1 .735v.999z"/></svg>
+      {{ createconf_form.priv|as_crispy_field }}
+      {{ createconf_form.start_date|as_crispy_field }}
+
+      {{ createconf_form.end_date|as_crispy_field }}
+      {{ createconf_form.size|as_crispy_field }}
+      {{ createconf_form.subject|as_crispy_field }}
+      {{ createconf_form.justtools|as_crispy_field }}
+  <div id="nottool">
+    <svg id="tooltipFreeTools" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-.001 5.75c.69 0 1.251.56 1.251 1.25s-.561 1.25-1.251 1.25-1.249-.56-1.249-1.25.559-1.25 1.249-1.25zm2.001 12.25h-4v-1c.484-.179 1-.201 1-.735v-4.467c0-.534-.516-.618-1-.797v-1h3v6.265c0 .535.517.558 1 .735v.999z"/></svg>
+      <div>{{ createconf_form.feeunique|as_crispy_field }}</div>
+      <div id="nopeu"></div>
+      <div id="feesu" style="display: none;">
+          <div><b>The fee per participant is <span id="totab" style="font-size: 18px;"></span><span id="tota" style="font-size: 18px;">{{ COST_PER_PARTICIPANT }}</span><span id="totaa" style="font-size: 18px;"> €</span></b></div>
+          <div>{{ createconf_form.fee_currency_unique|as_crispy_field }}</div>
+      </div>
+    <svg id="tooltipFees" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-.001 5.75c.69 0 1.251.56 1.251 1.25s-.561 1.25-1.251 1.25-1.249-.56-1.249-1.25.559-1.25 1.249-1.25zm2.001 12.25h-4v-1c.484-.179 1-.201 1-.735v-4.467c0-.534-.516-.618-1-.797v-1h3v6.265c0 .535.517.558 1 .735v.999z"/></svg>
+    {{ createconf_form.fee|as_crispy_field }}
+      <div id="nope"></div>
+      <div id="fees" style="display: none;">
+          <div class="row">
+          <div class="col">
+              {{ createconf_form.fee_amount|as_crispy_field }}
+              <div class="col">{{ createconf_form.fee_variable|as_crispy_field }}</div>
+          </div>
+          <div class="col">{{ createconf_form.fee_currency|as_crispy_field }}</div>
+          <div class="col">{{ createconf_form.fee_to_carbon|as_crispy_field }}</div>
+          </div>
+          <div class="row">
+          <div class="col" id="amount">
+          </div>
+          </div>
+      </div>
+      {{ createconf_form.hybrid|as_crispy_field }}
+      {{ createconf_form.proceedin|as_crispy_field }}
+      <input type="checkbox" value="multi" id="multi" name="multi"/>
+      <label for="multi">Is it a conference with more than one parallel session?</label><br/>
+      <div id="multisession">
+          <div style="margin-left: 30px">{{ createconf_form.masterconf|as_crispy_field }}</div>
+          <div style="margin-left: 30px">{{ createconf_form.daughterconf|as_crispy_field }}</div>
+      </div>
+      <div id="mastpass">
+          <div style="margin-left: 60px">{{ createconf_form.masterconfpass|as_crispy_field }}</div>
+      </div>
+      </div>
+      {% if mastconfdontexist %}
+      <div style="color: red"><strong>This master conference ID does not exist</strong></div>
+      {% endif %}
+      {% if mastconfalreadypaid %}
+      <div style="color: red"><strong>No more sessions can be created (contact the organizers for more details).</strong></div>
+      {% endif %}
+      {% if mastconfdate %}
+      <div style="color: red"><strong>The dates for your session do not fit in between the dates chosen for the master conference (see with the master conference organizers if the starting and/or ending dates needs to be updated)</strong></div>
+      {% endif %}
+      <input type="hidden" name="conf" class="conf" value="conf" />
+      <div class="mt-4 mb-3"><button type="submit" id="regconf" class="btn btn-success" onClick="this.form.submit(); this.disabled=true; this.innerText = 'Creating the conference...';"><i class="fas fa-heart"></i> Create the conference</button></div>
+      {% if conffailed %}
+      <div style="color: red"><strong>The conference was not created, please try again later</strong></div>
+      {% endif %}
+    </form>
+  </section>
+</main> -->
+
+<style>
+
+  .containerpage
+  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 10vh;
+  }
+
+  .up-arrow {
+      position: absolute; /* magic */
+    width: 0;
+    height: 0;
+      padding: 4px 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    display: inline-block;
+  }
+
+  .down-arrow {
+      width: 0;
+    height: 0;
+      /*padding: 3px 0;*/
+      margin-bottom: -2px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid black;
+    display: inline-block;
+
+  }
+
+  /* Large rounded green border */
+  hr.new5 {
+    border: 10px solid #9C3848;
+    border-radius: 5px;
+  }
+
+  #multisession {
+      display: none;
+  }
+  #mastpass {
+      display: none;
+  }
+  .collapse2 {
+      display: none;
+  }
+  .collapse24 {
+      display: none;
+  }
+
+  #feedback {
+    float: left;
+    position: fixed;
+    top: calc(50% - 47px);
+    left: 0;
+      z-index: 100;
+      display: none !important;
+  }
+
+  #feedback a {
+    background: #9AD4D6;
+    border-radius: 5px 0 0 5px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .3);
+    border: 3px solid #fff;
+    border-left: 0;
+    display: block;
+    padding: 20px 12px;
+    transition: all .2s ease-in-out;
+  }
+
+  #feedback a:hover {
+    padding-left: 20px;
+  }
+  .container {
+      /*document.getElementById("inlineFrameExample").style.width = "100%";*/
+
+      padding-left: 50px;
+      padding-right: 70px;
+      margin-left: 20px;
+      margin-right: 20px;
+      max-width: none;
+
+  }
+
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 300px;
+    line-height: 1.2;
+    resize: none;
+    margin-top: 5px;
+    /*padding: 4px;*/
+  }
+
+  textarea:focus {
+    outline: none;
+  }
+
+  span {
+    /* font-size: 13px; */
+  }
+
+  span.username-label {
+    font-weight: bold;
+  }
+
+  div.vis-tooltip {
+      color:black!important;
+      border: 3px solid #444444!important;
+      background-color: #EEEEEE!important;;/*lightsteelblue!important;*/
+      max-width:400px;
+      word-break: normal|break-all|keep-all|break-word|initial|inherit;
+      white-space: normal!important;
+  }
+  </style>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@convergence/html-text-collab-ext@0.2.0/css/html-text-collab-ext.min.css" />
+
+  <div class="container" style="color: black!important;">
+    <div class="modal fade" id="exampleModalhome" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelhome" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelhome"><strong>Change your conference set-up easily</strong></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="color: #333;background-color: lightgrey;" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="color: black!important;">
+    <div class="modal fade" id="exampleModalprog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelprog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelprog"><strong>Learn how to make your program</strong></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="color: #333;background-color: lightgrey;" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="color: black!important;">
+    <div class="modal fade" id="exampleModalweb" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelweb" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelweb"><strong>Learn how to create your conference website</strong></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="color: #333;background-color: lightgrey;" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="color: black!important;">
+    <div class="modal fade" id="exampleModalpart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelpart" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelpart"><strong>Manage your participants</strong></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="color: #333;background-color: lightgrey;" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container" style="color: black!important;">
+    <div class="modal fade" id="exampleModalcrea" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelcrea" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabelcrea"><strong>Create your conference in one click</strong></h5> <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="color: #333;background-color: lightgrey;" data-dismiss="modal">Close</button>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+   <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" displayed="false" aria-labelledby="basicModal" aria-hidden="true">
+ <div class="modal-dialog">
+   <div class="modal-content">
+     <div class="modal-header">
+       <h4 class="modal-title" id="myModalLabel">Quick help to use our program scheduler</h4>
+       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">×</span>
+       </button>
+     </div>
+     <div class="modal-body">
+       <h3>Use pre-loaded examples</h3>
+         <p>We have loaded six talk/break examples for you. <span style="color: rebeccapurple;">Purple</span> is for review talks, <span style="color: orange;">Orange</span> for regular talks, <span style="color: green;">Green</span> for invited talks, <span style="color: red;">Red</span> for discussions and <span style="color: deeppink;">Pink</span> for coffee breaks/snack times. These
+         are pre-loaded as examples and you can modify them or delete them if not needed. To change their content, click once on them and go to the detail tab.
+         To change the starting time just move the box around in either month or day view.</p>
+       <h3>Create new talks</h3>
+         <p>You can also create new talks by just clicking where you want the talk to start and dragging up to where you want it to finish. </p>
+         <p>You can also go to the participant tab and click the plus symbol to the right of a person's name to get their talk integrated here with all its content in one click (i.e., no need to type in the speaker's name, title and all again)!</p>
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     </div>
+   </div>
+ </div>
+</div>
+
+  <div class="container">
+
+    {% blocktrans %}
+              <h1>Create your conference! <i class="far fa-handshake" style="color: orange"></i></h1>
+              <h6 class="mb-4"><i>You can create a conference for free now by filling in this form to check how it all works. You can cancel and delete it any time at no cost. If you want the conference to happen you have to pay before it starts, otherwise you will not be charged and the conference will not run. If you just want to use are tools to create a website and manage your participants without running the meeting with us, you can do so for free.</i></h6>
+              {% endblocktrans %}
+              <div class="mt-2"><p><a href="{% url 'my_app:exampleModalcrea' %}" class="btn btn-secondary mb-2" data-toggle="modal" data-target="#exampleModalcrea" id="gocrea"> <strong>{% blocktrans %}In doubt? Read the guide!{% endblocktrans %}</strong> </a></p></div>
+              {% if conf_list_user|length > 0 %}
+              <label for="conf-select">{% blocktrans %}Modify another of your conferences instead?{% endblocktrans %}</label>
+              <form name=changeconfForm action="/{{LANGUAGE_CODE}}/create-conference/" method=POST>
+                  {% csrf_token %}
+              <select name="conf" class="browser-default custom-select mb-4" id="conf-select" onChange="changeconfForm.submit();">
+                  <option value="">--Please choose another conference to update it--</option>
+                  {% for conf in conf_list_user %}
+                      <option value="{{ conf.id }}">{% if conf.masterconf or conf.daughterconf %}{% if conf.daughterconfstarwars %}{% if conf.masterconfdaughtername %}{{ conf.masterconfdaughtername }}{% else %}Plenaries{% endif %}{% else %} S{{ conf.masterconfdaughterposition }} {% endif %} - {% endif %}{{ conf.title|ellipses:50 }}</option>
+
+                      <!--<option value="{{ conf.title }}">{{ conf.title|ellipses:50 }}</option>-->
+                  {% endfor %}
+              </select>
+              <input type="hidden" name="changeconfnow" value="1" />
+              </form>
+              {% endif %}
+              <p><b>{% blocktrans %}Important: All the choices you make can be changed later so that you can still chat with co-organizers and update things as it goes!{% endblocktrans %}</b></p>
+
+              <form name="createconf_form" enctype="multipart/form-data" method="POST"  action="/{{LANGUAGE_CODE}}/create-conference/">
+                  {% csrf_token %}
+
+                  {{ createconf_form.title|as_crispy_field }}
+                  <div id="testalr"></div>
+
+                  {{ createconf_form.abstract|as_crispy_field }}
+
+                  <span data-toggle="tooltip" data-placement="bottom" title="If the conference is public, participants will not have to register to your conference to access the virtual room. Though you will have to provide them with a private link. For private conferences, participants will register on your conference website for a talk or poster that you can accept or reject, which will decide if they will be able to join the virtual conference room." class="fas fa-info-circle"></span>
+                  {{ createconf_form.priv|as_crispy_field }}
+
+                  <div class="row">
+                      <div class="col-6">
+
+                          {{ createconf_form.start_date|as_crispy_field }}
+
+                      </div>
+                      <div class="col-6">
+
+                          {{ createconf_form.end_date|as_crispy_field }}
+
+                      </div>
+                  </div>
+
+
+                  {{ createconf_form.size|as_crispy_field }}
+
+                  {{ createconf_form.subject|as_crispy_field }}
+
+
+                  {{ createconf_form.justtools|as_crispy_field }}
+
+                   <!--fee_amount, fee_currency-->
+
+                <div id="nottool">
+                  <span data-toggle="tooltip" data-placement="bottom" title="This is the simplest option: You do not need to pay for the conference fees yourself as everyone contributes to pay for the price to organize the conference (with this option you have access to everything, e.g., you can create many parallel rooms, and, of course, we offset the carbon emissions)." class="fas fa-info-circle"></span>
+                  <div>{{ createconf_form.feeunique|as_crispy_field }}</div>
+                  <div id="nopeu"></div>
+                  <div id="feesu" style="display: none;">
+                      <div><b>{% blocktrans %}The fee per participant is {% endblocktrans %}<span id="totab" style="font-size: 18px;"></span><span id="tota" style="font-size: 18px;">{{ COST_PER_PARTICIPANT }}</span><span id="totaa" style="font-size: 18px;"> €</span></b></div>
+                      <div>{{ createconf_form.fee_currency_unique|as_crispy_field }}</div>
+                  </div>
+                  <span data-toggle="tooltip" data-placement="bottom" title="You can decide to pay the conferences fees yourself (if you do not tick the previous box) but ask for a participation from your attendees. This amount will then be provided to you when the conference is over via your bank account. As there are fees for gathering the participants money on our side, we take 10% of the participant fees." class="fas fa-info-circle"></span>
+                  {{ createconf_form.fee|as_crispy_field }}
+
+                  <div id="nope"></div>
+                  <div id="fees" style="display: none;">
+                    <div class="row">
+                      <div class="col">
+
+                      {{ createconf_form.fee_amount|as_crispy_field }}
+                      <div class="col">{{ createconf_form.fee_variable|as_crispy_field }}</div>
+
+                      </div>
+                      <div class="col">{{ createconf_form.fee_currency|as_crispy_field }}</div>
+                      <div class="col">{{ createconf_form.fee_to_carbon|as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                      <div class="col" id="amount">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+            </div>
+                 <!--<iframe is="x-frame-bypass" src="https://chat.carbonfreeconf.com/"></iframe>-->
+                <!--{% if messages %}
+                {% for message in messages %}
+                    {%if "chat" in message.tags %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endif %}
+                    {%if "csuc" in message.tags %}
+                        <div class="alert alert-success mt-3" role="alert">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% endif %}
+                <div class="resp-container3 mb-3">
+                    <iframe class="resp-iframe3" id="inlineFrameExample2" frameBorder="0"
+                        title="CarbonFreeChat"
+                        src="https://chat.carbonfreeconf.com/home?resumeToken={{ resumetoken }}"
+                        allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allow="microphone; camera;">
+                    </iframe>
+                </div>
+                <a href="https://chat.carbonfreeconf.com/home?resumeToken={{ resumetoken }}" target="_blank" id="newtabchat" class="btn btn-info mt-2 mb-2">Open chat in a new tab</a>
+                <hr>
+                <div><p><strong>Create a new private group for your conference?</strong></p></div>
+                <form enctype="multipart/form-data" method="POST" action="">
+                        {% csrf_token %}
+                        {% for q in chatform %}
+                            {{ q |as_crispy_field }}
+                        {% endfor %}
+                    <div class="mt-4"><button type="submit" class="btn btn-info mb-3">Create the private group</button></div>
+                </form>
+            </div>
+            </div>-->
+            {% if conftopass.recording %}
+            <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
+                  <!--<div class="border">-->
+                {% if status == '0' %}
+
+        <div>{{ archiveurl|length|pluralize:"This is,These are" }} the video{{ archiveurl|length|pluralize:",s" }} for the meeting: <strong>{{ title }}</strong> {% if conftopass.masterconf %}(and its parallel sessions){% endif %}</div>
+        {% for vid in archiveurl %}
+        <div class="mt-3">{% blocktrans %}Here is a video for the session{% endblocktrans %}{% if conftopass.masterconf %}: '{{ sessiontit|index:forloop.counter0 }}'{% endif %} that started on {{ start|index:forloop.counter0 }} and finished at {{ end|index:forloop.counter0|date:"g:i a" }}</div>
+            <p><i><strong>Title:</strong> {% if titles|index:forloop.counter0 %}{{ titles|index:forloop.counter0 }}{% else %} No title (you can enter the title in the Handle my archived videos menu){% endif %}</i></p>
+
+            <p><small><a href="{% url 'my_app:video' redvimurl2|index:forloop.counter0  %}">Go to individual video page</a></small></p>
+
+            {% comment %}
+            {% ifnotequal videostatus 'available' %}
+                <p style="color: #ee3535"><strong>{% blocktrans %}You need to wait a few more minutes before being able to see the conference recording as we are
+                transcoding the video in different formats and sizes to be more user-friendly when watching it on e.g. mobile, tablets, ... Reload the page in a moment.
+                {% endblocktrans %}</strong></p>
+            {% endifnotequal %}
+            {% endcomment %}
+        <div class="resp-container-vid mb-3">
+
+            <iframe class="resp-iframe-vid"
+                src="{{ vid }}" frameborder="0" allow="autoplay; fullscreen"
+                webkitallowfullscreen="true" mozallowfullscreen="true">
+            </iframe>
+        </div>
+        <!--<div><a href="{{ mp4downloadurl|index:forloop.counter0 }}" target="_blank">See the video on Vimeo</a></div>-->
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+
+
+                {% if status == '2c' or status == '4' or status == '2b' or status == '2' or status == '3' %}
+                <h5 class="mt-2"><strong>{% blocktrans %}You decided to record your meeting. {% endblocktrans %}</strong></h5>
+                <p>{% blocktrans %}The conference videos will appear here (and on your conference website) once they are recorded and imported. To import them after the meeting, go to the archive menu and click 'Handle my archived videos' and then click 'Import my recordings'.{% endblocktrans %}</p>
+                {% endif %}
+                  <div class="container">
+                    
+                                {{ createconf_form.hybrid|as_crispy_field }}
+                    
+                                {{ createconf_form.proceedin|as_crispy_field }}
+                    
+                                    <input type="checkbox" value="multi" id="multi" name="multi"/>
+                                    <label for="multi">{% blocktrans %}Is it a conference with more than one parallel session?{% endblocktrans %}</label><br/>
+                    
+                                    <div id="multisession">
+                      <div style="margin-left: 30px">{{ createconf_form.masterconf|as_crispy_field }}</div>
+                      <div style="margin-left: 30px">{{ createconf_form.daughterconf|as_crispy_field }}</div>
+                                    </div>
+                    
+                                    <div id="mastpass">
+                      <div style="margin-left: 60px">{{ createconf_form.masterconfpass|as_crispy_field }}</div>
+                                    </div>
+                  </div>
+
+                </div>
+
+                {% if mastconfdontexist %}
+                <div style="color: red"><strong>{% blocktrans %}This master conference ID does not exist{% endblocktrans %}</strong></div>
+                {% endif %}
+                {% if mastconfalreadypaid %}
+                <div style="color: red"><strong>{% blocktrans %}No more sessions can be created (contact the organizers for more details).{% endblocktrans %}</strong></div>
+                {% endif %}
+                {% if mastconfdate %}
+                <div style="color: red"><strong>{% blocktrans %}The dates for your session do not fit in between the dates chosen for the master conference (see with the master conference organizers if the starting and/or ending dates needs to be updated){% endblocktrans %}</strong></div>
+                {% endif %}
+
+                <input type="hidden" name="conf" class="conf" value="conf" />
+
+                <div class="mt-4 mb-3" style="margin:10px 70px;"><button type="submit" id="regconf" class="btn btn-success" onClick="this.form.submit(); this.disabled=true; this.innerText = 'Creating the conference...';"><i class="fas fa-heart"></i> {% blocktrans %}Create the conference{% endblocktrans %}</button></div>
+
+                {% if conffailed %}
+                <div style="color: red"><strong>{% blocktrans %}The conference was not created, please try again later{% endblocktrans %}</strong></div>
+                {% endif %}
+                
+              </form>
+
+      </div>
+
+
+  <script>
+      $("#multi").change(function () {
+      //check if its checked. If checked move inside and check for others value
+      if (this.checked) {
+          //add a text box next to it
+          $("#multisession").show()
+          $("#id_masterconf").prop('checked', false);
+          $("#id_daughterconf").prop('checked', false);
+          $("#id_masterconfpass").val('');
+      } else {
+          //remove if unchecked
+          $("#multisession").hide();
+          $("#id_masterconf").prop('checked', false);
+          $("#id_daughterconf").prop('checked', false);
+          $("#id_masterconfpass").val('');
+      }
+      });
+
+  </script>
+
+  <script>
+      $("#id_daughterconf").change(function () {
+      //check if its checked. If checked move inside and check for others value
+      if($("#id_masterconf").prop('checked', true)){
+          $("#id_masterconf").prop('checked', false);
+      }
+      if (this.checked) {
+          //add a text box next to it
+          $("#mastpass").show()
+      } else {
+          //remove if unchecked
+          $("#mastpass").hide();
+      }
+      });
+
+  </script>
+  <script>
+      $("#id_masterconf").change(function () {
+      //check if its checked. If checked move inside and check for others value
+      if($("#id_daughterconf").prop('checked', true)){
+          $("#id_daughterconf").prop('checked', false);
+          $("#id_masterconfpass").val('');
+      }
+      if (this.checked) {
+          //add a text box next to it
+          $("#mastpass").hide()
+      } else {
+          //remove if unchecked
+          //$("#mastpass").hide();
+      }
+      });
+
+  </script>
+
+      <script>
+
+          $(document).on('dp.hide', '[id="id_start_date"]', function (e) {
+          //function endchange() {
+          //$("#id_end_date").datepicker().on('changeDate', function (ev) {//changeDate(function () {
+              //alert(e.date);
+              var startDate = document.getElementById("id_start_date").value;
+              var endDate = document.getElementById("id_end_date").value;
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              endDat = new Date(correctFormate);
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, '0');
+              var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+              var yyyy = today.getFullYear();
+
+              today = yyyy + '/' + mm + '/' + dd;
+              toda= new Date(today);
+              //alert('e '+Date.parse(startDat)+' '+Date.parse(toda));
+
+              if ((Date.parse(startDat) < Date.parse(toda))) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("Start date should be greater than or equal to today's date");
+                  document.getElementById("id_start_date").value = "";
+                  //}
+              }
+              if ((Date.parse(endDat) < Date.parse(startDat))) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("End date should be greater than Start date");
+                  document.getElementById("id_end_date").value = "";
+                  //}
+              }
+              if ((Date.parse(endDat) - Date.parse(startDat))>864000000) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("The conference duration cannot be greater than 10 days or contact the administrator otherwise");
+                  document.getElementById("id_end_date").value = "";
+                  //}
+              }
+          });
+
+          //$("#id_start_date, #id_end_date").datepicker();
+          $(document).on('dp.hide', '[id="id_end_date"]', function (e) {
+          //function endchange() {
+          //$("#id_end_date").datepicker().on('changeDate', function (ev) {//changeDate(function () {
+              //alert(e.date);
+              var startDate = document.getElementById("id_start_date").value;
+              var endDate = document.getElementById("id_end_date").value;
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              endDat = new Date(correctFormate);
+              var today = new Date();
+              var dd = String(today.getDate()).padStart(2, '0');
+              var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+              var yyyy = today.getFullYear();
+
+              today = yyyy + '/' + mm + '/' + dd;
+              toda= new Date(today);
+              //alert('e '+startDate);
+              if (startDate == ''){
+                  alert("Fill in the Start date first");
+                  document.getElementById("id_end_date").value = "";
+              }
+              //if (Date.parse(endDat.getMonth() + "/" + endDat.getDate() + "/" + endDat.getYear()) < Date.parse(startDat.getMonth() + "/" + startDat.getDate() + "/" + startDat.getYear())){
+              if ((Date.parse(endDat) < Date.parse(startDat))) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("End date should be greater than Start date");
+                  document.getElementById("id_end_date").value = "";
+                  //}
+              }
+              if ((Date.parse(endDat) < Date.parse(toda))) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("End date should be greater than Today");
+                  document.getElementById("id_end_date").value = "";
+                  //}
+              }
+              if ((Date.parse(endDat) - Date.parse(startDat))>864000000) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("The conference duration cannot be greater than 10 days or contact the administrator otherwise");
+                  document.getElementById("id_end_date").value = "";
+                  //}
+              }
+          });
+      </script>
+
+      <script>
+
+          $(document).on('dp.hide', '[id="id_closing_date"]', function (e) {
+          //function endchange() {
+          //$("#id_end_date").datepicker().on('changeDate', function (ev) {//changeDate(function () {
+              //alert(e.date);
+              var startDate = document.getElementById("id_closing_date").value;
+              //var selected_date = new Date({{ selected_date|escapejs }});
+
+              var endDate = new Date("{{ conftopass.end_date.isoformat }}");
+              //alert('start'+startDate+' '+endDate);
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              //correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              //endDat = endDate;//new Date(correctFormate);
+              var today = new Date();
+              var dd = String(today.getDate()-1).padStart(2, '0');
+              var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+              var yyyy = today.getFullYear();
+
+              today = yyyy + '/' + mm + '/' + dd;
+              toda= new Date(today);
+              //alert('toda'+toda+' '+endDate);
+              var dde = String(endDate.getDate()).padStart(2, '0');
+              var mme = String(endDate.getMonth() + 1).padStart(2, '0'); //January is 0!
+              var yyyye = endDate.getFullYear();
+
+
+              ende = yyyye + '/' + mme + '/' + dde;
+              endDat= new Date(ende);
+              //alert('e '+Date.parse(startDat)+' '+Date.parse(toda)+' '+Date.parse(endDat));
+
+              if ((Date.parse(startDat) < Date.parse(toda))) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("The closing date should be at most one day before today's date");
+                  document.getElementById("id_closing_date").value = "";
+                  //}
+              }
+              if ((Date.parse(endDat) < Date.parse(startDat))) {
+                  //if ((Date.parse(endDat) != Date.parse(toda))) {
+                  alert("The closing date should be before the conference finishes");
+                  document.getElementById("id_closing_date").value = "";
+                  //}
+              }
+
+          });
+          </script>
+
+
+      
+      <script>
+          
+      $(document).on('input', '[id="id_title"]', function (event) {
+          
+          event.preventDefault();
+          //alert($(this).closest("form").attr('id'));
+          //alert('onfoc');
+          checktitleb($(this));
+          //var cn={{ confnum }}
+          {% if confnum %}
+              checktitlec($(this));
+          {% endif %}
+          return false;
+      });
+      </script>
+
+      <script>
+      function checktitleb(thisObj) {
+          //console.log("title is working!");// sanity check
+          //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+          $.ajax({
+              url : "/checktitle/",//"{% url 'my_app:addpeople' %}", // the endpoint
+              type : "POST", // http method
+              data : {    title : $('#id_title').val(),
+                          //loopnum : $('.divpeop').last().attr('id'),
+                          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                      }, // data sent with the post request
+
+              // handle a successful response
+              success : function(json) {
+                  $('#results').text('');
+                  $("div[id='testalr']").text('');
+                  //$('#regconf').prop('disabled', false);
+                  //$('#id_firstname').val(''); // remove the value from the input
+                  //$('#id_lastname').val('');
+                  //$('#id_email').val('');
+                  //console.log(json); // log the returned json to the console
+                  //var source = $("#result-template").html();
+                  //alert(json.title)
+                  //$(document.body).append(html);
+
+                  if (json.already == 1) {
+                      //alert('yes');
+                      $("#testalr").append("<p style='color:red;'>The title: '" + json.title + "' is already used on the chat's private groups. You can keep that name and we'll adjust your group name by adding a number to it.</p>");
+                      //$('#regconf').prop('disabled', true);
+
+                  }
+                  //alert('success');
+                  //console.log("success"); // another sanity check
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                      " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+      };
+      </script>
+
+      <script>
+      function checktitlec(thisObj) {
+          //console.log("titlec is working!");// sanity check
+          //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+          $.ajax({
+              url : "/checktitlebis/",//"{% url 'my_app:addpeople' %}", // the endpoint
+              type : "POST", // http method
+              data : {    title : $('#id_title').val(),
+                          //loopnum : $('.divpeop').last().attr('id'),
+                          {% if confnum %}
+                          confnum : {{ confnum }},//$('#confnumid').val(),
+                          {% endif %}
+                          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+                      }, // data sent with the post request
+
+              // handle a successful response
+              success : function(json) {
+                  $('#results').text('');
+                  $("div[id='testalr2']").text('');
+                  //$('#regconf2').prop('disabled', false);
+                  //$('#id_firstname').val(''); // remove the value from the input
+                  //$('#id_lastname').val('');
+                  //$('#id_email').val('');
+                  //alert('j');
+                  //console.log(json); // log the returned json to the console
+                  //var source = $("#result-template").html();
+                  //alert(json.title)
+                  //$(document.body).append(html);
+
+                  if (json.already == 1) {
+                      //alert('yes');
+                      $("#testalr2").append("<p style='color:red;'>The title: '" + json.title + "' is already used on the chat's private groups. You can keep that name and we'll adjust your group name by adding a number to it.</p>");
+                      //$('#regconf2').prop('disabled', true);
+
+                  }
+                  //alert('success');
+                  //console.log("success"); // another sanity check
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                      " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+      };
+      </script>
+
+      <script>
+          $("#id_fee_variable").click(function(){
+
+              if($("#id_fee_variable").prop( "checked" )==true){
+                  //alert('e');
+                  $("#id_fee_amount").hide();
+                  $("#amount").text('');
+                  $("#regconf").prop("disabled",false);
+                  $("#regconf2").prop("disabled",false);
+              }
+              else{
+                  $("#id_fee_amount").show();
+                  $("#amount").html('<small style="color:red;">The fee amount cannot be empty</small>');
+                  $("#regconf").prop("disabled", true);
+                  $("#regconf2").prop("disabled", true);
+              }
+      });
+      </script>
+
+      <script>
+          $(document).ready(function() {
+                //alert("document ready occurred!");
+                if($("#id_fee_variable").prop( "checked" )==true){
+                  //alert('e');
+                  $("#id_fee_amount").hide();
+
+              }
+              else{
+                  $("#id_fee_amount").show();
+              }
+          });
+
+      </script>
+
+
+          
+       <script>
+      $(function () {
+        $('[data-toggle="popover"]').popover()
+      })
+
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+  </script>
+
+
+
+      <script>
+          $("#id_fee_amount").keyup(function() {
+              var regExp = $("#id_fee_amount").val();
+              //alert(regExp+hasNonStandard(regExp));
+              if(regExp == ''){
+
+                      $("#amount").html('<small style="color:red;">The fee amount cannot be empty</small>');
+                      $("#regconf").prop("disabled", true);
+                      $("#regconf2").prop("disabled", true);
+
+              }else{
+                  $("#amount").text('');
+                  $("#regconf").prop("disabled",false);
+                  $("#regconf2").prop("disabled",false);
+              }
+          }
+      )
+      </script>
+
+
+  <script>
+      $('[id="multi"]').on('change', function() {
+              var startDate = document.getElementById("id_start_date").value;
+              var endDate = document.getElementById("id_end_date").value;
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              endDat = new Date(correctFormate);
+
+              //var start = $('#id_start_date').val();
+              //var end = $('#id_end_date').val();
+
+              // end - start returns difference in milliseconds
+              var diff = new Date(endDat - startDat);
+
+              // get days
+              var days = diff/1000/60/60/24;
+
+              //alert(startDate);
+          if ((startDate == '') || (endDate == '')) {
+              //alert('brah');
+
+              $('#nope').text('Fill in the start and end dates first').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $("#id_feeunique").prop('checked', false);
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+
+              //alert('1');
+
+          }
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && ($("#multi").prop('checked') == false)){
+              $('#nope').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants (unless there are multiple sessions, then click the more than one parallel session checkbox and come back here). Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $('#nopeu').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants (unless there are multiple sessions, then click the more than one parallel session checkbox and come back here). Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $("#id_feeunique").prop('checked', false);
+              $('#nope2').text('');
+              $('#fees').toggle(this.checked);
+              //alert('2');
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+
+          }else {
+              $('#nope').text('');
+              $('#nopeu').text('');
+              $('#nope2').text('');
+              //$('#fees').toggle(this.checked);
+              //alert('3');
+          }
+      });
+  </script>
+
+          <script>
+      $(document).ready(function() {
+
+          if($("#id_justtools").prop('checked') == false) {
+              //alert('first');
+              $('#nottools').toggle(true);
+
+
+          }else{
+              //alert('else');
+              $('#nottools').toggle(false);
+          }
+          //$('#id_fee_currency').toggle(this.checked);
+      });
+  </script>
+
+      <script>
+      $('[id="id_justtools"]').on('change', function() {
+
+          if($("#id_justtools").prop('checked') == false) {
+              //alert('first');
+              $('#nottool').toggle(true);
+              $('#nottools').toggle(true);
+
+
+          }else{
+              //alert('else');
+              $('#nottool').toggle(false);
+              $('#nottools').toggle(false);
+          }
+          //$('#id_fee_currency').toggle(this.checked);
+      });
+  </script>
+
+  <script>
+      $('[id="id_fee"]').on('change', function() {
+              var startDate = document.getElementById("id_start_date").value;
+              var endDate = document.getElementById("id_end_date").value;
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              endDat = new Date(correctFormate);
+
+              //var start = $('#id_start_date').val();
+              //var end = $('#id_end_date').val();
+
+              // end - start returns difference in milliseconds
+              var diff = new Date(endDat - startDat);
+
+              // get days
+              var days = diff/1000/60/60/24;
+
+          {% if createdconf %}
+
+              var mul={{ conftopass.daughterconf|yesno:"true,false" }};
+              if (mul==false){
+                  mul={{ conftopass.masterconf|yesno:"true,false" }};
+              }
+          {% endif %}
+              //alert(mul);
+              //alert(startDate);
+          if ((startDate == '') || (endDate == '')) {
+              //alert('brah');
+
+              $('#nope').text('Fill in the start and end dates first').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+              //alert('1');
+
+          }
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && ($("#multi").prop('checked') == false)) {
+              $('#nope').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants (unless there are multiple sessions, then click the more than one parallel session checkbox and come back here). Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $('#nope2').text('');
+              $('#fees').toggle(this.checked);
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+              //alert('2');
+          }
+          {% if createdconf %}
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && (mul == false)){
+              $('#nope').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants. Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $('#nope2').text('');
+              $('#fees').toggle(this.checked);
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+              //alert('2');
+
+          }{% endif %}
+          else {
+              $('#nope').text('');
+              $('#nope2').text('');
+              $('#fees').toggle(this.checked);
+              //alert('3');
+          }
+
+          if ($("#id_fee").prop('checked') == true){
+              $("#id_feeunique").prop('checked', false);
+              $('#feesu').toggle(false);
+          }
+
+          //$('#id_fee_currency').toggle(this.checked);
+      });
+  </script>
+
+
+  <script>
+      $('[id="id_fee_to_carbon"]').on('change', function() {
+              //alert('ok');
+              var startDate = document.getElementById("id_start_date").value;
+              var endDate = document.getElementById("id_end_date").value;
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              endDat = new Date(correctFormate);
+
+              //var start = $('#id_start_date').val();
+              //var end = $('#id_end_date').val();
+
+              // end - start returns difference in milliseconds
+              var diff = new Date(endDat - startDat);
+
+              // get days
+              var days = diff/1000/60/60/24;
+
+              {% if createdconf %}
+              var mul={{ conftopass.daughterconf|yesno:"true,false" }};
+              if (mul==false){
+                  mul={{ conftopass.masterconf|yesno:"true,false" }};
+              }
+          {% endif %}
+
+              //alert(startDate);
+          if ((startDate == '') || (endDate == '')) {
+              //alert('brah');
+
+              $('#nope').text('Fill in the start and end dates first').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+
+          }
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && ($("#multi").prop('checked') == false)){
+              $('#nope').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants (unless there are multiple sessions, then click the more than one parallel session checkbox and come back here). Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $('#nope2').text('');
+              $('#fees').hide();
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+              //alert('2');
+
+          }
+          {% if createdconf %}
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && (mul == false)){
+              $('#nope').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants (unless there are multiple sessions, then click the more than one parallel session checkbox and come back here). Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_fee").prop('checked', false);
+              $('#nope2').text('');
+              $('#fees').hide();
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+              //alert('2');
+
+          }
+          {% endif %}
+          else {
+              $('#nope').text('');
+              $('#nope2').text('');
+              //alert('3'+days+' '+$('#id_size').val()+' '+$("#multi").prop('checked'));
+              /*$('#fees').toggle(this.checked);*/
+          }
+          //$('#id_fee_currency').toggle(this.checked);
+      });
+  </script>
+
+  <script>
+      $('[id="id_feeunique"]').on('change', function() {
+              var startDate = document.getElementById("id_start_date").value;
+              var endDate = document.getElementById("id_end_date").value;
+              correctFormats = startDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1");
+              startDat = new Date(correctFormats);
+              correctFormate = endDate.replace(/(\d+)\/(\d+)\/(\d+)/, "$3/$2/$1"),
+              endDat = new Date(correctFormate);
+
+              //var start = $('#id_start_date').val();
+              //var end = $('#id_end_date').val();
+
+              // end - start returns difference in milliseconds
+              var diff = new Date(endDat - startDat);
+
+              // get days
+              var days = diff/1000/60/60/24;
+
+          {% if createdconf %}
+              var mul={{ conftopass.daughterconf|yesno:"true,false" }};
+              if (mul==false){
+                  mul={{ conftopass.masterconf|yesno:"true,false" }};
+              }
+          {% endif %}
+              //alert(startDate);
+          if ((startDate == '') || (endDate == '')) {
+              //alert('brah');
+
+              $('#nopeu').text('Fill in the start and end dates first').css("color", "red");
+              $("#id_feeunique").prop('checked', false);
+              //alert('1');
+
+          }
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && ($("#multi").prop('checked') == false)) {
+              $('#nopeu').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants (unless there are multiple sessions, then click the more than one parallel session checkbox and come back here). Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_feeunique").prop('checked', false);
+              $('#nope2').text('');
+              $('#feesu').toggle(this.checked);
+              //alert('2');
+          }
+          {% if createdconf %}
+          else if(((($('#id_size').val()=="<10") || ($('#id_size').val()=="10-50")) && (days<1)) && (mul == false)){
+              $('#nopeu').html('The conference is for one day only and with less than 50 participants so it is free and no fees can be asked to the participants. Though, you can add a fee to your participants if the profit goes towards offsetting carbon emissions, if this is the case, click <a href="#" id="altruist">here</a>.').css("color", "red");
+              $("#id_feeunique").prop('checked', false);
+              $('#nope2').text('');
+              $('#feesu').toggle(this.checked);
+              //alert('2');
+
+          }{% endif %}
+          else {
+              $('#nopeu').text('');
+              $('#nope2').text('');
+              $('#feesu').toggle(this.checked);
+              //alert('3');
+          }
+
+          if ($("#id_feeunique").prop('checked') == true){
+              $("#id_fee").prop('checked', false);
+              $('#fees').toggle(false);
+              $("#regconf").prop("disabled", false);
+              $("#regconf2").prop("disabled", false);
+          }
+
+          //$('#id_fee_currency').toggle(this.checked);
+      });
+  </script>
+
+  <script>
+      function scrollToAnchor(aid){
+      var aTag = $("#"+ aid);
+      $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+      }
+  </script>
+
+
+  <script>
+  $(document).on('click', '#altruist', function( event ) {
+      $('#nope').html('Thank you for the planet!').css("color", "red");
+      $('#fees').toggle(this.checked);
+      $("#id_fee_to_carbon").prop('checked', true);
+      $("#id_fee").prop('checked', true);
+      scrollToAnchor('div_id_fee');
+  });
+
+  </script>
+
+  <script>
+  $(document).on('click', '#id_fee,#altruist', function( event ) {
+      var regExp = $("#id_fee_amount").val();
+              //alert(regExp+hasNonStandard(regExp));
+              if ($('#id_fee').is(':checked')) {
+                  //alert('ok');
+                  if (regExp == '') {
+
+                      $("#amount").html('<small style="color:red;">The fee amount cannot be empty</small>');
+                      $("#regconf").prop("disabled", true);
+                      $("#regconf2").prop("disabled", true);
+                  } else {
+                      $("#amount").text('');
+                      $("#regconf").prop("disabled", false);
+                      $("#regconf2").prop("disabled", false);
+                  }
+              }else{
+                  $("#amount").text('');
+                      $("#regconf").prop("disabled", false);
+                      $("#regconf2").prop("disabled", false);
+              }
+
+  });
+
+  </script>
+
+  <script>
+      $(document).ready(function(){
+          $('[rel="tooltip"]').tooltip({trigger: "hover"});
+      });
+  $('[data-toggle="tooltip"]').on('click', function () {
+      $(this).tooltip('hide')
+  })
+  </script>
+
+  <script>
+      $(function () {
+
+          if ($('#id_fee').is(':checked')){
+              //alert('chec');
+              $('#fees').toggle(this.checked);
+          }
+      });
+  </script>
+      <script>
+      $(function () {
+
+          if ($('#id_feeunique').is(':checked')){
+              //alert('chec');
+              $('#feesu').toggle(this.checked);
+          }
+      });
+  </script>
+  <script>
+      $(function () {
+
+          if ($('#multi').is(':checked')){
+              //alert('chec');
+              $("#multisession").show()
+          }
+      });
+  </script>
+
+
+      <script>
+      //$("#exampleModalhome").click(function(){
+
+      $('body').on('click', '#gohome,#gopart,#goweb,#goprog,#gocrea', function(){
+          //alert('p'+$(this).attr('href'));
+          $($(this).data("target")+' .modal-body').load($(this).attr('href'));
+      });
+      </script>
+  <script>
+     var gotit = 0;
+
+      $('#exampleModalhome,#exampleModalpart,#exampleModalprog,#exampleModalweb,#exampleModalcrea').on('shown.bs.modal', function() {
+      //$('#exampleModalhome').on('show.bs.modal', function() {
+          //alert($(this).attr('id'));
+          var smw='nada';
+          if($(this).attr('id')=='exampleModalhome'){
+              smw='';
+          }
+          if($(this).attr('id')=='exampleModalprog'){
+              smw='prog';
+          }
+          if($(this).attr('id')=='exampleModalweb'){
+              smw='web';
+          }
+          if($(this).attr('id')=='exampleModalpart'){
+              smw='part';
+          }
+          if($(this).attr('id')=='exampleModalcrea'){
+              smw='crea';
+          }
+         //alert('ok'+smw);
+          if (!gotit) {
+              //alert('ok1');
+              $.getScript("https://unpkg.com/smartwizard@5/dist/js/jquery.smartWizard.min.js", function () {
+                  //alert('ok2');
+                  var $def = $.Deferred();
+                  if (typeof smartWizard === 'undefined') { // "foo" isn't available
+                      //alert('ok');
+                      var attempts = 0;
+                      // create an interval
+                      // that will check each 100ms if the "foo" function
+                      // was loaded
+                      var interval = setInterval(function () {
+                          if (typeof smartWizard !== 'undefined') { // loaded
+                              window.clearInterval(interval);
+                              $def.resolve();
+                          }
+                          // after X unsuccessfull attempts, abort the operation
+                          else if (attempts >= 100) {
+                              window.clearInterval(interval);
+                              $def.reject('Something went wrong');
+                              //alert('ik');
+                          }
+
+                          attempts++;
+                      }, 100);
+                  } else { // "foo" is available
+                      $def.resolve();
+                      //alert('il');
+                  }
+                  return $def.promise();
+              }).then(function () {
+                  // at this point "foo()" is definitely available.
+                  $('head').append('<link rel="stylesheet" type="text/css" href="https://unpkg.com/smartwizard@5/dist/css/smart_wizard_all.min.css">');
+                  //$('head').append('<link rel="stylesheet" type="text/css" href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1581152091/smartwizard/smart_wizard_theme_arrows.min.css">');
+                  //alert('ok3');
+
+                  gotit = 0;/*1*/
+                  //alert('ah?');
+                  $('#smartwizard'+smw).smartWizard({
+                        selected: 0, // Initial selected step, 0 = first step
+                        theme: 'arrows', // theme for the wizard, related css need to include for other than default theme
+                        justified: true, // Nav menu justification. true/false
+                        darkMode:false, // Enable/disable Dark Mode if the theme supports. true/false
+                        autoAdjustHeight: true, // Automatically adjust content height
+                        cycleSteps: false, // Allows to cycle the navigation of steps
+                        backButtonSupport: true, // Enable the back button support
+                        enableURLhash: true, // Enable selection of the step based on url hash
+                        transition: {
+                            animation: 'fade', // Effect on navigation, none/fade/slide-horizontal/slide-vertical/slide-swing
+                            speed: '400', // Transion animation speed
+                            easing:'' // Transition animation easing. Not supported without a jQuery easing plugin
+                        },
+                        toolbarSettings: {
+                            toolbarPosition: 'bottom', // none, top, bottom, both
+                            toolbarButtonPosition: 'right', // left, right, center
+                            showNextButton: true, // show/hide a Next button
+                            showPreviousButton: true, // show/hide a Previous button
+                            toolbarExtraButtons: [] // Extra buttons to show on toolbar, array of jQuery input/buttons elements
+                        },
+                        anchorSettings: {
+                            anchorClickable: true, // Enable/Disable anchor navigation
+                            enableAllAnchors: true, // Activates all anchors clickable all times
+                            markDoneStep: true, // Add done state on navigation
+                            markAllPreviousStepsAsDone: true, // When a step selected by url hash, all previous steps are marked done
+                            removeDoneStepOnNavigateBack: false, // While navigate back done step after active step will be cleared
+                            enableAnchorOnDoneStep: true // Enable/Disable the done steps navigation
+                        },
+                        keyboardSettings: {
+                            keyNavigation: true, // Enable/Disable keyboard navigation(left and right keys are used if enabled)
+                            keyLeft: [37], // Left key code
+                            keyRight: [39] // Right key code
+                        },
+                        lang: { // Language variables for button
+                            next: 'Next',
+                            previous: 'Previous'
+                        },
+                        disabledSteps: [], // Array Steps disabled
+                        errorSteps: [], // Highlight step with errors
+                        hiddenSteps: [] // Hidden steps
+
+                  });
+              }).fail(function () {
+                  // deal with the failure
+                  console.log('failure with smartwizard');
+              });
+
+          }
+          //else{
+              //alert('alr');
+          //}
+   });
+  </script>
+
+
+      
+      <script>
+              $("#id_fee_currency_unique").change(function () {
+                  //changecurrencyb(thisObj);
+                  //alert('ch');
+
+                  changecurrencycreab($(this));
+
+                  //var firstDropVal = $('#pick').val();
+              });
+              </script>
+  <script>
+      function changecurrencycreab(thisObj) {
+          console.log("change currency crea is working!");// sanity check
+          //console.log($('.divpeop').last().attr('id'));//thisObj.closest("div").find('.divpeop').val());
+          //alert($('#id_currency option:selected').val());
+          $.ajax({
+              url : "/changecurrencycrea/",//the endpoint
+              type : "POST", // http method
+              data : {    currency:$('#id_fee_currency_unique option:selected').val(),//thisObj.val(),//$('#id_currency option:selected').val(),//thisObj.val(),//        var end = this.value;
+                          csrfmiddlewaretoken:'{{ csrf_token }}',
+                      }, // data sent with the post request
+
+              // handle a successful response
+              success : function(json) {
+                  //$("div[id='test2']").text('');
+                  //$('#id_firstname').val(''); // remove the value from the input
+                  console.log(json.unit+' '+json.currency); // log the returned json to the console
+                  if(json.good) {
+                      $('#tota').text(json.tota);
+                      if (json.currency == 'EUR') {
+                          //$('#prepa').text(json.unit);
+                          //$('#offa').text(json.unit);
+                          //alert('ok');
+                          $('#totaa').text(json.unit);
+                          //$('#prepb').text('');
+                          //$('#offb').text('');
+                          $('#totab').text('');
+                      } else {
+                          //$('#prepb').text(json.unit);
+                          //$('#offb').text(json.unit);
+                          $('#totab').text(json.unit);
+                          //$('#prepa').text('');
+                          //$('#offa').text('');
+                          $('#totaa').text('');
+                      }
+                  }else{
+                      console.log('notgood');
+                  }
+                          //alert(json.currency);
+
+                  console.log("success"); // another sanity check
+              },
+
+              // handle a non-successful response
+              error : function(xhr,errmsg,err) {
+                  $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                      " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+              }
+          });
+      };
+      </script>
+  {% endblock %}
+
+{% block scripts %}
+<script>
+  tippy('#tooltipSessions', {
+    content: "If the conference is public, participants will not have to register to your conference to access the virtual room. Though you will have to provide them with a private link. For private conferences, participants will register on your conference website for a talk or poster that you can accept or reject, which will decide if they will be able to join the virtual conference room.",
+  });
+  tippy('#tooltipFreeTools', {
+    content: "This is the simplest option: You do not need to pay for the conference fees yourself as everyone contributes to pay for the price to organize the conference (with this option you have access to everything, e.g., you can create many parallel rooms, and, of course, we offset the carbon emissions).",
+  });
+  tippy('#tooltipFees', {
+    content: "You can decide to pay the conferences fees yourself (if you do not tick the previous box) but ask for a participation from your attendees. This amount will then be provided to you when the conference is over via your bank account. As there are fees for gathering the participants money on our side, we take 10% of the participant fees.",
+  });
+</script>
+{% endblock %}

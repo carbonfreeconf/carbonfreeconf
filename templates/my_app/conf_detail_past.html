@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %} Find online research conferences {% endblock title %}
+{% block extra_head_tags %}
+        <meta name="description" content="Check out online conferences that happened recently in your field" />
+{% endblock %}
+
+{% block header_class %}grey-nav{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+{% if object %}
+  <div class="row">
+    <div class="col-md-12 card mb-4  mt-3 left  top">
+      <div class="card-body">
+        <p> <strong><h2>{{ object.title }} {% if object.website %}<small>(<a href="{% url 'my_app:website' object.id 'home'%}" target="_blank">see conference website</a>)</small>{% endif %}</h2></strong> </p>
+        <p class=" text-muted">{{ object.subject }} | {{ object.start_date }}{% ifnotequal object.start_date object.end_date %} -{{ object.end_date }}{% endifnotequal %} | Organized by {{ object.user.first_name }} {{ object.user.last_name }} | {% if object.recording %}<a href="{% url 'my_app:confvideos' object.id %}" target="_blank">See recordings</a>{% endif %}</p>
+        <p class="card-text ">{{ object.abstract | safe }}</p>
+      <h4>Participations</h4>
+            {% for obj in object.registerconf_set.all %}
+                {% if obj.status == 1 %}
+                    <p><i>{{ obj.user.first_name }} {{ obj.user.last_name }}</i> ({% if obj.socloc > 0 %}{{ obj.get_socloc_display }},{% endif %}{{ obj.get_type_display }}) > {{ obj.title }}</p>
+                {% endif %}
+            {% endfor %}
+          <p class=" text-muted">
+            Posters: {% if object.poster %} Yes {% else %} No {% endif %} | Recording: {% if object.recording %} Yes {% else %} No {% endif %} | Proceedings: {% if object.proceedin %} Yes {% else %} No {% endif %} | Number of participants: {{ object.get_size_display }}</p>
+      </div>
+    </div>
+  </div>
+    <p><a href="{% url "my_app:confpast" %}">Go back to the list of past conferences?</a></p>
+{% else %}
+<h4 class="mt-2 mb-2">This conference you are trying to see details of does not exist!</h4>
+
+    <p><a href="{% url "my_app:confpast" %}">Go back to the list of past conferences?</a></p>
+
+{% endif %}
+
+</div>
+
+{% endblock content %}

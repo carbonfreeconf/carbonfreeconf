@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load index %}
+{% load static %}
+{% load i18n %}
+
+{% block title %} FAQ for organizing carbon-free workshops or conferences {% endblock title %}
+{% block extra_head_tags %}
+  <meta name="description" content="{% trans 'A question on how to make a carbon-neutral virtual workshop? You found the perfect place.'%}" />
+  <link rel="canonical" href="https://www.carbonfreeconf.com/faq/" />
+{% endblock %}
+
+{% block header_class %}{% endblock %}
+
+{% block content %}
+
+<main class="faq">
+  <section>
+    <div class="pretitle">{% trans 'FAQ' %}</div>
+    <h1>{% trans 'Frequently Asked Questions'%}</h1>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'What is the difference with platforms such as Zoom?'%}
+      </summary>
+      {% blocktrans %}
+      <p>Zoom et al. are not developed to handle a conference from start to end, here is a brief list of what you can do on CarbonFreeConf that is not possible on other platforms.</p>
+      <ul class="list">
+        <li>There is no download to access the conference, your participants just go on our website and it's done.</li>
+        <li>You can organize the whole conference from A to Z by yourself or as a team in no time.</li>
+        <li>In the conference room, participants can draw, use a white board, chat, send questions to presenters, send new results on twitter. There are Q&A, polls, the possibility to add handouts, share screen, videos, connect from mobile phones without download...</li>
+        <li>From the information you give us, a complete website with more than 10 pages is created for your conference (<a href="/website/1/home">see an example here</a>).</li>
+        <li>Participants register to your webinar on the conference website, they add their abstract and you can decide to validate the talk or not.</li>
+        <li>You have an admin interface to add your participants, send emails to them, make your conference program that will be visible on your website.</li>
+        <li>When the conference is over, the participants can write their proceedings (if needed) on our website where we store them and give access to them.</li>
+        <li>You can record the conference that would then be stored on our side and accessible via our website and/or youtube if wanted, which would be a gold mine for researchers in your field and an opportunity for presenters to share their work to a larger audience than usual.</li>
+        <li>You can also upload the slides and/or posters of your attendees and these can be public or private to the rest of the world as chosen by the participants</li>
+        <li>You can ask for a small participation fee to your participants to cover the expenses or even make profits (that you can decide to be used for more carbon offsetting or to be paid to you). For instance, asking for a small amount of 50 € to each of the 100 potential participants already covers the expenses for the conference and CO<sub>2</sub> offset (about 390 € for five days) and leaves a profit of about 4100 €.</li>
+        <li>And the MOST IMPORTANT, we offset the CO<sub>2</sub> emissions provoked by this virtual conference using trusted companies.</li>
+      </ul>
+      {% endblocktrans %}
+
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+       {% trans 'How do you offset carbon emissions?'%}
+      </summary>
+      {% blocktrans %}
+      <p>We spent a lot of time reviewing the best ways to offset carbon emissions produced by our online conferences. Our policy on this is to use techniques that are effective at actually removing CO<sub>2</sub> from our atmospheres, in quantities, which can be measured accurately so that we know we are offsetting the right quantity. So far we compensate using the (direct air capture) technology offered by <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a>. They basically build big vacuum cleaners that are sucking up some air from our atmospheres and storing the carbon dioxide that goes through them. They then pump it underground and within a few years the CO<sub>2</sub> reacts with rocks and turns into solid stones that are permanently put off our atmosphere.</p>
+      <p>Another important part of the work is quantifying accurately how much emission will be produced for a given conference, be it a 10 people workshop for a day or a 1000 people conference for a week. For video streaming during the conference, we assume that <strong>20 g of CO<sub>2</sub> are emitted per hour per person (international average)</strong> (<a href="https://www.carbonbrief.org/factcheck-what-is-the-carbon-footprint-of-streaming-video-on-netflix" rel="noopener" target="_blank">see source here</a>). We then multiply by the time the conference lasts and the number of participants and can work out the final carbon dioxide mass emitted by the virtual conference that needs to be offset. We find that a rough estimate for offsetting is that it costs 0.16 € per person per day (<a href="/offset">see more here</a>).</p>
+      <p>For conference video storage, we offset their emission over 3 years based on the number of averaged views we could estimate but that will be refined when we have more statistics from our website. After 3 years, the organisers or their company will be contacted to check whether the videos should be put offline (as some more recent conferences on the same field or by the same participants may have already happened) or if they otherwise want to keep on offsetting their produced carbon emissions (if the video is still state-of-the-art).</p>
+      <p>Finally we convert this mass of CO<sub>2</sub> that needs to be offset in money. <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks.</a> needs 1 euro to offset 1 kilo of CO<sub>2</sub> and bury it underground so that every hour of streaming for each participant costs 0.02 € to offset <strong>or roughly 0.16 € (or 0.16 kg of CO<sub>2</sub>) per day</strong>. Given this 0.16 € per day per person, you can easily find an estimate of how much your conference will cost to offset. For 100 participants for 3 days, it would be 0.16 € * 100 persons * 3 days = 48 € (to offset 48 kg). But note that if you want the conference to be recorded and hosted on our platform, there will be extra emissions to offset.</p>
+      <hr>
+      <p>You will be given a certificate from <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a> that shows you the amount we paid to them and how much emission they offset thanks to you. We are open to diversifying the ways we compensate carbon emissions and if you have effective solutions to suggest, please <a href="mailto:sales@carbonfreeconf.com">contact us</a>.</p>
+      {% endblocktrans %}
+
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'Can I organize regular meetings with your service?' %}
+      </summary>
+      <p>{% blocktrans %} This is possible and less expensive. <a href="mailto:sales@carbonfreeconf.com">Contact us</a> for more detail.{% endblocktrans %}</p>
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'Can I organize a conference for 5000 persons with different rooms running simultaneously?' %}
+      </summary>
+      <p>{% trans 'This is possible. When you create a conference, first create a master conference, which will host the master website of the conference and the plenary sessions. Then you get a code that can be given to researchers that want to organize the different sessions within this conference. They can go and create their meeting on CarbonFreeConf and then just say it is a daughter conference and give the master conference code to get it linked.' %}</p>
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'Can I tweak my conference website even more?' %}
+      </summary>
+      <p>{% blocktrans %} We take all suggestions and would be happy to improve your conference website if needed. <a href="mailto:support@carbonfreeconf.com">Contact us</a> with some details.{% endblocktrans %}</p>
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'I would like to offset my carbon emissions using a different organization, is this possible?' %}
+      </summary>
+      <p>{% trans 'We take all new suggestions and we will thoroughly look at your proposition and check whether this organization satisfies our criteria. If this is the case, we would add it to our offsetting basket. Please' %} <a href="mailto:admin@carbonfreeconf.com">{% trans 'contact us' %}</a> {% trans 'with more detail.' %}</p>
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'Can I make profits when organizing a conference with CarbonFreeConf?' %}
+      </summary>
+      <p>{% trans 'Yes you can. You can decide that the extra money goes towards offsetting more carbon emissions than produced by your virtual meeting (altruistic vision) or that it is paid to you. We do not encourage you to make profits but you can if you are not using the free version (and if you do you could advertise to your participants what it is for, e.g. a poster prize, offsetting carbon emissions at your institute, employ some extra people for the conference ...). You can ask for a small participation fee to each of your participant and we collect the money for you. When the conference is over, we send you this money (we just keep 10% because of the fees incurred when collecting the money via credit or debit card and because of exchange rate fees our bank charges). As an example, if you organize a conference with 500 participants (which costs about 820 € for a 3 day conference, including ~300 € of carbon offsetting,'%} <a href="{% url 'my_app2:pricing' %}">{% trans 'see our pricing' %}</a>), {% trans 'and decide to set the participation fee to 50 € per person, you can make a profit of about 21,700 €. Even with smaller conferences of 50 participants, profits can be very high for your institute, which could be a way of paying for offsetting emissions at your institute for instance via' %} <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a>.</p>
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'Do I have access to all the tools with the free version?' %}
+      </summary>
+      <p>{% trans 'Yes you do. The free version is for meetings with less than 50 participants for one day. The only thing that you cannot have for free is a very reactive human to answer the questions your particpants may have. To get this support, you have the option to pay some additional fees in the free version (you will see the option to tick when you go to the payment section). Check the' %} <a href="{% url 'my_app2:tutorial' %}">{% trans 'tutorial page' %}</a> {% trans 'to know more.' %}</p>
+    </details>
+    <details>
+      <summary onclick="this.classList.toggle('opened');">
+        {% trans 'How can I be sure that the carbon emissions are really offset?' %}
+      </summary>
+      <p>{% blocktrans %}You will be given a certificate from <a target="_blank" rel="noopener" href="https://climeworks.shop/how-it-works">Climeworks</a> (the offsetting company) that shows you the amount we paid to them and how much emission they offset thanks to you. Or if you prefer you can do it by yourself on their website and show us the certificate.{% endblocktrans %}</p>
+    </details>
+    <p class="contact-us">{% blocktrans %}Have another question? Feel free to <a href="mailto:sales@carbonfreeconf.com">Send Us an Email</a> or {% endblocktrans %}<a href="{% url 'my_app2:contactform' %}">{% trans 'contact us via our form' %}</a>.</p>
+  </section>
+</main>
+
+{% endblock %}
